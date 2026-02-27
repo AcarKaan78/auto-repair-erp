@@ -18,6 +18,8 @@ public partial class ServiceLineItem : ObservableObject
     [ObservableProperty] private int _quantity = 1;
     [ObservableProperty] private decimal _unitPrice;
     [ObservableProperty] private CurrencyType _currency = CurrencyType.TL;
+    [ObservableProperty] private StockItem? _selectedStockItem;
+    [ObservableProperty] private int _materialQuantityUsed;
 
     public decimal LineTotal => Quantity * UnitPrice;
 
@@ -47,6 +49,7 @@ public partial class NewServiceViewModel : ObservableObject
         ServiceLines.CollectionChanged += OnServiceLinesChanged;
         SearchResults = new ObservableCollection<VehicleSearchResult>();
         Technicians = new ObservableCollection<Technician>();
+        StockItems = new ObservableCollection<StockItem>();
 
         AddEmptyLine();
     }
@@ -194,9 +197,10 @@ public partial class NewServiceViewModel : ObservableObject
     [ObservableProperty]
     private CurrencyType _defaultCurrency = CurrencyType.TL;
 
-    // --- Technicians ---
+    // --- Technicians & Stock ---
 
     public ObservableCollection<Technician> Technicians { get; }
+    public ObservableCollection<StockItem> StockItems { get; }
 
     // --- Initialization ---
 
@@ -208,6 +212,11 @@ public partial class NewServiceViewModel : ObservableObject
             Technicians.Clear();
             foreach (var t in technicians)
                 Technicians.Add(t);
+
+            var stockItems = await _unitOfWork.StockItems.GetActiveAsync();
+            StockItems.Clear();
+            foreach (var s in stockItems)
+                StockItems.Add(s);
         }
         catch
         {
@@ -220,18 +229,14 @@ public partial class NewServiceViewModel : ObservableObject
     [RelayCommand]
     private async Task AddNewCustomerAndVehicle()
     {
-        // Show AddCustomerDialog
-        var customer = await _dialogService.ShowDialogAsync<Customer>(
-            new Dialogs.AddCustomerDialogViewModel(_unitOfWork, _dialogService));
+        var dialogVm = new Dialogs.AddCustomerDialogViewModel(_unitOfWork, _dialogService);
+        var customer = await _dialogService.ShowDialogAsync<Customer>(dialogVm);
 
         if (customer == null) return;
 
-        // Show AddVehicleDialog with customer pre-linked
-        var vehicleVm = new Dialogs.AddVehicleDialogViewModel(_unitOfWork, _dialogService)
-        {
-            CustomerId = customer.Id
-        };
-        var vehicle = await _dialogService.ShowDialogAsync<Vehicle>(vehicleVm);
+        // Load the vehicle that was created together with the customer
+        var vehicles = await _unitOfWork.Vehicles.GetByCustomerIdAsync(customer.Id);
+        var vehicle = vehicles.FirstOrDefault();
 
         if (vehicle != null)
         {
@@ -279,8 +284,20 @@ public partial class NewServiceViewModel : ObservableObject
                 Quantity = line.Quantity,
                 UnitPrice = line.UnitPrice,
                 TotalAmount = line.LineTotal,
-                Currency = line.Currency
+                Currency = line.Currency,
+                StockItemId = line.SelectedStockItem?.Id,
+                MaterialQuantityUsed = line.MaterialQuantityUsed
             }).ToList();
+
+            // Deduct stock quantities
+            foreach (var line in validLines)
+            {
+                if (line.SelectedStockItem != null && line.MaterialQuantityUsed > 0)
+                {
+                    line.SelectedStockItem.RemainingQuantity -= line.MaterialQuantityUsed;
+                    await _unitOfWork.StockItems.UpdateAsync(line.SelectedStockItem);
+                }
+            }
 
             await _unitOfWork.ServiceRecords.AddRangeAsync(records);
             await _unitOfWork.SaveChangesAsync();

@@ -19,6 +19,7 @@
                 <x:Type TypeName="enums:CurrencyType"/>
             </ObjectDataProvider.MethodParameters>
         </ObjectDataProvider>
+        <converters:NullToVisibilityConverter x:Key="NullToVisibilityConverter"/>
     </Window.Resources>
 
     <Grid Margin="24">
@@ -63,7 +64,7 @@
                          Margin="0,0,4,0"/>
 
                 <TextBox Grid.Column="1" materialDesign:HintAssist.Hint="Birim Fiyat"
-                         Text="{Binding UnitPrice, UpdateSourceTrigger=PropertyChanged, StringFormat=N2}"
+                         Text="{Binding UnitPrice, UpdateSourceTrigger=PropertyChanged}"
                          Style="{StaticResource MaterialDesignOutlinedTextBox}"
                          Margin="4,0,4,0"/>
 
@@ -72,6 +73,27 @@
                           SelectedItem="{Binding Currency}"
                           Style="{StaticResource MaterialDesignOutlinedComboBox}"
                           Margin="4,0,0,0"/>
+            </Grid>
+
+            <Grid Margin="0,0,0,8">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="100"/>
+                </Grid.ColumnDefinitions>
+
+                <ComboBox Grid.Column="0"
+                          materialDesign:HintAssist.Hint="Malzeme (Opsiyonel)"
+                          ItemsSource="{Binding StockItems}"
+                          SelectedItem="{Binding SelectedStockItem}"
+                          DisplayMemberPath="DisplayText"
+                          Style="{StaticResource MaterialDesignOutlinedComboBox}"
+                          Margin="0,0,4,0"/>
+
+                <TextBox Grid.Column="1"
+                         materialDesign:HintAssist.Hint="Malz. Adet"
+                         Text="{Binding MaterialQuantityUsed, UpdateSourceTrigger=PropertyChanged}"
+                         Style="{StaticResource MaterialDesignOutlinedTextBox}"
+                         Margin="4,0,0,0"/>
             </Grid>
 
             <DatePicker materialDesign:HintAssist.Hint="Tarih"
@@ -96,11 +118,16 @@
         </StackPanel>
 
         <!-- Buttons -->
-        <StackPanel Grid.Row="2" Orientation="Horizontal" HorizontalAlignment="Right" Margin="0,16,0,0">
-            <Button Content="Iptal" Command="{Binding CancelCommand}"
-                    Style="{StaticResource MaterialDesignFlatButton}" Margin="0,0,8,0"/>
-            <Button Content="Kaydet" Command="{Binding SaveCommand}"
-                    Style="{StaticResource MaterialDesignRaisedSecondaryButton}"/>
+        <StackPanel Grid.Row="2" Margin="0,16,0,0">
+            <TextBlock Text="{Binding ValidationError}" Foreground="Red" FontSize="12"
+                       Margin="0,0,0,8"
+                       Visibility="{Binding ValidationError, Converter={StaticResource NullToVisibilityConverter}, FallbackValue=Collapsed}"/>
+            <StackPanel Orientation="Horizontal" HorizontalAlignment="Right">
+                <Button Content="Iptal" Command="{Binding CancelCommand}"
+                        Style="{StaticResource MaterialDesignFlatButton}" Margin="0,0,8,0"/>
+                <Button Content="Kaydet" Command="{Binding SaveCommand}"
+                        Style="{StaticResource MaterialDesignRaisedSecondaryButton}"/>
+            </StackPanel>
         </StackPanel>
     </Grid>
 </Window>

@@ -151,21 +151,25 @@
                     <!-- Header Row -->
                     <Grid Margin="0,8,0,4">
                         <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="170"/>
                             <ColumnDefinition Width="200"/>
-                            <ColumnDefinition Width="250"/>
-                            <ColumnDefinition Width="150"/>
-                            <ColumnDefinition Width="60"/>
-                            <ColumnDefinition Width="100"/>
-                            <ColumnDefinition Width="100"/>
+                            <ColumnDefinition Width="130"/>
+                            <ColumnDefinition Width="130"/>
+                            <ColumnDefinition Width="75"/>
+                            <ColumnDefinition Width="55"/>
+                            <ColumnDefinition Width="90"/>
+                            <ColumnDefinition Width="90"/>
                             <ColumnDefinition Width="40"/>
                         </Grid.ColumnDefinitions>
                         <TextBlock Grid.Column="0" Text="Şikayet" FontWeight="Medium" Foreground="Gray"/>
                         <TextBlock Grid.Column="1" Text="Yapılan İşlem" FontWeight="Medium" Foreground="Gray" Margin="4,0,0,0"/>
                         <TextBlock Grid.Column="2" Text="Teknisyen" FontWeight="Medium" Foreground="Gray" Margin="4,0,0,0"/>
-                        <TextBlock Grid.Column="3" Text="Miktar" FontWeight="Medium" Foreground="Gray" Margin="4,0,0,0"/>
-                        <TextBlock Grid.Column="4" Text="Birim Fiyat" FontWeight="Medium" Foreground="Gray" Margin="4,0,0,0"/>
-                        <TextBlock Grid.Column="5" Text="Tutar" FontWeight="Medium" Foreground="Gray" Margin="4,0,0,0"/>
-                        <TextBlock Grid.Column="6" Text="Sil" FontWeight="Medium" Foreground="Gray" HorizontalAlignment="Center"/>
+                        <TextBlock Grid.Column="3" Text="Malzeme" FontWeight="Medium" Foreground="Gray" Margin="4,0,0,0"/>
+                        <TextBlock Grid.Column="4" Text="Malz. Adet" FontWeight="Medium" Foreground="Gray" Margin="4,0,0,0" ToolTip="Kullanılan Malzeme Adeti"/>
+                        <TextBlock Grid.Column="5" Text="Miktar" FontWeight="Medium" Foreground="Gray" Margin="4,0,0,0"/>
+                        <TextBlock Grid.Column="6" Text="Birim Fiyat" FontWeight="Medium" Foreground="Gray" Margin="4,0,0,0"/>
+                        <TextBlock Grid.Column="7" Text="Tutar" FontWeight="Medium" Foreground="Gray" Margin="4,0,0,0"/>
+                        <TextBlock Grid.Column="8" Text="Sil" FontWeight="Medium" Foreground="Gray" HorizontalAlignment="Center"/>
                     </Grid>
 
                     <Separator Margin="0,0,0,4"/>
@@ -176,12 +180,14 @@
                             <DataTemplate>
                                 <Grid Margin="0,2,0,2">
                                     <Grid.ColumnDefinitions>
+                                        <ColumnDefinition Width="170"/>
                                         <ColumnDefinition Width="200"/>
-                                        <ColumnDefinition Width="250"/>
-                                        <ColumnDefinition Width="150"/>
-                                        <ColumnDefinition Width="60"/>
-                                        <ColumnDefinition Width="100"/>
-                                        <ColumnDefinition Width="100"/>
+                                        <ColumnDefinition Width="130"/>
+                                        <ColumnDefinition Width="130"/>
+                                        <ColumnDefinition Width="75"/>
+                                        <ColumnDefinition Width="55"/>
+                                        <ColumnDefinition Width="90"/>
+                                        <ColumnDefinition Width="90"/>
                                         <ColumnDefinition Width="40"/>
                                     </Grid.ColumnDefinitions>
 
@@ -211,7 +217,27 @@
                                               Padding="4" FontSize="13"
                                               materialDesign:HintAssist.FloatingScale="0.75"/>
 
-                                    <TextBox Grid.Column="3"
+                                    <ComboBox Grid.Column="3"
+                                              ItemsSource="{Binding DataContext.StockItems, RelativeSource={RelativeSource AncestorType=UserControl}}"
+                                              SelectedItem="{Binding SelectedStockItem}"
+                                              DisplayMemberPath="DisplayText"
+                                              materialDesign:HintAssist.Hint="Malzeme"
+                                              Style="{StaticResource MaterialDesignOutlinedComboBox}"
+                                              Margin="4,0,4,0"
+                                              Padding="4" FontSize="13"
+                                              materialDesign:HintAssist.FloatingScale="0.75"/>
+
+                                    <TextBox Grid.Column="4"
+                                             Text="{Binding MaterialQuantityUsed, UpdateSourceTrigger=PropertyChanged}"
+                                             materialDesign:HintAssist.Hint="Malz."
+                                             Style="{StaticResource MaterialDesignOutlinedTextBox}"
+                                             Margin="4,0,4,0"
+                                             Padding="4" FontSize="13"
+                                             HorizontalContentAlignment="Center"
+                                             materialDesign:HintAssist.FloatingScale="0.75"
+                                             ToolTip="Kullanılan Malzeme Adeti"/>
+
+                                    <TextBox Grid.Column="5"
                                              Text="{Binding Quantity, UpdateSourceTrigger=PropertyChanged}"
                                              materialDesign:HintAssist.Hint="Adet"
                                              Style="{StaticResource MaterialDesignOutlinedTextBox}"
@@ -220,7 +246,7 @@
                                              HorizontalContentAlignment="Center"
                                              materialDesign:HintAssist.FloatingScale="0.75"/>
 
-                                    <TextBox Grid.Column="4"
+                                    <TextBox Grid.Column="6"
                                              Text="{Binding UnitPrice, UpdateSourceTrigger=PropertyChanged, StringFormat=N2}"
                                              materialDesign:HintAssist.Hint="Fiyat"
                                              Style="{StaticResource MaterialDesignOutlinedTextBox}"
@@ -229,7 +255,7 @@
                                              HorizontalContentAlignment="Right"
                                              materialDesign:HintAssist.FloatingScale="0.75"/>
 
-                                    <TextBlock Grid.Column="5"
+                                    <TextBlock Grid.Column="7"
                                                Text="{Binding LineTotal, Converter={StaticResource CurrencyFormatConverter}}"
                                                VerticalAlignment="Center"
                                                HorizontalAlignment="Right"
@@ -237,7 +263,7 @@
                                                FontSize="13"
                                                Margin="4,0,4,0"/>
 
-                                    <Button Grid.Column="6"
+                                    <Button Grid.Column="8"
                                             Command="{Binding DataContext.RemoveLineCommand, RelativeSource={RelativeSource AncestorType=UserControl}}"
                                             CommandParameter="{Binding}"
                                             Style="{StaticResource MaterialDesignIconForegroundButton}"
