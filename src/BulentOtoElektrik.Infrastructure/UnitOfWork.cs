@@ -14,6 +14,7 @@ public class UnitOfWork : IUnitOfWork
     private IDailyExpenseRepository? _dailyExpenses;
     private IExpenseCategoryRepository? _expenseCategories;
     private ITechnicianRepository? _technicians;
+    private IStockItemRepository? _stockItems;
 
     public UnitOfWork(AppDbContext context)
     {
@@ -27,6 +28,7 @@ public class UnitOfWork : IUnitOfWork
     public IDailyExpenseRepository DailyExpenses => _dailyExpenses ??= new DailyExpenseRepository(_context);
     public IExpenseCategoryRepository ExpenseCategories => _expenseCategories ??= new ExpenseCategoryRepository(_context);
     public ITechnicianRepository Technicians => _technicians ??= new TechnicianRepository(_context);
+    public IStockItemRepository StockItems => _stockItems ??= new StockItemRepository(_context);
 
     public async Task<int> SaveChangesAsync(CancellationToken ct = default)
     {

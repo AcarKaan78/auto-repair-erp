@@ -14,8 +14,11 @@ public class ServiceRecord : BaseEntity
     public decimal TotalAmount { get; set; } // Stored, computed as Quantity * UnitPrice in SaveChanges
     public CurrencyType Currency { get; set; } = CurrencyType.TL;
     public string? Notes { get; set; }
+    public int? StockItemId { get; set; }
+    public int MaterialQuantityUsed { get; set; }
 
     // Navigation
     public Vehicle Vehicle { get; set; } = null!;
     public Technician? Technician { get; set; }
+    public StockItem? StockItem { get; set; }
 }

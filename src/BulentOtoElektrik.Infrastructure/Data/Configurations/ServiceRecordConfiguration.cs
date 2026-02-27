@@ -26,5 +26,10 @@ public class ServiceRecordConfiguration : IEntityTypeConfiguration<ServiceRecord
             .WithMany(t => t.ServiceRecords)
             .HasForeignKey(sr => sr.TechnicianId)
             .OnDelete(DeleteBehavior.SetNull);
+
+        builder.HasOne(sr => sr.StockItem)
+            .WithMany(si => si.ServiceRecords)
+            .HasForeignKey(sr => sr.StockItemId)
+            .OnDelete(DeleteBehavior.SetNull);
     }
 }
