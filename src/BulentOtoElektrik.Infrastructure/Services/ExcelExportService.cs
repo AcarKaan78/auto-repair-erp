@@ -178,7 +178,7 @@ public class ExcelExportService : IExcelExportService
                 ws.Cell(row, 1).Value = i + 1;
 
                 // B = ServiceDate
-                ws.Cell(row, 2).Value = sr.ServiceDate.ToString("dd.MM.yyyy");
+                ws.Cell(row, 2).Value = sr.ServiceDate.ToString("dd/MM/yyyy");
 
                 // C = Complaint
                 ws.Cell(row, 3).Value = sr.Complaint ?? "";
@@ -270,7 +270,7 @@ public class ExcelExportService : IExcelExportService
             summarySheet.Cell("A1").Style.Font.Bold = true;
             summarySheet.Cell("A1").Style.Font.FontColor = XLColor.FromHtml("#C00000");
 
-            summarySheet.Cell("A2").Value = $"Dönem: {startDate:dd.MM.yyyy} - {endDate:dd.MM.yyyy}";
+            summarySheet.Cell("A2").Value = $"Dönem: {startDate:dd/MM/yyyy} - {endDate:dd/MM/yyyy}";
             summarySheet.Range("A2:D2").Merge();
             summarySheet.Cell("A2").Style.Font.FontSize = 12;
 
@@ -322,7 +322,7 @@ public class ExcelExportService : IExcelExportService
                 var sr = serviceRecords[i];
                 int row = i + 2;
                 srSheet.Cell(row, 1).Value = i + 1;
-                srSheet.Cell(row, 2).Value = sr.ServiceDate.ToString("dd.MM.yyyy");
+                srSheet.Cell(row, 2).Value = sr.ServiceDate.ToString("dd/MM/yyyy");
                 srSheet.Cell(row, 3).Value = sr.Vehicle?.Customer?.FullName ?? "";
                 srSheet.Cell(row, 4).Value = sr.Vehicle?.PlateNumber ?? "";
                 srSheet.Cell(row, 5).Value = sr.Complaint ?? "";
@@ -356,7 +356,7 @@ public class ExcelExportService : IExcelExportService
                 var p = payments[i];
                 int row = i + 2;
                 paySheet.Cell(row, 1).Value = i + 1;
-                paySheet.Cell(row, 2).Value = p.PaymentDate.ToString("dd.MM.yyyy");
+                paySheet.Cell(row, 2).Value = p.PaymentDate.ToString("dd/MM/yyyy");
                 paySheet.Cell(row, 3).Value = p.Customer?.FullName ?? "";
                 paySheet.Cell(row, 4).Value = p.Amount;
                 paySheet.Cell(row, 4).Style.NumberFormat.Format = @"#,##0.00\ ""TL""";
@@ -385,7 +385,7 @@ public class ExcelExportService : IExcelExportService
                 var e = expenses[i];
                 int row = i + 2;
                 expSheet.Cell(row, 1).Value = i + 1;
-                expSheet.Cell(row, 2).Value = e.ExpenseDate.ToString("dd.MM.yyyy");
+                expSheet.Cell(row, 2).Value = e.ExpenseDate.ToString("dd/MM/yyyy");
                 expSheet.Cell(row, 3).Value = e.Category?.Name ?? "";
                 expSheet.Cell(row, 4).Value = e.Description ?? "";
                 expSheet.Cell(row, 5).Value = e.Amount;
