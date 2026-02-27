@@ -1,0 +1,55 @@
+# Build results
+[Dd]ebug/
+[Rr]elease/
+x64/
+x86/
+[Bb]in/
+[Oo]bj/
+[Oo]ut/
+[Ll]og/
+[Ll]ogs/
+
+# Publish output
+publish/
+publish*/
+
+# NuGet
+*.nupkg
+**/[Pp]ackages/*
+*.nuget.props
+*.nuget.targets
+
+# User-specific files
+*.rsuser
+*.suo
+*.user
+*.userosscache
+*.sln.docstates
+.vs/
+
+# Rider
+.idea/
+
+# SQLite database files
+*.db
+*.db-shm
+*.db-wal
+
+# Backup files
+backups/
+
+# Export settings (user-specific)
+export_settings.txt
+
+# Installer output (compiled installer exe)
+installer/Output/
+installer/icon256.png
+
+# OS files
+Thumbs.db
+ehthumbs.db
+Desktop.ini
+.DS_Store
+
+# Serilog logs
+logs/
