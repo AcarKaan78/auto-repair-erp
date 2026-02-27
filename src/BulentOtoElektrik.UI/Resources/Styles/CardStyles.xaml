@@ -1,0 +1,9 @@
+<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+                    xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes">
+    <Style x:Key="SummaryCardStyle" TargetType="materialDesign:Card">
+        <Setter Property="Padding" Value="16"/>
+        <Setter Property="Margin" Value="8"/>
+        <Setter Property="UniformCornerRadius" Value="8"/>
+    </Style>
+</ResourceDictionary>

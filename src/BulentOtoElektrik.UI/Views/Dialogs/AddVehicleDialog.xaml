@@ -1,0 +1,64 @@
+<Window x:Class="BulentOtoElektrik.UI.Views.Dialogs.AddVehicleDialog"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
+        Title="Yeni Araç Ekle"
+        Width="420" Height="480"
+        WindowStartupLocation="CenterOwner"
+        ResizeMode="CanResizeWithGrip"
+        MinHeight="400" MinWidth="380"
+        TextElement.Foreground="{DynamicResource MaterialDesignBody}"
+        Background="{DynamicResource MaterialDesignPaper}">
+    <Grid Margin="24">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="Auto"/>
+        </Grid.RowDefinitions>
+
+        <!-- Title -->
+        <TextBlock Grid.Row="0"
+                   Text="Yeni Araç Ekle"
+                   FontSize="20" FontWeight="Medium"
+                   Margin="0,0,0,16"/>
+
+        <!-- Form -->
+        <ScrollViewer Grid.Row="1" VerticalScrollBarVisibility="Auto">
+        <StackPanel>
+            <TextBox materialDesign:HintAssist.Hint="Plaka *"
+                     Text="{Binding PlateNumber, UpdateSourceTrigger=PropertyChanged}"
+                     Style="{StaticResource MaterialDesignOutlinedTextBox}"
+                     CharacterCasing="Upper"
+                     Margin="0,0,0,8"/>
+
+            <TextBox materialDesign:HintAssist.Hint="Marka"
+                     Text="{Binding VehicleBrand, UpdateSourceTrigger=PropertyChanged}"
+                     Style="{StaticResource MaterialDesignOutlinedTextBox}"
+                     Margin="0,0,0,8"/>
+
+            <TextBox materialDesign:HintAssist.Hint="Model"
+                     Text="{Binding VehicleModel, UpdateSourceTrigger=PropertyChanged}"
+                     Style="{StaticResource MaterialDesignOutlinedTextBox}"
+                     Margin="0,0,0,8"/>
+
+            <TextBox materialDesign:HintAssist.Hint="Yıl"
+                     Text="{Binding VehicleYear, UpdateSourceTrigger=PropertyChanged}"
+                     Style="{StaticResource MaterialDesignOutlinedTextBox}"/>
+        </StackPanel>
+        </ScrollViewer>
+
+        <!-- Buttons -->
+        <StackPanel Grid.Row="2"
+                    Orientation="Horizontal"
+                    HorizontalAlignment="Right"
+                    Margin="0,16,0,0">
+            <Button Content="İptal"
+                    Command="{Binding CancelCommand}"
+                    Style="{StaticResource MaterialDesignFlatButton}"
+                    Margin="0,0,8,0"/>
+            <Button Content="Kaydet"
+                    Command="{Binding SaveCommand}"
+                    Style="{StaticResource MaterialDesignRaisedSecondaryButton}"/>
+        </StackPanel>
+    </Grid>
+</Window>

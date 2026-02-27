@@ -1,0 +1,131 @@
+<UserControl x:Class="BulentOtoElektrik.UI.Views.Pages.CustomerSearchPage"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
+             xmlns:converters="clr-namespace:BulentOtoElektrik.UI.Converters"
+             Background="#F5F5F5">
+
+    <UserControl.Resources>
+        <converters:CurrencyFormatConverter x:Key="CurrencyFormat"/>
+        <converters:BalanceToColorConverter x:Key="BalanceToColor"/>
+    </UserControl.Resources>
+
+    <Grid Margin="24">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="Auto"/>
+        </Grid.RowDefinitions>
+
+        <!-- Search Bar and Add Button -->
+        <Grid Grid.Row="0" Margin="0,0,0,16">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="Auto"/>
+            </Grid.ColumnDefinitions>
+
+            <TextBox Grid.Column="0"
+                     Text="{Binding SearchText, UpdateSourceTrigger=PropertyChanged}"
+                     materialDesign:HintAssist.Hint="Plaka veya musteri adi ile ara..."
+                     materialDesign:TextFieldAssist.HasLeadingIcon="True"
+                     materialDesign:TextFieldAssist.LeadingIcon="Magnify"
+                     materialDesign:TextFieldAssist.HasClearButton="True"
+                     Style="{StaticResource MaterialDesignOutlinedTextBox}"
+                     FontSize="14" Margin="0,0,16,0"
+                     VerticalAlignment="Center"/>
+
+            <Button Grid.Column="1"
+                    Command="{Binding AddCustomerCommand}"
+                    Style="{StaticResource MaterialDesignRaisedButton}"
+                    materialDesign:ButtonAssist.CornerRadius="4"
+                    Background="#303F9F" Foreground="White"
+                    Padding="16,8" FontSize="14"
+                    VerticalAlignment="Center">
+                <StackPanel Orientation="Horizontal">
+                    <materialDesign:PackIcon Kind="AccountPlus" Width="20" Height="20"
+                                              VerticalAlignment="Center" Margin="0,0,8,0"/>
+                    <TextBlock Text="Yeni Musteri Ekle" VerticalAlignment="Center"/>
+                </StackPanel>
+            </Button>
+        </Grid>
+
+        <!-- Results DataGrid -->
+        <materialDesign:Card Grid.Row="1" Padding="0" UniformCornerRadius="8">
+            <DataGrid ItemsSource="{Binding SearchResults}"
+                      AutoGenerateColumns="False"
+                      CanUserAddRows="False" CanUserDeleteRows="False"
+                      IsReadOnly="True" SelectionMode="Single"
+                      GridLinesVisibility="Horizontal"
+                      HorizontalGridLinesBrush="#E0E0E0"
+                      RowHeight="44" FontSize="13"
+                      AlternatingRowBackground="#FAFAFA"
+                      MouseDoubleClick="DataGrid_MouseDoubleClick"
+                      HeadersVisibility="Column">
+                <DataGrid.Columns>
+                    <DataGridTextColumn Header="Plaka" Binding="{Binding PlateNumber}"
+                                        Width="130" FontSize="14">
+                        <DataGridTextColumn.ElementStyle>
+                            <Style TargetType="TextBlock">
+                                <Setter Property="FontWeight" Value="Bold"/>
+                                <Setter Property="Foreground" Value="#303F9F"/>
+                                <Setter Property="VerticalAlignment" Value="Center"/>
+                                <Setter Property="Margin" Value="8,0"/>
+                            </Style>
+                        </DataGridTextColumn.ElementStyle>
+                    </DataGridTextColumn>
+
+                    <DataGridTextColumn Header="Musteri Adi" Binding="{Binding CustomerName}"
+                                        Width="*">
+                        <DataGridTextColumn.ElementStyle>
+                            <Style TargetType="TextBlock">
+                                <Setter Property="VerticalAlignment" Value="Center"/>
+                                <Setter Property="Margin" Value="8,0"/>
+                            </Style>
+                        </DataGridTextColumn.ElementStyle>
+                    </DataGridTextColumn>
+
+                    <DataGridTextColumn Header="Arac" Binding="{Binding VehicleModel}"
+                                        Width="200">
+                        <DataGridTextColumn.ElementStyle>
+                            <Style TargetType="TextBlock">
+                                <Setter Property="VerticalAlignment" Value="Center"/>
+                                <Setter Property="Foreground" Value="#757575"/>
+                                <Setter Property="Margin" Value="8,0"/>
+                            </Style>
+                        </DataGridTextColumn.ElementStyle>
+                    </DataGridTextColumn>
+
+                    <DataGridTextColumn Header="Bakiye" Binding="{Binding Balance, Converter={StaticResource CurrencyFormat}}"
+                                        Width="140">
+                        <DataGridTextColumn.ElementStyle>
+                            <Style TargetType="TextBlock">
+                                <Setter Property="FontWeight" Value="SemiBold"/>
+                                <Setter Property="VerticalAlignment" Value="Center"/>
+                                <Setter Property="Foreground" Value="{Binding Balance, Converter={StaticResource BalanceToColor}}"/>
+                                <Setter Property="Margin" Value="8,0"/>
+                                <Setter Property="HorizontalAlignment" Value="Right"/>
+                            </Style>
+                        </DataGridTextColumn.ElementStyle>
+                    </DataGridTextColumn>
+
+                    <DataGridTemplateColumn Header="" Width="60">
+                        <DataGridTemplateColumn.CellTemplate>
+                            <DataTemplate>
+                                <Button Style="{StaticResource MaterialDesignIconForegroundButton}"
+                                        Command="{Binding DataContext.ViewCustomerCommand, RelativeSource={RelativeSource AncestorType=UserControl}}"
+                                        CommandParameter="{Binding}"
+                                        ToolTip="Detay" Width="32" Height="32">
+                                    <materialDesign:PackIcon Kind="ChevronRight" Width="20" Height="20"/>
+                                </Button>
+                            </DataTemplate>
+                        </DataGridTemplateColumn.CellTemplate>
+                    </DataGridTemplateColumn>
+                </DataGrid.Columns>
+            </DataGrid>
+        </materialDesign:Card>
+
+        <!-- Status -->
+        <TextBlock Grid.Row="2" Text="{Binding StatusMessage}" Foreground="#757575"
+                   FontSize="12" Margin="0,8,0,0"/>
+    </Grid>
+</UserControl>

@@ -1,0 +1,342 @@
+<UserControl x:Class="BulentOtoElektrik.UI.Views.Pages.NewServicePage"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
+             xmlns:converters="clr-namespace:BulentOtoElektrik.UI.Converters"
+             xmlns:enums="clr-namespace:BulentOtoElektrik.Core.Enums;assembly=BulentOtoElektrik.Core"
+             xmlns:sys="clr-namespace:System;assembly=mscorlib">
+
+    <UserControl.Resources>
+        <converters:CurrencyFormatConverter x:Key="CurrencyFormatConverter"/>
+        <converters:BoolToVisibilityConverter x:Key="BoolToVisibilityConverter"/>
+        <converters:NullToVisibilityConverter x:Key="NullToVisibilityConverter"/>
+
+        <ObjectDataProvider x:Key="CurrencyTypeValues"
+                            MethodName="GetValues" ObjectType="{x:Type sys:Enum}">
+            <ObjectDataProvider.MethodParameters>
+                <x:Type TypeName="enums:CurrencyType"/>
+            </ObjectDataProvider.MethodParameters>
+        </ObjectDataProvider>
+    </UserControl.Resources>
+
+    <ScrollViewer VerticalScrollBarVisibility="Auto" Padding="32,24">
+        <Grid MaxWidth="1100">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+            </Grid.RowDefinitions>
+
+            <!-- Title -->
+            <TextBlock Grid.Row="0"
+                       Text="Yeni İşlem Kaydı"
+                       Style="{StaticResource PageTitleStyle}"/>
+
+            <!-- Top Section: Plate Search + Customer Info -->
+            <materialDesign:Card Grid.Row="1" Padding="20" Margin="0,0,0,16"
+                                 materialDesign:ElevationAssist.Elevation="Dp2">
+                <Grid>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="Auto"/>
+                        <ColumnDefinition Width="*"/>
+                    </Grid.ColumnDefinitions>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="Auto"/>
+                    </Grid.RowDefinitions>
+
+                    <!-- Plate TextBox with search icon -->
+                    <StackPanel Grid.Column="0" Grid.Row="0" Orientation="Vertical" Margin="0,0,24,0">
+                        <TextBlock Text="Araç Plakası" FontWeight="Medium" Margin="0,0,0,4"/>
+                        <Grid>
+                            <TextBox x:Name="PlateTextBox"
+                                     Width="220"
+                                     Text="{Binding PlateText, UpdateSourceTrigger=PropertyChanged}"
+                                     materialDesign:HintAssist.Hint="Plaka giriniz..."
+                                     Style="{StaticResource MaterialDesignOutlinedTextBox}"
+                                     materialDesign:TextFieldAssist.HasLeadingIcon="True"
+                                     materialDesign:TextFieldAssist.LeadingIcon="Magnify"
+                                     CharacterCasing="Upper"
+                                     FontSize="16"
+                                     FontWeight="Bold"/>
+
+                            <!-- Autocomplete Popup -->
+                            <Popup IsOpen="{Binding IsSearchPopupOpen}"
+                                   PlacementTarget="{Binding ElementName=PlateTextBox}"
+                                   Placement="Bottom"
+                                   StaysOpen="False"
+                                   AllowsTransparency="True"
+                                   PopupAnimation="Fade">
+                                <materialDesign:Card Width="320"
+                                                     materialDesign:ElevationAssist.Elevation="Dp4">
+                                    <ListBox ItemsSource="{Binding SearchResults}"
+                                             MaxHeight="200"
+                                             ScrollViewer.VerticalScrollBarVisibility="Auto">
+                                        <ListBox.ItemTemplate>
+                                            <DataTemplate>
+                                                <StackPanel Orientation="Horizontal" Margin="4">
+                                                    <materialDesign:PackIcon Kind="Car" VerticalAlignment="Center"
+                                                                             Margin="0,0,8,0" Foreground="Gray"/>
+                                                    <TextBlock FontWeight="Bold"
+                                                               Text="{Binding PlateNumber}"
+                                                               VerticalAlignment="Center"/>
+                                                    <TextBlock Text=" — " VerticalAlignment="Center"
+                                                               Foreground="Gray"/>
+                                                    <TextBlock Text="{Binding CustomerName}"
+                                                               VerticalAlignment="Center"/>
+                                                </StackPanel>
+                                            </DataTemplate>
+                                        </ListBox.ItemTemplate>
+                                        <ListBox.ItemContainerStyle>
+                                            <Style TargetType="ListBoxItem" BasedOn="{StaticResource MaterialDesignListBoxItem}">
+                                                <Setter Property="Cursor" Value="Hand"/>
+                                                <EventSetter Event="PreviewMouseLeftButtonDown" Handler="SearchResultItem_Click"/>
+                                            </Style>
+                                        </ListBox.ItemContainerStyle>
+                                    </ListBox>
+                                </materialDesign:Card>
+                            </Popup>
+                        </Grid>
+                    </StackPanel>
+
+                    <!-- Customer / Vehicle Info Display -->
+                    <StackPanel Grid.Column="1" Grid.Row="0" VerticalAlignment="Center"
+                                Visibility="{Binding SelectedVehicle, Converter={StaticResource NullToVisibilityConverter}}">
+                        <StackPanel Orientation="Horizontal" Margin="0,0,0,4">
+                            <materialDesign:PackIcon Kind="AccountCircle" VerticalAlignment="Center"
+                                                     Margin="0,0,8,0" Foreground="{DynamicResource PrimaryHueMidBrush}"/>
+                            <TextBlock Text="Müşteri: " FontWeight="Medium" VerticalAlignment="Center"/>
+                            <TextBlock Text="{Binding CustomerDisplayName}" FontSize="15"
+                                       FontWeight="SemiBold" VerticalAlignment="Center"/>
+                        </StackPanel>
+                        <StackPanel Orientation="Horizontal">
+                            <materialDesign:PackIcon Kind="Car" VerticalAlignment="Center"
+                                                     Margin="0,0,8,0" Foreground="{DynamicResource PrimaryHueMidBrush}"/>
+                            <TextBlock Text="Araç: " FontWeight="Medium" VerticalAlignment="Center"/>
+                            <TextBlock Text="{Binding VehicleDisplayInfo}" FontSize="14"
+                                       VerticalAlignment="Center"/>
+                        </StackPanel>
+                    </StackPanel>
+
+                    <!-- New Customer Link -->
+                    <Button Grid.Row="1" Grid.ColumnSpan="2"
+                            Content="Yeni Müşteri ve Araç Ekle"
+                            Command="{Binding AddNewCustomerAndVehicleCommand}"
+                            Style="{StaticResource MaterialDesignFlatButton}"
+                            HorizontalAlignment="Left"
+                            Margin="0,8,0,0"
+                            Foreground="{DynamicResource PrimaryHueMidBrush}">
+                        <Button.ContentTemplate>
+                            <DataTemplate>
+                                <StackPanel Orientation="Horizontal">
+                                    <materialDesign:PackIcon Kind="Plus" VerticalAlignment="Center"
+                                                             Margin="0,0,4,0"/>
+                                    <TextBlock Text="Yeni Müşteri ve Araç Ekle" VerticalAlignment="Center"/>
+                                </StackPanel>
+                            </DataTemplate>
+                        </Button.ContentTemplate>
+                    </Button>
+                </Grid>
+            </materialDesign:Card>
+
+            <!-- Middle Section: Service Lines -->
+            <materialDesign:Card Grid.Row="2" Padding="20" Margin="0,0,0,16"
+                                 materialDesign:ElevationAssist.Elevation="Dp2">
+                <StackPanel>
+                    <TextBlock Text="İşlem Satırları"
+                               Style="{StaticResource SectionTitleStyle}"/>
+
+                    <!-- Header Row -->
+                    <Grid Margin="0,8,0,4">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="200"/>
+                            <ColumnDefinition Width="250"/>
+                            <ColumnDefinition Width="150"/>
+                            <ColumnDefinition Width="60"/>
+                            <ColumnDefinition Width="100"/>
+                            <ColumnDefinition Width="100"/>
+                            <ColumnDefinition Width="40"/>
+                        </Grid.ColumnDefinitions>
+                        <TextBlock Grid.Column="0" Text="Şikayet" FontWeight="Medium" Foreground="Gray"/>
+                        <TextBlock Grid.Column="1" Text="Yapılan İşlem" FontWeight="Medium" Foreground="Gray" Margin="4,0,0,0"/>
+                        <TextBlock Grid.Column="2" Text="Teknisyen" FontWeight="Medium" Foreground="Gray" Margin="4,0,0,0"/>
+                        <TextBlock Grid.Column="3" Text="Miktar" FontWeight="Medium" Foreground="Gray" Margin="4,0,0,0"/>
+                        <TextBlock Grid.Column="4" Text="Birim Fiyat" FontWeight="Medium" Foreground="Gray" Margin="4,0,0,0"/>
+                        <TextBlock Grid.Column="5" Text="Tutar" FontWeight="Medium" Foreground="Gray" Margin="4,0,0,0"/>
+                        <TextBlock Grid.Column="6" Text="Sil" FontWeight="Medium" Foreground="Gray" HorizontalAlignment="Center"/>
+                    </Grid>
+
+                    <Separator Margin="0,0,0,4"/>
+
+                    <!-- Service Line Items -->
+                    <ItemsControl ItemsSource="{Binding ServiceLines}">
+                        <ItemsControl.ItemTemplate>
+                            <DataTemplate>
+                                <Grid Margin="0,2,0,2">
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition Width="200"/>
+                                        <ColumnDefinition Width="250"/>
+                                        <ColumnDefinition Width="150"/>
+                                        <ColumnDefinition Width="60"/>
+                                        <ColumnDefinition Width="100"/>
+                                        <ColumnDefinition Width="100"/>
+                                        <ColumnDefinition Width="40"/>
+                                    </Grid.ColumnDefinitions>
+
+                                    <TextBox Grid.Column="0"
+                                             Text="{Binding Complaint, UpdateSourceTrigger=PropertyChanged}"
+                                             materialDesign:HintAssist.Hint="Şikayet"
+                                             Style="{StaticResource MaterialDesignOutlinedTextBox}"
+                                             Margin="0,0,4,0"
+                                             Padding="4" FontSize="13"
+                                             materialDesign:HintAssist.FloatingScale="0.75"/>
+
+                                    <TextBox Grid.Column="1"
+                                             Text="{Binding WorkPerformed, UpdateSourceTrigger=PropertyChanged}"
+                                             materialDesign:HintAssist.Hint="Yapılan İşlem"
+                                             Style="{StaticResource MaterialDesignOutlinedTextBox}"
+                                             Margin="4,0,4,0"
+                                             Padding="4" FontSize="13"
+                                             materialDesign:HintAssist.FloatingScale="0.75"/>
+
+                                    <ComboBox Grid.Column="2"
+                                              ItemsSource="{Binding DataContext.Technicians, RelativeSource={RelativeSource AncestorType=UserControl}}"
+                                              SelectedItem="{Binding SelectedTechnician}"
+                                              DisplayMemberPath="FullName"
+                                              materialDesign:HintAssist.Hint="Teknisyen"
+                                              Style="{StaticResource MaterialDesignOutlinedComboBox}"
+                                              Margin="4,0,4,0"
+                                              Padding="4" FontSize="13"
+                                              materialDesign:HintAssist.FloatingScale="0.75"/>
+
+                                    <TextBox Grid.Column="3"
+                                             Text="{Binding Quantity, UpdateSourceTrigger=PropertyChanged}"
+                                             materialDesign:HintAssist.Hint="Adet"
+                                             Style="{StaticResource MaterialDesignOutlinedTextBox}"
+                                             Margin="4,0,4,0"
+                                             Padding="4" FontSize="13"
+                                             HorizontalContentAlignment="Center"
+                                             materialDesign:HintAssist.FloatingScale="0.75"/>
+
+                                    <TextBox Grid.Column="4"
+                                             Text="{Binding UnitPrice, UpdateSourceTrigger=PropertyChanged, StringFormat=N2}"
+                                             materialDesign:HintAssist.Hint="Fiyat"
+                                             Style="{StaticResource MaterialDesignOutlinedTextBox}"
+                                             Margin="4,0,4,0"
+                                             Padding="4" FontSize="13"
+                                             HorizontalContentAlignment="Right"
+                                             materialDesign:HintAssist.FloatingScale="0.75"/>
+
+                                    <TextBlock Grid.Column="5"
+                                               Text="{Binding LineTotal, Converter={StaticResource CurrencyFormatConverter}}"
+                                               VerticalAlignment="Center"
+                                               HorizontalAlignment="Right"
+                                               FontWeight="SemiBold"
+                                               FontSize="13"
+                                               Margin="4,0,4,0"/>
+
+                                    <Button Grid.Column="6"
+                                            Command="{Binding DataContext.RemoveLineCommand, RelativeSource={RelativeSource AncestorType=UserControl}}"
+                                            CommandParameter="{Binding}"
+                                            Style="{StaticResource MaterialDesignIconForegroundButton}"
+                                            ToolTip="Satırı Sil"
+                                            Width="28" Height="28"
+                                            Padding="0"
+                                            HorizontalAlignment="Center">
+                                        <materialDesign:PackIcon Kind="Close" Width="16" Height="16"
+                                                                 Foreground="#E53935"/>
+                                    </Button>
+                                </Grid>
+                            </DataTemplate>
+                        </ItemsControl.ItemTemplate>
+                    </ItemsControl>
+
+                    <!-- Add Line Button -->
+                    <Button Command="{Binding AddLineCommand}"
+                            Style="{StaticResource MaterialDesignFlatButton}"
+                            HorizontalAlignment="Left"
+                            Margin="0,8,0,0"
+                            Foreground="{DynamicResource PrimaryHueMidBrush}">
+                        <StackPanel Orientation="Horizontal">
+                            <materialDesign:PackIcon Kind="Plus" VerticalAlignment="Center"
+                                                     Margin="0,0,4,0"/>
+                            <TextBlock Text="Satır Ekle" VerticalAlignment="Center"/>
+                        </StackPanel>
+                    </Button>
+                </StackPanel>
+            </materialDesign:Card>
+
+            <!-- Bottom Section: Date, Currency, Grand Total, Buttons -->
+            <materialDesign:Card Grid.Row="3" Padding="20" Margin="0,0,0,16"
+                                 materialDesign:ElevationAssist.Elevation="Dp2">
+                <Grid>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="*"/>
+                        <ColumnDefinition Width="Auto"/>
+                    </Grid.ColumnDefinitions>
+
+                    <!-- Left: Date and Currency -->
+                    <StackPanel Grid.Column="0" Orientation="Horizontal">
+                        <StackPanel Margin="0,0,24,0">
+                            <TextBlock Text="İşlem Tarihi" FontWeight="Medium" Margin="0,0,0,4"/>
+                            <DatePicker SelectedDate="{Binding ServiceDate}"
+                                        Style="{StaticResource MaterialDesignOutlinedDatePicker}"
+                                        Width="180"
+                                        materialDesign:HintAssist.Hint="Tarih"/>
+                        </StackPanel>
+
+                        <StackPanel>
+                            <TextBlock Text="Varsayılan Para Birimi" FontWeight="Medium" Margin="0,0,0,4"/>
+                            <ComboBox ItemsSource="{Binding Source={StaticResource CurrencyTypeValues}}"
+                                      SelectedItem="{Binding DefaultCurrency}"
+                                      Style="{StaticResource MaterialDesignOutlinedComboBox}"
+                                      Width="120"/>
+                        </StackPanel>
+                    </StackPanel>
+
+                    <!-- Right: Grand Total -->
+                    <StackPanel Grid.Column="1" VerticalAlignment="Center"
+                                HorizontalAlignment="Right">
+                        <TextBlock Text="Genel Toplam" FontWeight="Medium"
+                                   HorizontalAlignment="Right"
+                                   Foreground="Gray" Margin="0,0,0,4"/>
+                        <TextBlock Text="{Binding GrandTotal, Converter={StaticResource CurrencyFormatConverter}}"
+                                   FontSize="28" FontWeight="Bold"
+                                   HorizontalAlignment="Right"
+                                   Foreground="{DynamicResource PrimaryHueMidBrush}"/>
+                    </StackPanel>
+                </Grid>
+            </materialDesign:Card>
+
+            <!-- Action Buttons -->
+            <StackPanel Grid.Row="4"
+                        Orientation="Horizontal"
+                        HorizontalAlignment="Right"
+                        Margin="0,0,0,24">
+                <Button Content="İptal"
+                        Command="{Binding CancelCommand}"
+                        Style="{StaticResource MaterialDesignFlatButton}"
+                        FontSize="14"
+                        Margin="0,0,12,0"
+                        Padding="16,8"/>
+                <Button Content="Kaydet"
+                        Command="{Binding SaveCommand}"
+                        Style="{StaticResource MaterialDesignRaisedSecondaryButton}"
+                        FontSize="14"
+                        Padding="24,8">
+                    <Button.ContentTemplate>
+                        <DataTemplate>
+                            <StackPanel Orientation="Horizontal">
+                                <materialDesign:PackIcon Kind="ContentSave" VerticalAlignment="Center"
+                                                         Margin="0,0,6,0"/>
+                                <TextBlock Text="Kaydet" VerticalAlignment="Center"/>
+                            </StackPanel>
+                        </DataTemplate>
+                    </Button.ContentTemplate>
+                </Button>
+            </StackPanel>
+        </Grid>
+    </ScrollViewer>
+</UserControl>

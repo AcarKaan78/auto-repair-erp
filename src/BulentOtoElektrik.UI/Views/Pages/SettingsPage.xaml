@@ -1,0 +1,227 @@
+<UserControl x:Class="BulentOtoElektrik.UI.Views.Pages.SettingsPage"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
+             xmlns:converters="clr-namespace:BulentOtoElektrik.UI.Converters">
+
+    <UserControl.Resources>
+        <converters:BoolToVisibilityConverter x:Key="BoolToVisibility"/>
+    </UserControl.Resources>
+
+    <Grid Margin="24">
+        <ScrollViewer VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Disabled">
+            <StackPanel>
+                <!-- Title -->
+                <TextBlock Text="Ayarlar"
+                           Style="{StaticResource PageTitleStyle}"/>
+
+                <!-- Section 0: Excel Çıktı Klasörü -->
+                <materialDesign:Card Padding="20" Margin="0,0,0,16" UniformCornerRadius="8">
+                    <StackPanel>
+                        <TextBlock Text="Excel Dosya Konumu"
+                                   Style="{StaticResource SectionTitleStyle}"/>
+
+                        <TextBlock Text="Excel dosyaları varsayılan olarak bu klasöre kaydedilecektir."
+                                   Foreground="#757575" FontSize="13" Margin="0,4,0,12"/>
+
+                        <Grid>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="Auto"/>
+                                <ColumnDefinition Width="*"/>
+                                <ColumnDefinition Width="Auto"/>
+                            </Grid.ColumnDefinitions>
+
+                            <TextBlock Grid.Column="0"
+                                       Text="Kayıt Klasörü:"
+                                       FontWeight="Medium"
+                                       VerticalAlignment="Center"
+                                       Margin="0,0,12,0"/>
+                            <TextBlock Grid.Column="1"
+                                       Text="{Binding ExcelExportFolder}"
+                                       VerticalAlignment="Center"
+                                       TextTrimming="CharacterEllipsis"
+                                       Foreground="#757575"
+                                       ToolTip="{Binding ExcelExportFolder}"/>
+                            <Button Grid.Column="2"
+                                    Style="{StaticResource MaterialDesignOutlinedButton}"
+                                    Content="Klasör Seç"
+                                    Command="{Binding ChangeExcelExportFolderCommand}"
+                                    Margin="12,0,0,0"/>
+                        </Grid>
+                    </StackPanel>
+                </materialDesign:Card>
+
+                <!-- Section 1: Yedekleme -->
+                <materialDesign:Card Padding="20" Margin="0,0,0,16" UniformCornerRadius="8">
+                    <StackPanel>
+                        <TextBlock Text="Yedekleme"
+                                   Style="{StaticResource SectionTitleStyle}"/>
+
+                        <!-- Current folder display + Change button -->
+                        <Grid Margin="0,8,0,0">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="Auto"/>
+                                <ColumnDefinition Width="*"/>
+                                <ColumnDefinition Width="Auto"/>
+                            </Grid.ColumnDefinitions>
+
+                            <TextBlock Grid.Column="0"
+                                       Text="Yedekleme Klasörü:"
+                                       FontWeight="Medium"
+                                       VerticalAlignment="Center"
+                                       Margin="0,0,12,0"/>
+                            <TextBlock Grid.Column="1"
+                                       Text="{Binding BackupFolder}"
+                                       VerticalAlignment="Center"
+                                       TextTrimming="CharacterEllipsis"
+                                       Foreground="#757575"
+                                       ToolTip="{Binding BackupFolder}"/>
+                            <Button Grid.Column="2"
+                                    Style="{StaticResource MaterialDesignOutlinedButton}"
+                                    Content="Klasör Değiştir"
+                                    Command="{Binding ChangeBackupFolderCommand}"
+                                    Margin="12,0,0,0"/>
+                        </Grid>
+
+                        <!-- Manual Backup button -->
+                        <Button Style="{StaticResource MaterialDesignRaisedButton}"
+                                Command="{Binding ManualBackupCommand}"
+                                HorizontalAlignment="Left"
+                                Margin="0,16,0,0"
+                                Padding="24,8"
+                                Background="#303F9F">
+                            <StackPanel Orientation="Horizontal">
+                                <materialDesign:PackIcon Kind="DatabaseExport" VerticalAlignment="Center" Margin="0,0,8,0"/>
+                                <TextBlock Text="Manuel Yedek Al" VerticalAlignment="Center"/>
+                            </StackPanel>
+                        </Button>
+
+                        <!-- Backup List -->
+                        <TextBlock Text="Mevcut Yedekler"
+                                   FontWeight="Medium"
+                                   Margin="0,20,0,8"/>
+                        <ListBox ItemsSource="{Binding Backups}"
+                                 MaxHeight="200"
+                                 BorderBrush="#E0E0E0"
+                                 BorderThickness="1"
+                                 Padding="4">
+                            <ListBox.ItemTemplate>
+                                <DataTemplate>
+                                    <StackPanel Orientation="Horizontal" Margin="4,2">
+                                        <materialDesign:PackIcon Kind="Database"
+                                                                  Width="16" Height="16"
+                                                                  VerticalAlignment="Center"
+                                                                  Foreground="#757575"
+                                                                  Margin="0,0,8,0"/>
+                                        <TextBlock Text="{Binding}"
+                                                   VerticalAlignment="Center"
+                                                   FontSize="13"/>
+                                    </StackPanel>
+                                </DataTemplate>
+                            </ListBox.ItemTemplate>
+                        </ListBox>
+                    </StackPanel>
+                </materialDesign:Card>
+
+                <!-- Section 2: Gider Kategorileri -->
+                <materialDesign:Card Padding="20" Margin="0,0,0,16" UniformCornerRadius="8">
+                    <StackPanel>
+                        <TextBlock Text="Gider Kategorileri"
+                                   Style="{StaticResource SectionTitleStyle}"/>
+
+                        <!-- DataGrid for categories -->
+                        <DataGrid ItemsSource="{Binding Categories}"
+                                  AutoGenerateColumns="False"
+                                  CanUserAddRows="False"
+                                  CanUserDeleteRows="False"
+                                  IsReadOnly="True"
+                                  SelectionMode="Single"
+                                  MaxHeight="300"
+                                  Margin="0,8,0,0"
+                                  BorderBrush="#E0E0E0"
+                                  BorderThickness="1"
+                                  GridLinesVisibility="Horizontal"
+                                  HorizontalGridLinesBrush="#F0F0F0">
+                            <DataGrid.Columns>
+                                <DataGridTextColumn Header="Kategori Adı"
+                                                    Binding="{Binding Name}"
+                                                    Width="*"/>
+                                <DataGridTemplateColumn Header="Aktif" Width="100">
+                                    <DataGridTemplateColumn.CellTemplate>
+                                        <DataTemplate>
+                                            <ToggleButton Style="{StaticResource MaterialDesignSwitchToggleButton}"
+                                                          IsChecked="{Binding IsActive, Mode=OneWay}"
+                                                          Command="{Binding DataContext.ToggleCategoryCommand, RelativeSource={RelativeSource AncestorType=UserControl}}"
+                                                          CommandParameter="{Binding}"
+                                                          HorizontalAlignment="Center"/>
+                                        </DataTemplate>
+                                    </DataGridTemplateColumn.CellTemplate>
+                                </DataGridTemplateColumn>
+                            </DataGrid.Columns>
+                        </DataGrid>
+
+                        <!-- Add category row -->
+                        <Grid Margin="0,12,0,0">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="*"/>
+                                <ColumnDefinition Width="Auto"/>
+                            </Grid.ColumnDefinitions>
+
+                            <TextBox Grid.Column="0"
+                                     Text="{Binding NewCategoryName, UpdateSourceTrigger=PropertyChanged}"
+                                     materialDesign:HintAssist.Hint="Yeni kategori adı"
+                                     Style="{StaticResource MaterialDesignOutlinedTextBox}"
+                                     VerticalAlignment="Center"/>
+                            <Button Grid.Column="1"
+                                    Style="{StaticResource MaterialDesignRaisedButton}"
+                                    Content="Ekle"
+                                    Command="{Binding AddCategoryCommand}"
+                                    Margin="12,0,0,0"
+                                    Padding="24,8"
+                                    VerticalAlignment="Center"
+                                    Background="#303F9F"/>
+                        </Grid>
+                    </StackPanel>
+                </materialDesign:Card>
+
+                <!-- Section 3: Hakkında -->
+                <materialDesign:Card Padding="20" Margin="0,0,0,16" UniformCornerRadius="8">
+                    <StackPanel>
+                        <TextBlock Text="Hakkında"
+                                   Style="{StaticResource SectionTitleStyle}"/>
+
+                        <StackPanel Margin="0,8,0,0">
+                            <TextBlock Text="Bülent Oto Elektrik - Müşteri Yönetim Sistemi"
+                                       FontSize="18"
+                                       FontWeight="Bold"
+                                       Foreground="#303F9F"/>
+                            <TextBlock Text="v1.0.0"
+                                       FontSize="14"
+                                       Foreground="#757575"
+                                       Margin="0,4,0,0"/>
+                            <TextBlock Text=".NET 8 WPF + SQLite"
+                                       FontSize="13"
+                                       Foreground="#9E9E9E"
+                                       Margin="0,4,0,0"/>
+                        </StackPanel>
+                    </StackPanel>
+                </materialDesign:Card>
+            </StackPanel>
+        </ScrollViewer>
+
+        <!-- Loading Indicator -->
+        <Grid Visibility="{Binding IsBusy, Converter={StaticResource BoolToVisibility}}"
+              Background="#80FFFFFF">
+            <StackPanel VerticalAlignment="Center" HorizontalAlignment="Center">
+                <ProgressBar Style="{StaticResource MaterialDesignCircularProgressBar}"
+                             IsIndeterminate="True"
+                             Width="40" Height="40"/>
+                <TextBlock Text="Yükleniyor..."
+                           HorizontalAlignment="Center"
+                           Margin="0,12,0,0"
+                           FontSize="14"
+                           Foreground="#757575"/>
+            </StackPanel>
+        </Grid>
+    </Grid>
+</UserControl>

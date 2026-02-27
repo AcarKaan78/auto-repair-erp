@@ -1,0 +1,504 @@
+<UserControl x:Class="BulentOtoElektrik.UI.Views.Pages.CustomerDetailPage"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
+             xmlns:converters="clr-namespace:BulentOtoElektrik.UI.Converters"
+             Background="#F5F5F5">
+
+    <UserControl.Resources>
+        <converters:CurrencyFormatConverter x:Key="CurrencyFormat"/>
+        <converters:BalanceToColorConverter x:Key="BalanceToColor"/>
+        <converters:DateFormatConverter x:Key="DateFormat"/>
+        <converters:BoolToVisibilityConverter x:Key="BoolToVisibility"/>
+
+        <!-- Customer edit field style: shows border when editing, flat when not -->
+        <Style x:Key="EditableFieldStyle" TargetType="TextBox" BasedOn="{StaticResource MaterialDesignTextBox}">
+            <Setter Property="Padding" Value="4,2"/>
+            <Setter Property="BorderThickness" Value="0,0,0,1"/>
+            <Setter Property="BorderBrush" Value="Transparent"/>
+            <Style.Triggers>
+                <DataTrigger Binding="{Binding IsEditing}" Value="True">
+                    <Setter Property="BorderBrush" Value="{DynamicResource PrimaryHueMidBrush}"/>
+                    <Setter Property="Background" Value="#F5F5F5"/>
+                </DataTrigger>
+            </Style.Triggers>
+        </Style>
+    </UserControl.Resources>
+
+    <ScrollViewer VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Disabled">
+        <Grid Margin="24">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+            </Grid.RowDefinitions>
+
+            <!-- Top Bar -->
+            <Grid Grid.Row="0" Margin="0,0,0,16">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="Auto"/>
+                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="Auto"/>
+                </Grid.ColumnDefinitions>
+
+                <Button Grid.Column="0" Command="{Binding GoBackCommand}"
+                        Style="{StaticResource MaterialDesignOutlinedButton}"
+                        Padding="12,6">
+                    <StackPanel Orientation="Horizontal">
+                        <materialDesign:PackIcon Kind="ArrowLeft" Width="20" Height="20" VerticalAlignment="Center"/>
+                        <TextBlock Text="Geri" Margin="4,0,0,0" VerticalAlignment="Center"/>
+                    </StackPanel>
+                </Button>
+
+                <TextBlock Grid.Column="1" Text="{Binding CustomerName}"
+                           FontSize="24" FontWeight="Medium" Foreground="#212121"
+                           HorizontalAlignment="Center" VerticalAlignment="Center"/>
+
+                <StackPanel Grid.Column="2" Orientation="Horizontal">
+                    <Button Command="{Binding ExportExcelCommand}"
+                            Style="{StaticResource MaterialDesignOutlinedButton}"
+                            Padding="12,6" Margin="0,0,8,0">
+                        <StackPanel Orientation="Horizontal">
+                            <materialDesign:PackIcon Kind="FileExcel" Width="20" Height="20" VerticalAlignment="Center"/>
+                            <TextBlock Text="Excel" Margin="4,0,0,0" VerticalAlignment="Center"/>
+                        </StackPanel>
+                    </Button>
+                </StackPanel>
+            </Grid>
+
+            <!-- Row 1: Customer Info + Balance -->
+            <Grid Grid.Row="1" Margin="0,0,0,16">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="*"/>
+                </Grid.ColumnDefinitions>
+
+                <!-- Customer Info Card -->
+                <materialDesign:Card Grid.Column="0" Padding="20" Margin="0,0,8,0" UniformCornerRadius="8">
+                    <Grid>
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="Auto"/>
+                            <RowDefinition Height="*"/>
+                            <RowDefinition Height="Auto"/>
+                        </Grid.RowDefinitions>
+
+                        <Grid Grid.Row="0" Margin="0,0,0,12">
+                            <TextBlock Text="Musteri Bilgileri" FontSize="16" FontWeight="Medium"/>
+                            <Button HorizontalAlignment="Right"
+                                    Command="{Binding ToggleEditCommand}"
+                                    Style="{StaticResource MaterialDesignIconForegroundButton}"
+                                    ToolTip="Duzenle" Width="32" Height="32">
+                                <materialDesign:PackIcon Kind="PencilOutline" Width="20" Height="20"/>
+                            </Button>
+                        </Grid>
+
+                        <StackPanel Grid.Row="1" Margin="0,0,0,8">
+                            <Grid Margin="0,4">
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="100"/>
+                                    <ColumnDefinition Width="*"/>
+                                </Grid.ColumnDefinitions>
+                                <TextBlock Text="Ad Soyad:" FontWeight="Medium" Foreground="#757575"/>
+                                <TextBox Grid.Column="1" Text="{Binding CustomerName, UpdateSourceTrigger=PropertyChanged}"
+                                         IsEnabled="{Binding IsEditing}"
+                                         Style="{StaticResource EditableFieldStyle}"/>
+                            </Grid>
+
+                            <Grid Margin="0,4">
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="100"/>
+                                    <ColumnDefinition Width="*"/>
+                                </Grid.ColumnDefinitions>
+                                <TextBlock Text="Telefon 1:" FontWeight="Medium" Foreground="#757575"/>
+                                <TextBox Grid.Column="1" Text="{Binding Phone1, UpdateSourceTrigger=PropertyChanged}"
+                                         IsEnabled="{Binding IsEditing}"
+                                         Style="{StaticResource EditableFieldStyle}"/>
+                            </Grid>
+
+                            <Grid Margin="0,4">
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="100"/>
+                                    <ColumnDefinition Width="*"/>
+                                </Grid.ColumnDefinitions>
+                                <TextBlock Text="Telefon 2:" FontWeight="Medium" Foreground="#757575"/>
+                                <TextBox Grid.Column="1" Text="{Binding Phone2, UpdateSourceTrigger=PropertyChanged}"
+                                         IsEnabled="{Binding IsEditing}"
+                                         Style="{StaticResource EditableFieldStyle}"/>
+                            </Grid>
+
+                            <Grid Margin="0,4">
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="100"/>
+                                    <ColumnDefinition Width="*"/>
+                                </Grid.ColumnDefinitions>
+                                <TextBlock Text="TC No:" FontWeight="Medium" Foreground="#757575"/>
+                                <TextBox Grid.Column="1" Text="{Binding IdentityNumber, UpdateSourceTrigger=PropertyChanged}"
+                                         IsEnabled="{Binding IsEditing}"
+                                         Style="{StaticResource EditableFieldStyle}"/>
+                            </Grid>
+
+                            <Grid Margin="0,4">
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="100"/>
+                                    <ColumnDefinition Width="*"/>
+                                </Grid.ColumnDefinitions>
+                                <TextBlock Text="E-posta:" FontWeight="Medium" Foreground="#757575"/>
+                                <TextBox Grid.Column="1" Text="{Binding Email, UpdateSourceTrigger=PropertyChanged}"
+                                         IsEnabled="{Binding IsEditing}"
+                                         Style="{StaticResource EditableFieldStyle}"/>
+                            </Grid>
+
+                            <Grid Margin="0,4">
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="100"/>
+                                    <ColumnDefinition Width="*"/>
+                                </Grid.ColumnDefinitions>
+                                <TextBlock Text="Adres:" FontWeight="Medium" Foreground="#757575"/>
+                                <TextBox Grid.Column="1" Text="{Binding Address, UpdateSourceTrigger=PropertyChanged}"
+                                         IsEnabled="{Binding IsEditing}"
+                                         Style="{StaticResource EditableFieldStyle}"
+                                         TextWrapping="Wrap" AcceptsReturn="True" MaxHeight="60"/>
+                            </Grid>
+
+                            <Grid Margin="0,4">
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="100"/>
+                                    <ColumnDefinition Width="*"/>
+                                </Grid.ColumnDefinitions>
+                                <TextBlock Text="Notlar:" FontWeight="Medium" Foreground="#757575"/>
+                                <TextBox Grid.Column="1" Text="{Binding Notes, UpdateSourceTrigger=PropertyChanged}"
+                                         IsEnabled="{Binding IsEditing}"
+                                         Style="{StaticResource EditableFieldStyle}"
+                                         TextWrapping="Wrap" AcceptsReturn="True" MaxHeight="60"/>
+                            </Grid>
+                        </StackPanel>
+
+                        <Button Grid.Row="2" Command="{Binding SaveCustomerCommand}"
+                                Visibility="{Binding IsEditing, Converter={StaticResource BoolToVisibility}}"
+                                Style="{StaticResource MaterialDesignRaisedButton}"
+                                Background="#303F9F" Foreground="White"
+                                Content="Kaydet" HorizontalAlignment="Right"
+                                Padding="24,6" Margin="0,8,0,0"/>
+                    </Grid>
+                </materialDesign:Card>
+
+                <!-- Balance Card -->
+                <materialDesign:Card Grid.Column="1" Padding="20" Margin="8,0,0,0" UniformCornerRadius="8">
+                    <Grid>
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="Auto"/>
+                            <RowDefinition Height="*"/>
+                        </Grid.RowDefinitions>
+
+                        <TextBlock Grid.Row="0" Text="Hesap Ozeti" FontSize="16" FontWeight="Medium" Margin="0,0,0,16"/>
+
+                        <UniformGrid Grid.Row="1" Columns="3" Margin="0,8">
+                            <!-- Debt -->
+                            <StackPanel HorizontalAlignment="Center" Margin="4">
+                                <TextBlock Text="BORC" FontSize="13" Foreground="#757575" HorizontalAlignment="Center"/>
+                                <TextBlock Text="{Binding TotalDebt, Converter={StaticResource CurrencyFormat}}"
+                                           FontSize="20" FontWeight="Bold" Foreground="#F44336"
+                                           HorizontalAlignment="Center" Margin="0,4,0,0"
+                                           TextTrimming="CharacterEllipsis"/>
+                            </StackPanel>
+
+                            <!-- Payments -->
+                            <StackPanel HorizontalAlignment="Center" Margin="4">
+                                <TextBlock Text="ODEME" FontSize="13" Foreground="#757575" HorizontalAlignment="Center"/>
+                                <TextBlock Text="{Binding TotalPayments, Converter={StaticResource CurrencyFormat}}"
+                                           FontSize="20" FontWeight="Bold" Foreground="#4CAF50"
+                                           HorizontalAlignment="Center" Margin="0,4,0,0"
+                                           TextTrimming="CharacterEllipsis"/>
+                            </StackPanel>
+
+                            <!-- Balance -->
+                            <StackPanel HorizontalAlignment="Center" Margin="4">
+                                <TextBlock Text="BAKIYE" FontSize="13" Foreground="#757575" HorizontalAlignment="Center"/>
+                                <TextBlock Text="{Binding Balance, Converter={StaticResource CurrencyFormat}}"
+                                           FontSize="20" FontWeight="Bold"
+                                           Foreground="{Binding Balance, Converter={StaticResource BalanceToColor}}"
+                                           HorizontalAlignment="Center" Margin="0,4,0,0"
+                                           TextTrimming="CharacterEllipsis"/>
+                            </StackPanel>
+                        </UniformGrid>
+                    </Grid>
+                </materialDesign:Card>
+            </Grid>
+
+            <!-- Row 2: Vehicle Selector -->
+            <materialDesign:Card Grid.Row="2" Padding="16" Margin="0,0,0,16" UniformCornerRadius="8">
+                <Grid>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="Auto"/>
+                    </Grid.RowDefinitions>
+
+                    <TextBlock Grid.Row="0" Text="Araclar" FontSize="16" FontWeight="Medium" Margin="0,0,0,12"/>
+
+                    <StackPanel Grid.Row="1" Orientation="Horizontal">
+                        <ItemsControl ItemsSource="{Binding Vehicles}">
+                            <ItemsControl.ItemsPanel>
+                                <ItemsPanelTemplate>
+                                    <WrapPanel Orientation="Horizontal"/>
+                                </ItemsPanelTemplate>
+                            </ItemsControl.ItemsPanel>
+                            <ItemsControl.ItemTemplate>
+                                <DataTemplate>
+                                    <materialDesign:Chip Content="{Binding PlateNumber}"
+                                                          Icon="{Binding VehicleBrand}"
+                                                          IsDeletable="False"
+                                                          Margin="4,2"
+                                                          Click="VehicleChip_Click"
+                                                          ToolTip="{Binding VehicleBrand}"/>
+                                </DataTemplate>
+                            </ItemsControl.ItemTemplate>
+                        </ItemsControl>
+
+                        <Button Command="{Binding AddVehicleCommand}"
+                                Style="{StaticResource MaterialDesignOutlinedButton}"
+                                Padding="12,4" Margin="8,0,0,0"
+                                VerticalAlignment="Center">
+                            <StackPanel Orientation="Horizontal">
+                                <materialDesign:PackIcon Kind="Plus" Width="18" Height="18" VerticalAlignment="Center"/>
+                                <TextBlock Text="Arac Ekle" Margin="4,0,0,0" VerticalAlignment="Center"/>
+                            </StackPanel>
+                        </Button>
+                    </StackPanel>
+                </Grid>
+            </materialDesign:Card>
+
+            <!-- Row 3: Service Records -->
+            <materialDesign:Card Grid.Row="3" Padding="16" Margin="0,0,0,16" UniformCornerRadius="8">
+                <Grid>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="*"/>
+                    </Grid.RowDefinitions>
+
+                    <Grid Grid.Row="0" Margin="0,0,0,12">
+                        <TextBlock Text="Islem Kayitlari" FontSize="16" FontWeight="Medium" VerticalAlignment="Center"/>
+                        <Button HorizontalAlignment="Right"
+                                Command="{Binding AddServiceCommand}"
+                                Style="{StaticResource MaterialDesignRaisedButton}"
+                                Background="#303F9F" Foreground="White"
+                                Padding="12,4">
+                            <StackPanel Orientation="Horizontal">
+                                <materialDesign:PackIcon Kind="Plus" Width="18" Height="18" VerticalAlignment="Center"/>
+                                <TextBlock Text="Islem Ekle" Margin="4,0,0,0" VerticalAlignment="Center"/>
+                            </StackPanel>
+                        </Button>
+                    </Grid>
+
+                    <DataGrid Grid.Row="1" ItemsSource="{Binding ServiceRecords}"
+                              AutoGenerateColumns="False"
+                              CanUserAddRows="False" CanUserDeleteRows="False"
+                              IsReadOnly="True" SelectionMode="Single"
+                              GridLinesVisibility="Horizontal"
+                              HorizontalGridLinesBrush="#E0E0E0"
+                              RowHeight="40" FontSize="13"
+                              AlternatingRowBackground="#FAFAFA"
+                              MaxHeight="300"
+                              HeadersVisibility="Column">
+                        <DataGrid.Columns>
+                            <DataGridTextColumn Header="Tarih" Binding="{Binding ServiceDate, Converter={StaticResource DateFormat}}"
+                                                Width="Auto" MinWidth="100">
+                                <DataGridTextColumn.ElementStyle>
+                                    <Style TargetType="TextBlock">
+                                        <Setter Property="VerticalAlignment" Value="Center"/>
+                                        <Setter Property="Margin" Value="8,0"/>
+                                    </Style>
+                                </DataGridTextColumn.ElementStyle>
+                            </DataGridTextColumn>
+
+                            <DataGridTextColumn Header="Sikayet" Binding="{Binding Complaint}" Width="150">
+                                <DataGridTextColumn.ElementStyle>
+                                    <Style TargetType="TextBlock">
+                                        <Setter Property="VerticalAlignment" Value="Center"/>
+                                        <Setter Property="Margin" Value="8,0"/>
+                                        <Setter Property="TextTrimming" Value="CharacterEllipsis"/>
+                                    </Style>
+                                </DataGridTextColumn.ElementStyle>
+                            </DataGridTextColumn>
+
+                            <DataGridTextColumn Header="Yapilan Islem" Binding="{Binding WorkPerformed}" Width="*">
+                                <DataGridTextColumn.ElementStyle>
+                                    <Style TargetType="TextBlock">
+                                        <Setter Property="VerticalAlignment" Value="Center"/>
+                                        <Setter Property="Margin" Value="8,0"/>
+                                        <Setter Property="TextTrimming" Value="CharacterEllipsis"/>
+                                    </Style>
+                                </DataGridTextColumn.ElementStyle>
+                            </DataGridTextColumn>
+
+                            <DataGridTextColumn Header="Teknisyen" Binding="{Binding Technician.FullName}" Width="Auto" MinWidth="110">
+                                <DataGridTextColumn.ElementStyle>
+                                    <Style TargetType="TextBlock">
+                                        <Setter Property="VerticalAlignment" Value="Center"/>
+                                        <Setter Property="Margin" Value="8,0"/>
+                                    </Style>
+                                </DataGridTextColumn.ElementStyle>
+                            </DataGridTextColumn>
+
+                            <DataGridTextColumn Header="Miktar" Binding="{Binding Quantity}" Width="60">
+                                <DataGridTextColumn.ElementStyle>
+                                    <Style TargetType="TextBlock">
+                                        <Setter Property="VerticalAlignment" Value="Center"/>
+                                        <Setter Property="HorizontalAlignment" Value="Center"/>
+                                    </Style>
+                                </DataGridTextColumn.ElementStyle>
+                            </DataGridTextColumn>
+
+                            <DataGridTextColumn Header="Birim Fiyat" Binding="{Binding UnitPrice, Converter={StaticResource CurrencyFormat}}" Width="100">
+                                <DataGridTextColumn.ElementStyle>
+                                    <Style TargetType="TextBlock">
+                                        <Setter Property="VerticalAlignment" Value="Center"/>
+                                        <Setter Property="HorizontalAlignment" Value="Right"/>
+                                        <Setter Property="Margin" Value="0,0,8,0"/>
+                                    </Style>
+                                </DataGridTextColumn.ElementStyle>
+                            </DataGridTextColumn>
+
+                            <DataGridTextColumn Header="Tutar" Binding="{Binding TotalAmount, Converter={StaticResource CurrencyFormat}}" Width="100">
+                                <DataGridTextColumn.ElementStyle>
+                                    <Style TargetType="TextBlock">
+                                        <Setter Property="VerticalAlignment" Value="Center"/>
+                                        <Setter Property="HorizontalAlignment" Value="Right"/>
+                                        <Setter Property="FontWeight" Value="SemiBold"/>
+                                        <Setter Property="Margin" Value="0,0,8,0"/>
+                                    </Style>
+                                </DataGridTextColumn.ElementStyle>
+                            </DataGridTextColumn>
+
+                            <DataGridTextColumn Header="PB" Binding="{Binding Currency}" Width="50">
+                                <DataGridTextColumn.ElementStyle>
+                                    <Style TargetType="TextBlock">
+                                        <Setter Property="VerticalAlignment" Value="Center"/>
+                                        <Setter Property="HorizontalAlignment" Value="Center"/>
+                                    </Style>
+                                </DataGridTextColumn.ElementStyle>
+                            </DataGridTextColumn>
+
+                            <DataGridTemplateColumn Header="" Width="40">
+                                <DataGridTemplateColumn.CellTemplate>
+                                    <DataTemplate>
+                                        <Button Style="{StaticResource MaterialDesignIconForegroundButton}"
+                                                Command="{Binding DataContext.DeleteServiceCommand, RelativeSource={RelativeSource AncestorType=UserControl}}"
+                                                CommandParameter="{Binding}"
+                                                ToolTip="Sil" Width="28" Height="28"
+                                                Foreground="#F44336">
+                                            <materialDesign:PackIcon Kind="DeleteOutline" Width="18" Height="18"/>
+                                        </Button>
+                                    </DataTemplate>
+                                </DataGridTemplateColumn.CellTemplate>
+                            </DataGridTemplateColumn>
+                        </DataGrid.Columns>
+                    </DataGrid>
+                </Grid>
+            </materialDesign:Card>
+
+            <!-- Row 4: Payments -->
+            <materialDesign:Card Grid.Row="4" Padding="16" Margin="0,0,0,16" UniformCornerRadius="8">
+                <Grid>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="*"/>
+                    </Grid.RowDefinitions>
+
+                    <Grid Grid.Row="0" Margin="0,0,0,16">
+                        <TextBlock Text="Odemeler" FontSize="16" FontWeight="Medium" VerticalAlignment="Center"/>
+                        <Button HorizontalAlignment="Right"
+                                Command="{Binding TakePaymentCommand}"
+                                Style="{StaticResource MaterialDesignRaisedButton}"
+                                Background="#4CAF50" Foreground="White"
+                                Padding="12,4">
+                            <StackPanel Orientation="Horizontal">
+                                <materialDesign:PackIcon Kind="CashPlus" Width="18" Height="18" VerticalAlignment="Center"/>
+                                <TextBlock Text="Odeme Al" Margin="4,0,0,0" VerticalAlignment="Center"/>
+                            </StackPanel>
+                        </Button>
+                    </Grid>
+
+                    <DataGrid Grid.Row="1" ItemsSource="{Binding Payments}"
+                              AutoGenerateColumns="False"
+                              CanUserAddRows="False" CanUserDeleteRows="False"
+                              IsReadOnly="True" SelectionMode="Single"
+                              GridLinesVisibility="Horizontal"
+                              HorizontalGridLinesBrush="#E0E0E0"
+                              RowHeight="40" FontSize="13"
+                              AlternatingRowBackground="#FAFAFA"
+                              MaxHeight="250"
+                              HeadersVisibility="Column">
+                        <DataGrid.Columns>
+                            <DataGridTextColumn Header="Tarih" Binding="{Binding PaymentDate, Converter={StaticResource DateFormat}}"
+                                                Width="100">
+                                <DataGridTextColumn.ElementStyle>
+                                    <Style TargetType="TextBlock">
+                                        <Setter Property="VerticalAlignment" Value="Center"/>
+                                        <Setter Property="Margin" Value="8,0"/>
+                                    </Style>
+                                </DataGridTextColumn.ElementStyle>
+                            </DataGridTextColumn>
+
+                            <DataGridTextColumn Header="Tutar" Binding="{Binding Amount, Converter={StaticResource CurrencyFormat}}"
+                                                Width="Auto" MinWidth="120">
+                                <DataGridTextColumn.ElementStyle>
+                                    <Style TargetType="TextBlock">
+                                        <Setter Property="VerticalAlignment" Value="Center"/>
+                                        <Setter Property="FontWeight" Value="SemiBold"/>
+                                        <Setter Property="Foreground" Value="#4CAF50"/>
+                                        <Setter Property="HorizontalAlignment" Value="Right"/>
+                                        <Setter Property="Margin" Value="0,0,8,0"/>
+                                    </Style>
+                                </DataGridTextColumn.ElementStyle>
+                            </DataGridTextColumn>
+
+                            <DataGridTextColumn Header="Odeme Yontemi" Binding="{Binding PaymentMethod}" Width="130">
+                                <DataGridTextColumn.ElementStyle>
+                                    <Style TargetType="TextBlock">
+                                        <Setter Property="VerticalAlignment" Value="Center"/>
+                                        <Setter Property="Margin" Value="8,0"/>
+                                    </Style>
+                                </DataGridTextColumn.ElementStyle>
+                            </DataGridTextColumn>
+
+                            <DataGridTextColumn Header="PB" Binding="{Binding Currency}" Width="50">
+                                <DataGridTextColumn.ElementStyle>
+                                    <Style TargetType="TextBlock">
+                                        <Setter Property="VerticalAlignment" Value="Center"/>
+                                        <Setter Property="HorizontalAlignment" Value="Center"/>
+                                    </Style>
+                                </DataGridTextColumn.ElementStyle>
+                            </DataGridTextColumn>
+
+                            <DataGridTextColumn Header="Notlar" Binding="{Binding Notes}" Width="*">
+                                <DataGridTextColumn.ElementStyle>
+                                    <Style TargetType="TextBlock">
+                                        <Setter Property="VerticalAlignment" Value="Center"/>
+                                        <Setter Property="Margin" Value="8,0"/>
+                                        <Setter Property="TextTrimming" Value="CharacterEllipsis"/>
+                                    </Style>
+                                </DataGridTextColumn.ElementStyle>
+                            </DataGridTextColumn>
+
+                            <DataGridTemplateColumn Header="" Width="40">
+                                <DataGridTemplateColumn.CellTemplate>
+                                    <DataTemplate>
+                                        <Button Style="{StaticResource MaterialDesignIconForegroundButton}"
+                                                Command="{Binding DataContext.DeletePaymentCommand, RelativeSource={RelativeSource AncestorType=UserControl}}"
+                                                CommandParameter="{Binding}"
+                                                ToolTip="Sil" Width="28" Height="28"
+                                                Foreground="#F44336">
+                                            <materialDesign:PackIcon Kind="DeleteOutline" Width="18" Height="18"/>
+                                        </Button>
+                                    </DataTemplate>
+                                </DataGridTemplateColumn.CellTemplate>
+                            </DataGridTemplateColumn>
+                        </DataGrid.Columns>
+                    </DataGrid>
+                </Grid>
+            </materialDesign:Card>
+        </Grid>
+    </ScrollViewer>
+</UserControl>

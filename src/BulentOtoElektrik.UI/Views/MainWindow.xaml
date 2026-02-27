@@ -1,0 +1,230 @@
+<Window x:Class="BulentOtoElektrik.UI.Views.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
+        xmlns:converters="clr-namespace:BulentOtoElektrik.UI.Converters"
+        xmlns:vm="clr-namespace:BulentOtoElektrik.UI.ViewModels"
+        xmlns:pages="clr-namespace:BulentOtoElektrik.UI.Views.Pages"
+        Title="BULENT OTO ELEKTRIK - Musteri Yonetim Sistemi"
+        Width="1280" Height="800"
+        MinWidth="1024" MinHeight="768"
+        WindowStartupLocation="CenterScreen"
+        TextElement.Foreground="{DynamicResource MaterialDesignBody}"
+        Background="{DynamicResource MaterialDesignPaper}"
+        KeyDown="Window_KeyDown">
+
+    <Window.Resources>
+        <converters:BoolToVisibilityConverter x:Key="BoolToVisibility"/>
+        <converters:CurrencyFormatConverter x:Key="CurrencyFormat"/>
+
+        <!-- DataTemplates for ViewModel to View mapping -->
+        <DataTemplate DataType="{x:Type vm:DashboardViewModel}">
+            <pages:DashboardPage/>
+        </DataTemplate>
+        <DataTemplate DataType="{x:Type vm:CustomerSearchViewModel}">
+            <pages:CustomerSearchPage/>
+        </DataTemplate>
+        <DataTemplate DataType="{x:Type vm:CustomerDetailViewModel}">
+            <pages:CustomerDetailPage/>
+        </DataTemplate>
+        <DataTemplate DataType="{x:Type vm:NewServiceViewModel}">
+            <pages:NewServicePage/>
+        </DataTemplate>
+        <DataTemplate DataType="{x:Type vm:DailyExpensesViewModel}">
+            <pages:DailyExpensesPage/>
+        </DataTemplate>
+        <DataTemplate DataType="{x:Type vm:ReportsViewModel}">
+            <pages:ReportsPage/>
+        </DataTemplate>
+        <DataTemplate DataType="{x:Type vm:TechniciansViewModel}">
+            <pages:TechniciansPage/>
+        </DataTemplate>
+        <DataTemplate DataType="{x:Type vm:SettingsViewModel}">
+            <pages:SettingsPage/>
+        </DataTemplate>
+    </Window.Resources>
+
+    <Grid>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="220"/>
+            <ColumnDefinition Width="*"/>
+        </Grid.ColumnDefinitions>
+
+        <!-- Sidebar -->
+        <Border Grid.Column="0" Background="#303F9F">
+            <DockPanel>
+                <!-- Logo/Title at top -->
+                <StackPanel DockPanel.Dock="Top" Margin="16,20,16,24">
+                    <materialDesign:PackIcon Kind="CarElectric" Width="40" Height="40"
+                                              Foreground="White" HorizontalAlignment="Center"/>
+                    <TextBlock Text="BULENT OTO"
+                               Foreground="White" FontWeight="Bold" FontSize="16"
+                               HorizontalAlignment="Center" Margin="0,8,0,0"/>
+                    <TextBlock Text="ELEKTRIK"
+                               Foreground="White" FontWeight="Bold" FontSize="16"
+                               HorizontalAlignment="Center"/>
+                </StackPanel>
+
+                <!-- Version info at bottom -->
+                <TextBlock DockPanel.Dock="Bottom"
+                           Text="v1.0.0" Foreground="#7986CB" FontSize="11"
+                           HorizontalAlignment="Center" Margin="0,0,0,12"/>
+
+                <!-- Navigation ListBox -->
+                <ListBox x:Name="NavListBox"
+                         Background="Transparent" BorderThickness="0"
+                         SelectedIndex="0"
+                         SelectionChanged="NavListBox_SelectionChanged">
+                    <ListBox.ItemContainerStyle>
+                        <Style TargetType="ListBoxItem">
+                            <Setter Property="Foreground" Value="White"/>
+                            <Setter Property="FontSize" Value="14"/>
+                            <Setter Property="Padding" Value="20,12"/>
+                            <Setter Property="Cursor" Value="Hand"/>
+                            <Setter Property="Template">
+                                <Setter.Value>
+                                    <ControlTemplate TargetType="ListBoxItem">
+                                        <Border x:Name="Bd" Background="Transparent"
+                                                Padding="{TemplateBinding Padding}">
+                                            <ContentPresenter/>
+                                        </Border>
+                                        <ControlTemplate.Triggers>
+                                            <Trigger Property="IsMouseOver" Value="True">
+                                                <Setter TargetName="Bd" Property="Background" Value="#3949AB"/>
+                                            </Trigger>
+                                            <Trigger Property="IsSelected" Value="True">
+                                                <Setter TargetName="Bd" Property="Background" Value="#1A237E"/>
+                                            </Trigger>
+                                        </ControlTemplate.Triggers>
+                                    </ControlTemplate>
+                                </Setter.Value>
+                            </Setter>
+                        </Style>
+                    </ListBox.ItemContainerStyle>
+
+                    <ListBoxItem Tag="Dashboard">
+                        <StackPanel Orientation="Horizontal">
+                            <materialDesign:PackIcon Kind="Home" Width="22" Height="22" VerticalAlignment="Center" Foreground="White"/>
+                            <TextBlock Text="Ana Sayfa" Margin="12,0,0,0" VerticalAlignment="Center" Foreground="White"/>
+                        </StackPanel>
+                    </ListBoxItem>
+
+                    <ListBoxItem Tag="CustomerSearch">
+                        <StackPanel Orientation="Horizontal">
+                            <materialDesign:PackIcon Kind="Magnify" Width="22" Height="22" VerticalAlignment="Center" Foreground="White"/>
+                            <TextBlock Text="Musteri Ara" Margin="12,0,0,0" VerticalAlignment="Center" Foreground="White"/>
+                        </StackPanel>
+                    </ListBoxItem>
+
+                    <ListBoxItem Tag="NewService">
+                        <StackPanel Orientation="Horizontal">
+                            <materialDesign:PackIcon Kind="Plus" Width="22" Height="22" VerticalAlignment="Center" Foreground="White"/>
+                            <TextBlock Text="Yeni Islem" Margin="12,0,0,0" VerticalAlignment="Center" Foreground="White"/>
+                        </StackPanel>
+                    </ListBoxItem>
+
+                    <ListBoxItem Tag="DailyExpenses">
+                        <StackPanel Orientation="Horizontal">
+                            <materialDesign:PackIcon Kind="Cash" Width="22" Height="22" VerticalAlignment="Center" Foreground="White"/>
+                            <TextBlock Text="Gunluk Giderler" Margin="12,0,0,0" VerticalAlignment="Center" Foreground="White"/>
+                        </StackPanel>
+                    </ListBoxItem>
+
+                    <ListBoxItem Tag="Reports">
+                        <StackPanel Orientation="Horizontal">
+                            <materialDesign:PackIcon Kind="ChartBar" Width="22" Height="22" VerticalAlignment="Center" Foreground="White"/>
+                            <TextBlock Text="Raporlar" Margin="12,0,0,0" VerticalAlignment="Center" Foreground="White"/>
+                        </StackPanel>
+                    </ListBoxItem>
+
+                    <ListBoxItem Tag="Technicians">
+                        <StackPanel Orientation="Horizontal">
+                            <materialDesign:PackIcon Kind="AccountGroup" Width="22" Height="22" VerticalAlignment="Center" Foreground="White"/>
+                            <TextBlock Text="Teknisyenler" Margin="12,0,0,0" VerticalAlignment="Center" Foreground="White"/>
+                        </StackPanel>
+                    </ListBoxItem>
+
+                    <ListBoxItem Tag="Settings">
+                        <StackPanel Orientation="Horizontal">
+                            <materialDesign:PackIcon Kind="Cog" Width="22" Height="22" VerticalAlignment="Center" Foreground="White"/>
+                            <TextBlock Text="Ayarlar" Margin="12,0,0,0" VerticalAlignment="Center" Foreground="White"/>
+                        </StackPanel>
+                    </ListBoxItem>
+                </ListBox>
+            </DockPanel>
+        </Border>
+
+        <!-- Main Content Area -->
+        <DockPanel Grid.Column="1" Background="#F5F5F5">
+            <!-- Top Search Bar -->
+            <Border DockPanel.Dock="Top" Background="White"
+                    Padding="16,10" BorderBrush="#E0E0E0" BorderThickness="0,0,0,1">
+                <Grid>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="*"/>
+                    </Grid.ColumnDefinitions>
+
+                    <!-- Search Box -->
+                    <Grid Grid.Column="0" MaxWidth="500" HorizontalAlignment="Left">
+                        <TextBox x:Name="SearchBox"
+                                 Text="{Binding SearchText, UpdateSourceTrigger=PropertyChanged}"
+                                 materialDesign:HintAssist.Hint="Plaka veya musteri ara... (Ctrl+F)"
+                                 materialDesign:TextFieldAssist.HasLeadingIcon="True"
+                                 materialDesign:TextFieldAssist.LeadingIcon="Magnify"
+                                 materialDesign:TextFieldAssist.HasClearButton="True"
+                                 Style="{StaticResource MaterialDesignOutlinedTextBox}"
+                                 MinWidth="350" VerticalAlignment="Center"
+                                 FontSize="14"/>
+
+                        <!-- Search Results Popup -->
+                        <Popup IsOpen="{Binding IsSearchPopupOpen}"
+                               PlacementTarget="{Binding ElementName=SearchBox}"
+                               Placement="Bottom" StaysOpen="False"
+                               Width="{Binding ElementName=SearchBox, Path=ActualWidth}">
+                            <materialDesign:Card Padding="0" UniformCornerRadius="4">
+                                <ListBox ItemsSource="{Binding SearchResults}" MaxHeight="300"
+                                         BorderThickness="0">
+                                    <ListBox.ItemTemplate>
+                                        <DataTemplate>
+                                            <StackPanel Orientation="Horizontal" Margin="4,2">
+                                                <TextBlock Text="{Binding PlateNumber}" FontWeight="Bold"
+                                                           Foreground="#303F9F" MinWidth="100"/>
+                                                <TextBlock Text="{Binding CustomerName}" Margin="12,0,0,0"/>
+                                                <TextBlock Text="{Binding VehicleModel}" Margin="12,0,0,0"
+                                                           Foreground="#757575"/>
+                                            </StackPanel>
+                                        </DataTemplate>
+                                    </ListBox.ItemTemplate>
+                                </ListBox>
+                            </materialDesign:Card>
+                        </Popup>
+                    </Grid>
+                </Grid>
+            </Border>
+
+            <!-- Status Bar at Bottom -->
+            <StatusBar DockPanel.Dock="Bottom" Background="#303F9F" Foreground="White" Padding="12,6">
+                <StatusBarItem>
+                    <StackPanel Orientation="Horizontal">
+                        <materialDesign:PackIcon Kind="CurrencyTry" Width="16" Height="16"
+                                                  VerticalAlignment="Center" Margin="0,0,4,0"/>
+                        <TextBlock Text="Bugun:" FontWeight="Medium" Margin="0,0,8,0"/>
+                        <TextBlock Text="{Binding TodayRevenueText}" FontWeight="Bold"/>
+                        <TextBlock Text="  |  " Foreground="#7986CB"/>
+                        <materialDesign:PackIcon Kind="Car" Width="16" Height="16"
+                                                  VerticalAlignment="Center" Margin="0,0,4,0"/>
+                        <TextBlock Text="Arac:" FontWeight="Medium" Margin="0,0,8,0"/>
+                        <TextBlock Text="{Binding TodayVehicleCount}" FontWeight="Bold"/>
+                    </StackPanel>
+                </StatusBarItem>
+            </StatusBar>
+
+            <!-- Page Content -->
+            <ContentControl Content="{Binding CurrentPage}" Margin="0"/>
+
+            <!-- Snackbar for notifications -->
+            <materialDesign:Snackbar DockPanel.Dock="Bottom"
+                                     MessageQueue="{Binding SnackbarMessageQueue}"/>
+        </DockPanel>
+    </Grid>
+</Window>

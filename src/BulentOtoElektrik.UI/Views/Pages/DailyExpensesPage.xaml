@@ -1,0 +1,165 @@
+<UserControl x:Class="BulentOtoElektrik.UI.Views.Pages.DailyExpensesPage"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
+             xmlns:converters="clr-namespace:BulentOtoElektrik.UI.Converters">
+
+    <UserControl.Resources>
+        <converters:CurrencyFormatConverter x:Key="CurrencyFormat"/>
+        <converters:BoolToVisibilityConverter x:Key="BoolToVisibility"/>
+    </UserControl.Resources>
+
+    <Grid Margin="24">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+        </Grid.RowDefinitions>
+
+        <!-- Title -->
+        <TextBlock Grid.Row="0"
+                   Text="Günlük Giderler"
+                   Style="{StaticResource PageTitleStyle}"/>
+
+        <!-- Date Navigation Row -->
+        <StackPanel Grid.Row="1" Orientation="Horizontal" Margin="0,0,0,16">
+            <Button Style="{StaticResource MaterialDesignIconButton}"
+                    Command="{Binding PreviousDayCommand}"
+                    ToolTip="Önceki Gün">
+                <materialDesign:PackIcon Kind="ChevronLeft" Width="24" Height="24"/>
+            </Button>
+
+            <DatePicker SelectedDate="{Binding SelectedDate, Mode=TwoWay}"
+                        Width="180"
+                        VerticalAlignment="Center"
+                        Margin="8,0"
+                        materialDesign:HintAssist.Hint="Tarih Seçin"
+                        Style="{StaticResource MaterialDesignOutlinedDatePicker}"/>
+
+            <Button Style="{StaticResource MaterialDesignIconButton}"
+                    Command="{Binding NextDayCommand}"
+                    ToolTip="Sonraki Gün">
+                <materialDesign:PackIcon Kind="ChevronRight" Width="24" Height="24"/>
+            </Button>
+
+            <Button Style="{StaticResource MaterialDesignOutlinedButton}"
+                    Content="Bugün"
+                    Command="{Binding GoToTodayCommand}"
+                    Margin="16,0,0,0"
+                    VerticalAlignment="Center"/>
+        </StackPanel>
+
+        <!-- DataGrid -->
+        <DataGrid Grid.Row="2"
+                  ItemsSource="{Binding Expenses}"
+                  Style="{StaticResource AppDataGridStyle}"
+                  Margin="0,0,0,16">
+            <DataGrid.Columns>
+                <DataGridTextColumn Header="Kategori"
+                                    Binding="{Binding Category.Name}"
+                                    Width="*"/>
+                <DataGridTextColumn Header="Açıklama"
+                                    Binding="{Binding Description}"
+                                    Width="2*"/>
+                <DataGridTextColumn Header="Tutar"
+                                    Binding="{Binding Amount, Converter={StaticResource CurrencyFormat}}"
+                                    Width="Auto">
+                    <DataGridTextColumn.ElementStyle>
+                        <Style TargetType="TextBlock">
+                            <Setter Property="HorizontalAlignment" Value="Right"/>
+                            <Setter Property="Margin" Value="8,0"/>
+                        </Style>
+                    </DataGridTextColumn.ElementStyle>
+                </DataGridTextColumn>
+                <DataGridTextColumn Header="Para Birimi"
+                                    Binding="{Binding Currency}"
+                                    Width="Auto"/>
+                <DataGridTemplateColumn Header="Sil" Width="Auto">
+                    <DataGridTemplateColumn.CellTemplate>
+                        <DataTemplate>
+                            <Button Style="{StaticResource MaterialDesignIconForegroundButton}"
+                                    Command="{Binding DataContext.DeleteExpenseCommand, RelativeSource={RelativeSource AncestorType=UserControl}}"
+                                    CommandParameter="{Binding}"
+                                    ToolTip="Gideri Sil"
+                                    Foreground="{StaticResource DangerRedBrush}">
+                                <materialDesign:PackIcon Kind="Delete" Width="18" Height="18"/>
+                            </Button>
+                        </DataTemplate>
+                    </DataGridTemplateColumn.CellTemplate>
+                </DataGridTemplateColumn>
+            </DataGrid.Columns>
+        </DataGrid>
+
+        <!-- Add Expense Button -->
+        <Button Grid.Row="3"
+                Style="{StaticResource MaterialDesignRaisedSecondaryButton}"
+                Content="Gider Ekle"
+                Command="{Binding AddExpenseCommand}"
+                HorizontalAlignment="Left"
+                Margin="0,0,0,16"
+                Padding="24,8">
+            <Button.ContentTemplate>
+                <DataTemplate>
+                    <StackPanel Orientation="Horizontal">
+                        <materialDesign:PackIcon Kind="Plus" VerticalAlignment="Center" Margin="0,0,8,0"/>
+                        <TextBlock Text="Gider Ekle" VerticalAlignment="Center"/>
+                    </StackPanel>
+                </DataTemplate>
+            </Button.ContentTemplate>
+        </Button>
+
+        <!-- Daily Summary Panel -->
+        <UniformGrid Grid.Row="4" Columns="3" Margin="0,0,0,0">
+            <!-- Toplam Gelir -->
+            <materialDesign:Card Style="{StaticResource SummaryCardStyle}">
+                <StackPanel>
+                    <TextBlock Text="Toplam Gelir"
+                               Style="{StaticResource SummaryCardLabelStyle}"/>
+                    <TextBlock Text="{Binding TotalRevenue, Converter={StaticResource CurrencyFormat}}"
+                               Style="{StaticResource SummaryCardValueStyle}"
+                               Foreground="{StaticResource SuccessGreenBrush}"/>
+                </StackPanel>
+            </materialDesign:Card>
+
+            <!-- Toplam Gider -->
+            <materialDesign:Card Style="{StaticResource SummaryCardStyle}">
+                <StackPanel>
+                    <TextBlock Text="Toplam Gider"
+                               Style="{StaticResource SummaryCardLabelStyle}"/>
+                    <TextBlock Text="{Binding TotalExpenses, Converter={StaticResource CurrencyFormat}}"
+                               Style="{StaticResource SummaryCardValueStyle}"
+                               Foreground="{StaticResource DangerRedBrush}"/>
+                </StackPanel>
+            </materialDesign:Card>
+
+            <!-- Net Kazanç -->
+            <materialDesign:Card Style="{StaticResource SummaryCardStyle}">
+                <StackPanel>
+                    <TextBlock Text="Net Kazanç"
+                               Style="{StaticResource SummaryCardLabelStyle}"/>
+                    <TextBlock Text="{Binding NetEarnings, Converter={StaticResource CurrencyFormat}}"
+                               Style="{StaticResource SummaryCardValueStyle}"
+                               Foreground="#1976D2"/>
+                </StackPanel>
+            </materialDesign:Card>
+        </UniformGrid>
+
+        <!-- Loading Indicator -->
+        <Grid Grid.Row="0" Grid.RowSpan="5"
+              Visibility="{Binding IsBusy, Converter={StaticResource BoolToVisibility}}"
+              Background="#80FFFFFF">
+            <StackPanel VerticalAlignment="Center" HorizontalAlignment="Center">
+                <ProgressBar Style="{StaticResource MaterialDesignCircularProgressBar}"
+                             IsIndeterminate="True"
+                             Width="40" Height="40"/>
+                <TextBlock Text="Yükleniyor..."
+                           HorizontalAlignment="Center"
+                           Margin="0,12,0,0"
+                           FontSize="14"
+                           Foreground="#757575"/>
+            </StackPanel>
+        </Grid>
+    </Grid>
+</UserControl>

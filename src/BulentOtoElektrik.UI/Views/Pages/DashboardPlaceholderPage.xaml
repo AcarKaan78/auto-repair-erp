@@ -1,0 +1,7 @@
+<UserControl x:Class="BulentOtoElektrik.UI.Views.Pages.DashboardPlaceholderPage"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
+    <Grid VerticalAlignment="Center" HorizontalAlignment="Center">
+        <TextBlock Text="Ana Sayfa" FontSize="24" Foreground="#757575"/>
+    </Grid>
+</UserControl>
