@@ -35,8 +35,8 @@ SolidCompression=yes
 WizardStyle=modern
 WizardSizePercent=100
 
-; No admin required (installing outside Program Files)
-PrivilegesRequired=lowest
+; Require admin privileges
+PrivilegesRequired=admin
 
 ; Uninstaller
 UninstallDisplayIcon={app}\{#MyAppExeName}
