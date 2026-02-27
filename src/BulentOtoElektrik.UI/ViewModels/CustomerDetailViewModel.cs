@@ -198,6 +198,7 @@ public partial class CustomerDetailViewModel : ObservableObject
             await _unitOfWork.Customers.UpdateAsync(Customer);
             await _unitOfWork.SaveChangesAsync();
             _ = _excelExportService.AutoExportCustomerCardsAsync(CustomerId);
+            _ = _excelExportService.AutoExportReportsAsync(DateTime.Today);
 
             IsEditing = false;
             await _dialogService.ShowMessageAsync("Musteri bilgileri guncellendi.", "Basarili");
@@ -222,6 +223,7 @@ public partial class CustomerDetailViewModel : ObservableObject
                 await _unitOfWork.SaveChangesAsync();
                 await LoadAsync(CustomerId);
                 _ = _excelExportService.AutoExportCustomerCardsAsync(CustomerId);
+                _ = _excelExportService.AutoExportReportsAsync(DateTime.Today);
             }
             catch (Exception ex)
             {
@@ -335,6 +337,17 @@ public partial class CustomerDetailViewModel : ObservableObject
                 await _dialogService.ShowMessageAsync($"Silme hatasi: {ex.Message}", "Hata");
             }
         }
+    }
+
+    [RelayCommand]
+    private async Task ExportAllReportsAsync()
+    {
+        try
+        {
+            _ = _excelExportService.AutoExportCustomerCardsAsync(CustomerId);
+            _ = _excelExportService.AutoExportReportsAsync(DateTime.Today);
+        }
+        catch { }
     }
 
     [RelayCommand]

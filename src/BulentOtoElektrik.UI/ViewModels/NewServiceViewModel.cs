@@ -239,6 +239,8 @@ public partial class NewServiceViewModel : ObservableObject
             PlateText = vehicle.PlateNumber;
             CustomerDisplayName = customer.FullName;
             VehicleDisplayInfo = $"{vehicle.VehicleBrand} {vehicle.VehicleModel} ({vehicle.VehicleYear})";
+            _ = _excelExportService.AutoExportCustomerCardsAsync(customer.Id);
+            _ = _excelExportService.AutoExportReportsAsync(DateTime.Today);
         }
     }
 
