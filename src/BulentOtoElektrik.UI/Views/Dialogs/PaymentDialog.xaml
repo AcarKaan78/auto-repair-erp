@@ -4,6 +4,7 @@
         xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
         xmlns:enums="clr-namespace:BulentOtoElektrik.Core.Enums;assembly=BulentOtoElektrik.Core"
         xmlns:sys="clr-namespace:System;assembly=mscorlib"
+        xmlns:converters="clr-namespace:BulentOtoElektrik.UI.Converters"
         Title="Odeme Al"
         Width="420" Height="520"
         WindowStartupLocation="CenterOwner"
@@ -25,6 +26,7 @@
                 <x:Type TypeName="enums:PaymentMethod"/>
             </ObjectDataProvider.MethodParameters>
         </ObjectDataProvider>
+        <converters:PaymentMethodConverter x:Key="PaymentMethodConverter"/>
     </Window.Resources>
 
     <Grid Margin="24">
@@ -50,7 +52,13 @@
                       ItemsSource="{Binding Source={StaticResource PaymentMethodValues}}"
                       SelectedItem="{Binding PaymentMethod}"
                       Style="{StaticResource MaterialDesignOutlinedComboBox}"
-                      Margin="0,0,0,12"/>
+                      Margin="0,0,0,12">
+                <ComboBox.ItemTemplate>
+                    <DataTemplate>
+                        <TextBlock Text="{Binding Converter={StaticResource PaymentMethodConverter}}"/>
+                    </DataTemplate>
+                </ComboBox.ItemTemplate>
+            </ComboBox>
 
             <ComboBox materialDesign:HintAssist.Hint="Para Birimi"
                       ItemsSource="{Binding Source={StaticResource CurrencyTypeValues}}"
