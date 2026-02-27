@@ -18,6 +18,8 @@ public partial class CustomerDetailViewModel : ObservableObject
     [ObservableProperty]
     private int _customerId;
 
+    public int? PreferredVehicleId { get; set; }
+
     [ObservableProperty]
     private Customer? _customer;
 
@@ -46,10 +48,7 @@ public partial class CustomerDetailViewModel : ObservableObject
     private bool _isEditing;
 
     [ObservableProperty]
-    private ObservableCollection<Vehicle> _vehicles = new();
-
-    [ObservableProperty]
-    private Vehicle? _selectedVehicle;
+    private Vehicle? _vehicle;
 
     [ObservableProperty]
     private ObservableCollection<ServiceRecord> _serviceRecords = new();
@@ -105,21 +104,18 @@ public partial class CustomerDetailViewModel : ObservableObject
             Address = customer.Address;
             Notes = customer.Notes;
 
-            Vehicles = new ObservableCollection<Vehicle>(customer.Vehicles);
+            Vehicle = (PreferredVehicleId.HasValue
+                ? customer.Vehicles.FirstOrDefault(v => v.Id == PreferredVehicleId.Value)
+                : null) ?? customer.Vehicles.FirstOrDefault();
 
             // Load payments
             var payments = await _unitOfWork.Payments.GetByCustomerIdAsync(customerId);
             Payments = new ObservableCollection<Payment>(payments);
 
-            // Select first vehicle (or keep current selection) and force reload service records
-            var vehicleToSelect = Vehicles.FirstOrDefault(v => v.Id == SelectedVehicle?.Id) ?? Vehicles.FirstOrDefault();
-            SelectedVehicle = null; // force property change
-            SelectedVehicle = vehicleToSelect;
-
-            // Always reload service records even if same vehicle (EF tracking may reuse same object)
-            if (SelectedVehicle != null)
+            // Load service records for the vehicle
+            if (Vehicle != null)
             {
-                await LoadServiceRecordsAsync(SelectedVehicle.Id);
+                await LoadServiceRecordsAsync(Vehicle.Id);
             }
 
             RecalculateBalances();
@@ -131,18 +127,6 @@ public partial class CustomerDetailViewModel : ObservableObject
         finally
         {
             IsLoading = false;
-        }
-    }
-
-    partial void OnSelectedVehicleChanged(Vehicle? value)
-    {
-        if (value != null)
-        {
-            _ = LoadServiceRecordsAsync(value.Id);
-        }
-        else
-        {
-            ServiceRecords.Clear();
         }
     }
 
@@ -161,8 +145,7 @@ public partial class CustomerDetailViewModel : ObservableObject
 
     private void RecalculateBalances()
     {
-        // Compute from in-memory collections to ensure fresh data
-        TotalDebt = Vehicles.SelectMany(v => v.ServiceRecords ?? Enumerable.Empty<ServiceRecord>()).Sum(sr => sr.TotalAmount);
+        TotalDebt = (Vehicle?.ServiceRecords ?? Enumerable.Empty<ServiceRecord>()).Sum(sr => sr.TotalAmount);
         TotalPayments = Payments.Sum(p => p.Amount);
         Balance = TotalDebt - TotalPayments;
     }
@@ -210,46 +193,32 @@ public partial class CustomerDetailViewModel : ObservableObject
     }
 
     [RelayCommand]
-    private async Task AddVehicleAsync()
-    {
-        var dialogVm = new AddVehicleDialogViewModel();
-        var vehicle = await _dialogService.ShowDialogAsync<Vehicle>(dialogVm);
-        if (vehicle != null)
-        {
-            try
-            {
-                vehicle.CustomerId = CustomerId;
-                await _unitOfWork.Vehicles.AddAsync(vehicle);
-                await _unitOfWork.SaveChangesAsync();
-                await LoadAsync(CustomerId);
-                _ = _excelExportService.AutoExportCustomerCardsAsync(CustomerId);
-                _ = _excelExportService.AutoExportReportsAsync(DateTime.Today);
-            }
-            catch (Exception ex)
-            {
-                await _dialogService.ShowMessageAsync($"Arac eklenirken hata: {ex.Message}", "Hata");
-            }
-        }
-    }
-
-    [RelayCommand]
     private async Task AddServiceAsync()
     {
-        if (SelectedVehicle == null)
+        if (Vehicle == null)
         {
-            await _dialogService.ShowMessageAsync("Lutfen once bir arac secin.", "Uyari");
+            await _dialogService.ShowMessageAsync("Bu musteriye ait arac bulunamadi.", "Uyari");
             return;
         }
 
         var technicians = await _unitOfWork.Technicians.GetActiveAsync();
-        var dialogVm = new AddServiceDialogViewModel(technicians);
+        var stockItems = (await _unitOfWork.StockItems.GetActiveAsync()).ToList();
+        var dialogVm = new AddServiceDialogViewModel(technicians, stockItems);
         var record = await _dialogService.ShowDialogAsync<ServiceRecord>(dialogVm);
         if (record != null)
         {
             try
             {
-                record.VehicleId = SelectedVehicle.Id;
+                record.VehicleId = Vehicle.Id;
                 record.TotalAmount = record.Quantity * record.UnitPrice;
+
+                // Deduct stock if material was used
+                if (dialogVm.SelectedStockItem != null && dialogVm.MaterialQuantityUsed > 0)
+                {
+                    dialogVm.SelectedStockItem.RemainingQuantity -= dialogVm.MaterialQuantityUsed;
+                    await _unitOfWork.StockItems.UpdateAsync(dialogVm.SelectedStockItem);
+                }
+
                 await _unitOfWork.ServiceRecords.AddAsync(record);
                 await _unitOfWork.SaveChangesAsync();
                 await LoadAsync(CustomerId);
@@ -273,7 +242,7 @@ public partial class CustomerDetailViewModel : ObservableObject
             try
             {
                 payment.CustomerId = CustomerId;
-                payment.VehicleId = SelectedVehicle?.Id;
+                payment.VehicleId = Vehicle?.Id;
                 await _unitOfWork.Payments.AddAsync(payment);
                 await _unitOfWork.SaveChangesAsync();
                 await LoadAsync(CustomerId);
@@ -353,9 +322,9 @@ public partial class CustomerDetailViewModel : ObservableObject
     [RelayCommand]
     private async Task ExportExcelAsync()
     {
-        if (SelectedVehicle == null)
+        if (Vehicle == null)
         {
-            await _dialogService.ShowMessageAsync("Lütfen önce bir araç seçin.", "Uyarı");
+            await _dialogService.ShowMessageAsync("Bu musteriye ait arac bulunamadi.", "Uyarı");
             return;
         }
 
@@ -365,12 +334,12 @@ public partial class CustomerDetailViewModel : ObservableObject
             Directory.CreateDirectory(exportFolder);
 
             // Sanitize file name (remove invalid chars from plate/name)
-            var safeName = string.Join("_", $"{CustomerName}_{SelectedVehicle.PlateNumber}".Split(Path.GetInvalidFileNameChars()));
+            var safeName = string.Join("_", $"{CustomerName}_{Vehicle.PlateNumber}".Split(Path.GetInvalidFileNameChars()));
             var fileName = $"{safeName}.xlsx";
             var filePath = Path.Combine(exportFolder, fileName);
 
             await _excelExportService.ExportCustomerCardAsync(
-                CustomerId, SelectedVehicle.Id, filePath);
+                CustomerId, Vehicle.Id, filePath);
             await _dialogService.ShowMessageAsync($"Excel dosyası başarıyla oluşturuldu.\n{filePath}", "Başarılı");
         }
         catch (Exception ex)

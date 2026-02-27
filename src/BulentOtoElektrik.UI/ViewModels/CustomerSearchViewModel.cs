@@ -61,11 +61,49 @@ public partial class CustomerSearchViewModel : ObservableObject
         IsLoading = true;
         try
         {
-            var results = await _unitOfWork.Vehicles.SearchAsync("");
+            // Load all customers (including those without vehicles)
+            var customers = await _unitOfWork.Customers.GetAllAsync();
+            var results = new List<VehicleSearchResult>();
+
+            foreach (var c in customers)
+            {
+                var vehicles = await _unitOfWork.Vehicles.GetByCustomerIdAsync(c.Id);
+                if (vehicles.Count > 0)
+                {
+                    foreach (var v in vehicles)
+                    {
+                        var serviceRecords = await _unitOfWork.ServiceRecords.GetByVehicleIdAsync(v.Id);
+                        var payments = await _unitOfWork.Payments.GetByCustomerIdAsync(c.Id);
+                        results.Add(new VehicleSearchResult
+                        {
+                            VehicleId = v.Id,
+                            CustomerId = c.Id,
+                            PlateNumber = v.PlateNumber,
+                            CustomerName = c.FullName,
+                            VehicleModel = $"{v.VehicleBrand} {v.VehicleModel}".Trim(),
+                            Balance = serviceRecords.Sum(sr => sr.TotalAmount) - payments.Sum(p => p.Amount)
+                        });
+                    }
+                }
+                else
+                {
+                    // Show customers without vehicles too
+                    results.Add(new VehicleSearchResult
+                    {
+                        VehicleId = 0,
+                        CustomerId = c.Id,
+                        PlateNumber = "-",
+                        CustomerName = c.FullName,
+                        VehicleModel = "Arac eklenmemis",
+                        Balance = 0
+                    });
+                }
+            }
+
             SearchResults = new ObservableCollection<VehicleSearchResult>(results);
             StatusMessage = SearchResults.Count == 0
                 ? "Henuz kayitli musteri bulunmuyor"
-                : $"{SearchResults.Count} musteri listelendi";
+                : $"{SearchResults.Count} kayit listelendi";
         }
         catch
         {
@@ -109,16 +147,13 @@ public partial class CustomerSearchViewModel : ObservableObject
     [RelayCommand]
     private async Task AddCustomerAsync()
     {
-        var dialogVm = new AddCustomerDialogViewModel();
+        var dialogVm = new AddCustomerDialogViewModel(_unitOfWork, _dialogService);
         var customer = await _dialogService.ShowDialogAsync<Customer>(dialogVm);
         if (customer != null)
         {
             try
             {
-                await _unitOfWork.Customers.AddAsync(customer);
-                await _unitOfWork.SaveChangesAsync();
-                await _dialogService.ShowMessageAsync("Musteri basariyla eklendi.", "Basarili");
-                await LoadRecentCustomersAsync();
+                _navigationService.NavigateToCustomerDetail(customer.Id);
             }
             catch (Exception ex)
             {
@@ -132,7 +167,7 @@ public partial class CustomerSearchViewModel : ObservableObject
     {
         if (result != null)
         {
-            _navigationService.NavigateToCustomerDetail(result.CustomerId);
+            _navigationService.NavigateToCustomerDetail(result.CustomerId, result.VehicleId > 0 ? result.VehicleId : null);
         }
     }
 }

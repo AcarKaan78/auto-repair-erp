@@ -1,5 +1,6 @@
 using BulentOtoElektrik.Core.Entities;
 using BulentOtoElektrik.Core.Interfaces;
+using BulentOtoElektrik.UI.Helpers;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 
@@ -20,6 +21,7 @@ public partial class AddCustomerDialogViewModel : ObservableObject
         _dialogService = dialogService;
     }
 
+    // Customer fields
     [ObservableProperty] private string _fullName = "";
     [ObservableProperty] private string? _phone1;
     [ObservableProperty] private string? _phone2;
@@ -27,14 +29,14 @@ public partial class AddCustomerDialogViewModel : ObservableObject
     [ObservableProperty] private string? _email;
     [ObservableProperty] private string? _address;
 
-    /// <summary>
-    /// Set by dialog infrastructure after save to return the created customer.
-    /// </summary>
+    // Vehicle fields
+    [ObservableProperty] private string _plateNumber = "";
+    [ObservableProperty] private string? _vehicleBrand;
+    [ObservableProperty] private string? _vehicleModel;
+    [ObservableProperty] private int? _vehicleYear;
+
     public Customer? CreatedCustomer { get; private set; }
 
-    /// <summary>
-    /// Signals the dialog window to close with a positive result.
-    /// </summary>
     public event Action<bool>? CloseRequested;
 
     [RelayCommand]
@@ -44,6 +46,13 @@ public partial class AddCustomerDialogViewModel : ObservableObject
         {
             if (_dialogService != null)
                 await _dialogService.ShowMessageAsync("Müşteri adı zorunludur.", "Uyarı");
+            return;
+        }
+
+        if (string.IsNullOrWhiteSpace(PlateNumber))
+        {
+            if (_dialogService != null)
+                await _dialogService.ShowMessageAsync("Plaka zorunludur.", "Uyarı");
             return;
         }
 
@@ -62,6 +71,18 @@ public partial class AddCustomerDialogViewModel : ObservableObject
             if (_unitOfWork != null)
             {
                 CreatedCustomer = await _unitOfWork.Customers.AddAsync(customer);
+                await _unitOfWork.SaveChangesAsync();
+
+                // Create the vehicle linked to this customer
+                var vehicle = new Vehicle
+                {
+                    CustomerId = CreatedCustomer.Id,
+                    PlateNumber = PlateNumberFormatter.FormatPlate(PlateNumber),
+                    VehicleBrand = VehicleBrand?.Trim(),
+                    VehicleModel = VehicleModel?.Trim(),
+                    VehicleYear = VehicleYear
+                };
+                await _unitOfWork.Vehicles.AddAsync(vehicle);
                 await _unitOfWork.SaveChangesAsync();
             }
             else

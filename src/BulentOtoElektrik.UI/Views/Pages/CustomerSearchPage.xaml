@@ -85,12 +85,14 @@
                     </DataGridTextColumn>
 
                     <DataGridTextColumn Header="Arac" Binding="{Binding VehicleModel}"
-                                        Width="200">
+                                        Width="*">
                         <DataGridTextColumn.ElementStyle>
                             <Style TargetType="TextBlock">
                                 <Setter Property="VerticalAlignment" Value="Center"/>
                                 <Setter Property="Foreground" Value="#757575"/>
                                 <Setter Property="Margin" Value="8,0"/>
+                                <Setter Property="TextTrimming" Value="CharacterEllipsis"/>
+                                <Setter Property="ToolTip" Value="{Binding VehicleModel}"/>
                             </Style>
                         </DataGridTextColumn.ElementStyle>
                     </DataGridTextColumn>
