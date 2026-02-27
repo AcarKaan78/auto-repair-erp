@@ -13,6 +13,7 @@ public partial class SettingsViewModel : ObservableObject
     private readonly IUnitOfWork _unitOfWork;
     private readonly IDialogService _dialogService;
     private readonly IExcelExportService _excelExportService;
+    private readonly IExcelImportService _excelImportService;
 
     [ObservableProperty] private string _backupFolder = string.Empty;
     [ObservableProperty] private string _excelExportFolder = string.Empty;
@@ -20,13 +21,26 @@ public partial class SettingsViewModel : ObservableObject
     [ObservableProperty] private ObservableCollection<ExpenseCategory> _categories = new();
     [ObservableProperty] private string _newCategoryName = string.Empty;
     [ObservableProperty] private bool _isBusy;
+    [ObservableProperty] private string _importStatusText = string.Empty;
+    [ObservableProperty] private int _importProgress;
+    [ObservableProperty] private bool _isImporting;
 
-    public SettingsViewModel(IBackupService backupService, IUnitOfWork unitOfWork, IDialogService dialogService, IExcelExportService excelExportService)
+    public bool IsNotImporting => !IsImporting;
+
+    partial void OnIsImportingChanged(bool value) => OnPropertyChanged(nameof(IsNotImporting));
+
+    public SettingsViewModel(
+        IBackupService backupService,
+        IUnitOfWork unitOfWork,
+        IDialogService dialogService,
+        IExcelExportService excelExportService,
+        IExcelImportService excelImportService)
     {
         _backupService = backupService;
         _unitOfWork = unitOfWork;
         _dialogService = dialogService;
         _excelExportService = excelExportService;
+        _excelImportService = excelImportService;
     }
 
     public async Task InitializeAsync()
@@ -180,6 +194,115 @@ public partial class SettingsViewModel : ObservableObject
         finally
         {
             IsBusy = false;
+        }
+    }
+
+    [RelayCommand]
+    private async Task ImportExcelFiles()
+    {
+        var dialog = new Microsoft.Win32.OpenFileDialog
+        {
+            Title = "İçe aktarılacak Excel dosyalarını seçin",
+            Filter = "Excel Dosyaları (*.xlsx)|*.xlsx",
+            Multiselect = true
+        };
+
+        if (dialog.ShowDialog() != true || dialog.FileNames.Length == 0)
+            return;
+
+        var confirmed = await _dialogService.ShowConfirmationAsync(
+            $"{dialog.FileNames.Length} dosya içe aktarılacak. Devam etmek istiyor musunuz?",
+            "İçe Aktarma Onayı");
+
+        if (!confirmed)
+            return;
+
+        await ExecuteImportAsync(async (progress, ct) =>
+            await _excelImportService.ImportFilesAsync(dialog.FileNames, "merge", progress, ct));
+    }
+
+    [RelayCommand]
+    private async Task ImportExcelFolder()
+    {
+        var dialog = new Microsoft.Win32.OpenFolderDialog
+        {
+            Title = "Excel dosyalarının bulunduğu klasörü seçin"
+        };
+
+        if (dialog.ShowDialog() != true)
+            return;
+
+        var xlsxCount = Directory.GetFiles(dialog.FolderName, "*.xlsx", SearchOption.TopDirectoryOnly)
+            .Count(f => !Path.GetFileName(f).StartsWith("~$"));
+
+        if (xlsxCount == 0)
+        {
+            await _dialogService.ShowMessageAsync("Seçilen klasörde Excel dosyası bulunamadı.", "Uyarı");
+            return;
+        }
+
+        var confirmed = await _dialogService.ShowConfirmationAsync(
+            $"Klasörde {xlsxCount} Excel dosyası bulundu. Tümünü içe aktarmak istiyor musunuz?",
+            "İçe Aktarma Onayı");
+
+        if (!confirmed)
+            return;
+
+        await ExecuteImportAsync(async (progress, ct) =>
+            await _excelImportService.ImportFolderAsync(dialog.FolderName, "merge", progress, ct));
+    }
+
+    private async Task ExecuteImportAsync(
+        Func<Action<int, int>, CancellationToken, Task<Core.DTOs.ExcelImportResultDto>> importFunc)
+    {
+        IsImporting = true;
+        ImportProgress = 0;
+        ImportStatusText = "İçe aktarma başlatılıyor...";
+
+        try
+        {
+            var result = await importFunc((current, total) =>
+            {
+                System.Windows.Application.Current.Dispatcher.Invoke(() =>
+                {
+                    ImportProgress = total > 0 ? (int)(current * 100.0 / total) : 0;
+                    ImportStatusText = $"İşleniyor: {current}/{total}";
+                });
+            }, CancellationToken.None);
+
+            ImportProgress = 100;
+            ImportStatusText = "Tamamlandı!";
+
+            var summary = $"İçe aktarma tamamlandı!\n\n" +
+                          $"Başarılı dosya: {result.SuccessfulFiles}\n" +
+                          $"Başarısız dosya: {result.FailedFiles}\n" +
+                          $"Oluşturulan müşteri: {result.CustomersCreated}\n" +
+                          $"Oluşturulan araç: {result.VehiclesCreated}\n" +
+                          $"Oluşturulan işlem: {result.ServiceRecordsCreated}\n" +
+                          $"Oluşturulan ödeme: {result.PaymentsCreated}\n" +
+                          $"Oluşturulan teknisyen: {result.TechniciansCreated}";
+
+            if (result.VehiclesSkipped > 0)
+                summary += $"\nAtlanan araç: {result.VehiclesSkipped}";
+            if (result.VehiclesMerged > 0)
+                summary += $"\nBirleştirilen araç: {result.VehiclesMerged}";
+
+            if (result.Errors.Count > 0)
+                summary += $"\n\nHatalar:\n" + string.Join("\n", result.Errors.Take(10));
+
+            await _dialogService.ShowMessageAsync(summary, "İçe Aktarma Sonucu");
+        }
+        catch (Exception ex)
+        {
+            await _dialogService.ShowMessageAsync(
+                $"İçe aktarma sırasında hata oluştu:\n{ex.Message}",
+                "Hata");
+        }
+        finally
+        {
+            IsImporting = false;
+            ImportStatusText = string.Empty;
+            ImportProgress = 0;
         }
     }
 }

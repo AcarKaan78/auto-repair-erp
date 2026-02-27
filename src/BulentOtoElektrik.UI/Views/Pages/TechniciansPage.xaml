@@ -119,6 +119,44 @@
             </DataGrid>
         </materialDesign:Card>
 
+        <!-- Edit Overlay -->
+        <Grid Grid.Row="0" Grid.RowSpan="3"
+              Visibility="{Binding IsEditing, Converter={StaticResource BoolToVisibility}}"
+              Background="#80000000">
+            <materialDesign:Card Padding="24" UniformCornerRadius="12"
+                                  Width="400"
+                                  VerticalAlignment="Center"
+                                  HorizontalAlignment="Center">
+                <StackPanel>
+                    <TextBlock Text="Teknisyen Düzenle"
+                               FontSize="20" FontWeight="Bold"
+                               Foreground="#303F9F"
+                               Margin="0,0,0,16"/>
+
+                    <TextBox Text="{Binding EditFullName, UpdateSourceTrigger=PropertyChanged}"
+                             materialDesign:HintAssist.Hint="Ad Soyad"
+                             Style="{StaticResource MaterialDesignOutlinedTextBox}"
+                             Margin="0,0,0,12"/>
+
+                    <TextBox Text="{Binding EditPhone, UpdateSourceTrigger=PropertyChanged}"
+                             materialDesign:HintAssist.Hint="Telefon"
+                             Style="{StaticResource MaterialDesignOutlinedTextBox}"
+                             Margin="0,0,0,20"/>
+
+                    <StackPanel Orientation="Horizontal" HorizontalAlignment="Right">
+                        <Button Command="{Binding CancelEditCommand}"
+                                Content="İptal"
+                                Style="{StaticResource MaterialDesignOutlinedButton}"
+                                Margin="0,0,8,0"/>
+                        <Button Command="{Binding SaveCommand}"
+                                Content="Kaydet"
+                                Style="{StaticResource MaterialDesignRaisedButton}"
+                                Background="#303F9F" Foreground="White"/>
+                    </StackPanel>
+                </StackPanel>
+            </materialDesign:Card>
+        </Grid>
+
         <!-- Loading Indicator -->
         <Grid Grid.Row="0" Grid.RowSpan="3"
               Visibility="{Binding IsBusy, Converter={StaticResource BoolToVisibility}}"

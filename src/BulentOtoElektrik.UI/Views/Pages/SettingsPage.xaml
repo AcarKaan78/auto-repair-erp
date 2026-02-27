@@ -51,7 +51,55 @@
                     </StackPanel>
                 </materialDesign:Card>
 
-                <!-- Section 1: Yedekleme -->
+                <!-- Section 1: Excel İçe Aktarma -->
+                <materialDesign:Card Padding="20" Margin="0,0,0,16" UniformCornerRadius="8">
+                    <StackPanel>
+                        <TextBlock Text="Excel İçe Aktarma"
+                                   Style="{StaticResource SectionTitleStyle}"/>
+
+                        <TextBlock Text="Eski Excel dosyalarını sisteme aktarabilirsiniz. Müşteri, araç, işlem ve ödeme bilgileri otomatik olarak tanınır."
+                                   Foreground="#757575" FontSize="13" Margin="0,4,0,16"
+                                   TextWrapping="Wrap"/>
+
+                        <StackPanel Orientation="Horizontal">
+                            <Button Style="{StaticResource MaterialDesignOutlinedButton}"
+                                    Command="{Binding ImportExcelFilesCommand}"
+                                    IsEnabled="{Binding IsNotImporting}"
+                                    Margin="0,0,12,0"
+                                    Padding="16,8">
+                                <StackPanel Orientation="Horizontal">
+                                    <materialDesign:PackIcon Kind="FileExcel" VerticalAlignment="Center" Margin="0,0,8,0"/>
+                                    <TextBlock Text="Dosya Seç ve İçe Aktar" VerticalAlignment="Center"/>
+                                </StackPanel>
+                            </Button>
+
+                            <Button Style="{StaticResource MaterialDesignOutlinedButton}"
+                                    Command="{Binding ImportExcelFolderCommand}"
+                                    IsEnabled="{Binding IsNotImporting}"
+                                    Padding="16,8">
+                                <StackPanel Orientation="Horizontal">
+                                    <materialDesign:PackIcon Kind="FolderOpen" VerticalAlignment="Center" Margin="0,0,8,0"/>
+                                    <TextBlock Text="Klasörden İçe Aktar" VerticalAlignment="Center"/>
+                                </StackPanel>
+                            </Button>
+                        </StackPanel>
+
+                        <!-- Import Progress -->
+                        <StackPanel Margin="0,16,0,0"
+                                    Visibility="{Binding IsImporting, Converter={StaticResource BoolToVisibility}}">
+                            <TextBlock Text="{Binding ImportStatusText}"
+                                       FontSize="13"
+                                       Foreground="#303F9F"
+                                       Margin="0,0,0,8"/>
+                            <ProgressBar Value="{Binding ImportProgress}"
+                                         Minimum="0" Maximum="100"
+                                         Height="6"
+                                         Foreground="#303F9F"/>
+                        </StackPanel>
+                    </StackPanel>
+                </materialDesign:Card>
+
+                <!-- Section 2: Yedekleme -->
                 <materialDesign:Card Padding="20" Margin="0,0,0,16" UniformCornerRadius="8">
                     <StackPanel>
                         <TextBlock Text="Yedekleme"

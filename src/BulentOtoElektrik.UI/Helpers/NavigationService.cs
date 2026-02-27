@@ -38,6 +38,7 @@ public class NavigationService : INavigationService
             "DailyExpenses" => _serviceProvider.GetRequiredService<ViewModels.DailyExpensesViewModel>(),
             "Reports" => _serviceProvider.GetRequiredService<ViewModels.ReportsViewModel>(),
             "Technicians" => _serviceProvider.GetRequiredService<ViewModels.TechniciansViewModel>(),
+            "StokTakip" => _serviceProvider.GetRequiredService<ViewModels.StokTakipViewModel>(),
             "Settings" => _serviceProvider.GetRequiredService<ViewModels.SettingsViewModel>(),
             _ => _serviceProvider.GetRequiredService<ViewModels.DashboardViewModel>()
         };
@@ -49,10 +50,11 @@ public class NavigationService : INavigationService
         TriggerAutoExport();
     }
 
-    public void NavigateToCustomerDetail(int customerId)
+    public void NavigateToCustomerDetail(int customerId, int? vehicleId = null)
     {
         var vm = _serviceProvider.GetRequiredService<ViewModels.CustomerDetailViewModel>();
         vm.CustomerId = customerId;
+        vm.PreferredVehicleId = vehicleId;
 
         if (_currentViewModel != null)
             _navigationStack.Push(_currentViewModel);

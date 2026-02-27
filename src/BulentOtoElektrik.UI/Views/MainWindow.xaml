@@ -39,6 +39,9 @@
         <DataTemplate DataType="{x:Type vm:TechniciansViewModel}">
             <pages:TechniciansPage/>
         </DataTemplate>
+        <DataTemplate DataType="{x:Type vm:StokTakipViewModel}">
+            <pages:StokTakipPage/>
+        </DataTemplate>
         <DataTemplate DataType="{x:Type vm:SettingsViewModel}">
             <pages:SettingsPage/>
         </DataTemplate>
@@ -141,6 +144,13 @@
                         <StackPanel Orientation="Horizontal">
                             <materialDesign:PackIcon Kind="AccountGroup" Width="22" Height="22" VerticalAlignment="Center" Foreground="White"/>
                             <TextBlock Text="Teknisyenler" Margin="12,0,0,0" VerticalAlignment="Center" Foreground="White"/>
+                        </StackPanel>
+                    </ListBoxItem>
+
+                    <ListBoxItem Tag="StokTakip">
+                        <StackPanel Orientation="Horizontal">
+                            <materialDesign:PackIcon Kind="PackageVariant" Width="22" Height="22" VerticalAlignment="Center" Foreground="White"/>
+                            <TextBlock Text="Stok Takip" Margin="12,0,0,0" VerticalAlignment="Center" Foreground="White"/>
                         </StackPanel>
                     </ListBoxItem>
 

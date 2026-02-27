@@ -65,7 +65,7 @@ public class VehicleRepository : IVehicleRepository
             CustomerId = v.CustomerId,
             PlateNumber = v.PlateNumber,
             CustomerName = v.Customer.FullName,
-            VehicleModel = v.VehicleModel ?? "",
+            VehicleModel = $"{v.VehicleBrand} {v.VehicleModel} {v.VehicleYear}".Trim(),
             Balance = v.ServiceRecords.Sum(sr => sr.TotalAmount) -
                       v.Customer.Payments.Sum(p => p.Amount)
         }).ToList();

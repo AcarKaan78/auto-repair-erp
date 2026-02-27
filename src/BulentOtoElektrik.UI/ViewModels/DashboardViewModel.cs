@@ -181,4 +181,5 @@ public partial class DashboardViewModel : ObservableObject
             _navigationService.NavigateToCustomerDetail(serviceRecord.Vehicle.CustomerId);
         }
     }
+
 }

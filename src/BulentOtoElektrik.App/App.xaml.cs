@@ -66,6 +66,33 @@ public partial class App : Application
             var context = scope.ServiceProvider.GetRequiredService<AppDbContext>();
             await context.Database.EnsureCreatedAsync();
 
+            // Migrate existing DB: add StockItems table and ServiceRecord columns if missing
+            var conn = context.Database.GetDbConnection();
+            await conn.OpenAsync();
+            using (var cmd = conn.CreateCommand())
+            {
+                cmd.CommandText = "SELECT name FROM sqlite_master WHERE type='table' AND name='StockItems'";
+                if (await cmd.ExecuteScalarAsync() == null)
+                {
+                    using var migrate = conn.CreateCommand();
+                    migrate.CommandText = @"
+                        CREATE TABLE StockItems (
+                            Id INTEGER PRIMARY KEY AUTOINCREMENT,
+                            MaterialName TEXT NOT NULL,
+                            StockQuantity INTEGER NOT NULL,
+                            RemainingQuantity INTEGER NOT NULL,
+                            UnitPrice REAL NOT NULL DEFAULT 0,
+                            IsActive INTEGER NOT NULL DEFAULT 1,
+                            CreatedAt TEXT NOT NULL DEFAULT '0001-01-01',
+                            UpdatedAt TEXT NOT NULL DEFAULT '0001-01-01'
+                        );
+                        ALTER TABLE ServiceRecords ADD COLUMN StockItemId INTEGER REFERENCES StockItems(Id);
+                        ALTER TABLE ServiceRecords ADD COLUMN MaterialQuantityUsed INTEGER NOT NULL DEFAULT 0;";
+                    await migrate.ExecuteNonQueryAsync();
+                    Log.Information("StockItems table and ServiceRecord columns created");
+                }
+            }
+
             var seeder = scope.ServiceProvider.GetRequiredService<DatabaseSeeder>();
             await seeder.SeedAsync();
 
@@ -172,10 +199,12 @@ public partial class App : Application
         services.AddScoped<IDailyExpenseRepository, DailyExpenseRepository>();
         services.AddScoped<IExpenseCategoryRepository, ExpenseCategoryRepository>();
         services.AddScoped<ITechnicianRepository, TechnicianRepository>();
+        services.AddScoped<IStockItemRepository, StockItemRepository>();
         services.AddScoped<IUnitOfWork, UnitOfWork>();
 
         // Services
         services.AddSingleton<IExcelExportService>(sp => new ExcelExportService(sp));
+        services.AddSingleton<IExcelImportService>(sp => new ExcelImportService(sp));
         services.AddSingleton<IBackupService, BackupService>();
         services.AddSingleton<IReportingService>(sp => new ReportingService(sp));
 

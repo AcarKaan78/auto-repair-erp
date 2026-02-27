@@ -332,7 +332,7 @@
                 </Grid>
 
                 <!-- Row 3: Monthly Chart -->
-                <materialDesign:Card Grid.Row="3" Padding="16" UniformCornerRadius="8" Margin="0,0,0,24">
+                <materialDesign:Card Grid.Row="3" Padding="16" UniformCornerRadius="8" Margin="0,0,0,16">
                     <DockPanel>
                         <TextBlock DockPanel.Dock="Top"
                                    Text="Aylik Gelir/Gider Grafigi"

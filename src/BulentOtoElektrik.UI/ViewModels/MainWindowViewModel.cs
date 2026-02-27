@@ -102,7 +102,7 @@ public partial class MainWindowViewModel : ObservableObject
     [RelayCommand]
     private void SelectSearchResult(VehicleSearchResult result)
     {
-        _navigationService.NavigateToCustomerDetail(result.CustomerId);
+        _navigationService.NavigateToCustomerDetail(result.CustomerId, result.VehicleId > 0 ? result.VehicleId : null);
         SelectedNavItem = "";
         SearchText = "";
         IsSearchPopupOpen = false;

@@ -40,7 +40,18 @@ public class TechnicianRepository : ITechnicianRepository
 
     public async Task UpdateAsync(Technician technician, CancellationToken ct = default)
     {
-        _context.Technicians.Update(technician);
+        var tracked = _context.ChangeTracker.Entries<Technician>()
+            .FirstOrDefault(e => e.Entity.Id == technician.Id);
+
+        if (tracked != null)
+        {
+            tracked.CurrentValues.SetValues(technician);
+        }
+        else
+        {
+            _context.Technicians.Update(technician);
+        }
+
         await _context.SaveChangesAsync(ct);
     }
 }

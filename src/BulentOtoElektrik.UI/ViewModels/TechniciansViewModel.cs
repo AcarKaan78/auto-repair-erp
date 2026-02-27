@@ -18,6 +18,10 @@ public partial class TechniciansViewModel : ObservableObject
     [ObservableProperty] private bool _isEditing;
     [ObservableProperty] private bool _isBusy;
 
+    // Edit form fields
+    [ObservableProperty] private string _editFullName = string.Empty;
+    [ObservableProperty] private string _editPhone = string.Empty;
+
     public TechniciansViewModel(IUnitOfWork unitOfWork, IDialogService dialogService)
     {
         _unitOfWork = unitOfWork;
@@ -112,9 +116,18 @@ public partial class TechniciansViewModel : ObservableObject
     {
         if (SelectedTechnician == null) return;
 
+        if (string.IsNullOrWhiteSpace(EditFullName))
+        {
+            await _dialogService.ShowMessageAsync("Teknisyen adı boş olamaz.", "Uyarı");
+            return;
+        }
+
         IsBusy = true;
         try
         {
+            SelectedTechnician.FullName = EditFullName.Trim();
+            SelectedTechnician.Phone = string.IsNullOrWhiteSpace(EditPhone) ? null : EditPhone.Trim();
+
             await _unitOfWork.Technicians.UpdateAsync(SelectedTechnician);
             await _unitOfWork.SaveChangesAsync();
             IsEditing = false;
@@ -133,10 +146,19 @@ public partial class TechniciansViewModel : ObservableObject
     }
 
     [RelayCommand]
+    private void CancelEdit()
+    {
+        IsEditing = false;
+        SelectedTechnician = null;
+    }
+
+    [RelayCommand]
     private void EditTechnician(Technician technician)
     {
         if (technician == null) return;
         SelectedTechnician = technician;
+        EditFullName = technician.FullName;
+        EditPhone = technician.Phone ?? string.Empty;
         IsEditing = true;
     }
 }
