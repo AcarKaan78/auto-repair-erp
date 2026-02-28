@@ -21,12 +21,15 @@ public class ReportingService : IReportingService
         var _context = scope.ServiceProvider.GetRequiredService<AppDbContext>();
 
         var targetDate = date.Date;
+        var targetDateEnd = targetDate.AddDays(1);
         var previousDate = targetDate.AddDays(-1);
+        var previousDateEnd = targetDate; // == previousDate.AddDays(1)
 
         // SQLite cannot Sum() on decimal, so materialize first then sum in memory
+        // Use range comparison to handle any time component in stored dates
         var todayServices = await _context.ServiceRecords
             .AsNoTracking()
-            .Where(sr => sr.ServiceDate == targetDate)
+            .Where(sr => sr.ServiceDate >= targetDate && sr.ServiceDate < targetDateEnd)
             .Select(sr => new { sr.TotalAmount, sr.VehicleId })
             .ToListAsync(ct);
 
@@ -35,21 +38,21 @@ public class ReportingService : IReportingService
 
         var todayExpenseAmounts = await _context.DailyExpenses
             .AsNoTracking()
-            .Where(e => e.ExpenseDate == targetDate)
+            .Where(e => e.ExpenseDate >= targetDate && e.ExpenseDate < targetDateEnd)
             .Select(e => e.Amount)
             .ToListAsync(ct);
         var todayExpenses = todayExpenseAmounts.Sum();
 
         var yesterdayServiceAmounts = await _context.ServiceRecords
             .AsNoTracking()
-            .Where(sr => sr.ServiceDate == previousDate)
+            .Where(sr => sr.ServiceDate >= previousDate && sr.ServiceDate < previousDateEnd)
             .Select(sr => sr.TotalAmount)
             .ToListAsync(ct);
         var yesterdayRevenue = yesterdayServiceAmounts.Sum();
 
         var yesterdayExpenseAmounts = await _context.DailyExpenses
             .AsNoTracking()
-            .Where(e => e.ExpenseDate == previousDate)
+            .Where(e => e.ExpenseDate >= previousDate && e.ExpenseDate < previousDateEnd)
             .Select(e => e.Amount)
             .ToListAsync(ct);
         var yesterdayExpenses = yesterdayExpenseAmounts.Sum();
