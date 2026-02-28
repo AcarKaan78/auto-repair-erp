@@ -51,6 +51,18 @@ public partial class CustomerDetailViewModel : ObservableObject
     private Vehicle? _vehicle;
 
     [ObservableProperty]
+    private string _vehiclePlate = "";
+
+    [ObservableProperty]
+    private string? _vehicleBrand;
+
+    [ObservableProperty]
+    private string? _vehicleModel;
+
+    [ObservableProperty]
+    private int? _vehicleYear;
+
+    [ObservableProperty]
     private ObservableCollection<ServiceRecord> _serviceRecords = new();
 
     [ObservableProperty]
@@ -107,6 +119,11 @@ public partial class CustomerDetailViewModel : ObservableObject
             Vehicle = (PreferredVehicleId.HasValue
                 ? customer.Vehicles.FirstOrDefault(v => v.Id == PreferredVehicleId.Value)
                 : null) ?? customer.Vehicles.FirstOrDefault();
+
+            VehiclePlate = Vehicle?.PlateNumber ?? "";
+            VehicleBrand = Vehicle?.VehicleBrand;
+            VehicleModel = Vehicle?.VehicleModel;
+            VehicleYear = Vehicle?.VehicleYear;
 
             // Load payments
             var payments = await _unitOfWork.Payments.GetByCustomerIdAsync(customerId);
@@ -179,6 +196,17 @@ public partial class CustomerDetailViewModel : ObservableObject
             Customer.UpdatedAt = DateTime.Now;
 
             await _unitOfWork.Customers.UpdateAsync(Customer);
+
+            if (Vehicle != null)
+            {
+                Vehicle.PlateNumber = VehiclePlate;
+                Vehicle.VehicleBrand = VehicleBrand;
+                Vehicle.VehicleModel = VehicleModel;
+                Vehicle.VehicleYear = VehicleYear;
+                Vehicle.UpdatedAt = DateTime.Now;
+                await _unitOfWork.Vehicles.UpdateAsync(Vehicle);
+            }
+
             await _unitOfWork.SaveChangesAsync();
             _ = _excelExportService.AutoExportCustomerCardsAsync(CustomerId);
             _ = _excelExportService.AutoExportReportsAsync(DateTime.Today);
@@ -202,8 +230,7 @@ public partial class CustomerDetailViewModel : ObservableObject
         }
 
         var technicians = await _unitOfWork.Technicians.GetActiveAsync();
-        var stockItems = (await _unitOfWork.StockItems.GetActiveAsync()).ToList();
-        var dialogVm = new AddServiceDialogViewModel(technicians, stockItems);
+        var dialogVm = new AddServiceDialogViewModel(technicians);
         var record = await _dialogService.ShowDialogAsync<ServiceRecord>(dialogVm);
         if (record != null)
         {
@@ -211,13 +238,6 @@ public partial class CustomerDetailViewModel : ObservableObject
             {
                 record.VehicleId = Vehicle.Id;
                 record.TotalAmount = record.Quantity * record.UnitPrice;
-
-                // Deduct stock if material was used
-                if (dialogVm.SelectedStockItem != null && dialogVm.MaterialQuantityUsed > 0)
-                {
-                    dialogVm.SelectedStockItem.RemainingQuantity -= dialogVm.MaterialQuantityUsed;
-                    await _unitOfWork.StockItems.UpdateAsync(dialogVm.SelectedStockItem);
-                }
 
                 await _unitOfWork.ServiceRecords.AddAsync(record);
                 await _unitOfWork.SaveChangesAsync();
@@ -304,6 +324,55 @@ public partial class CustomerDetailViewModel : ObservableObject
             catch (Exception ex)
             {
                 await _dialogService.ShowMessageAsync($"Silme hatasi: {ex.Message}", "Hata");
+            }
+        }
+    }
+
+    [RelayCommand]
+    private async Task DeleteCustomerAsync()
+    {
+        var confirmed = await _dialogService.ShowConfirmationAsync(
+            "Bu müşteri, tüm araçları ve işlem kayıtları kalıcı olarak silinecektir.\n\nDevam etmek istiyor musunuz?",
+            "Müşteri Sil");
+
+        if (confirmed)
+        {
+            try
+            {
+                await _unitOfWork.Customers.DeleteAsync(CustomerId);
+                await _unitOfWork.SaveChangesAsync();
+                _ = _excelExportService.AutoExportReportsAsync(DateTime.Today);
+                _navigationService.NavigateTo("CustomerSearch");
+            }
+            catch (Exception ex)
+            {
+                await _dialogService.ShowMessageAsync($"Silme hatası: {ex.Message}", "Hata");
+            }
+        }
+    }
+
+    [RelayCommand]
+    private async Task DeleteVehicleAsync()
+    {
+        if (Vehicle == null) return;
+
+        var confirmed = await _dialogService.ShowConfirmationAsync(
+            $"'{Vehicle.PlateNumber}' plakalı araç ve tüm işlem kayıtları kalıcı olarak silinecektir.\n\nDevam etmek istiyor musunuz?",
+            "Araç Sil");
+
+        if (confirmed)
+        {
+            try
+            {
+                await _unitOfWork.Vehicles.DeleteAsync(Vehicle.Id);
+                await _unitOfWork.SaveChangesAsync();
+                _ = _excelExportService.AutoExportCustomerCardsAsync(CustomerId);
+                _ = _excelExportService.AutoExportReportsAsync(DateTime.Today);
+                await LoadAsync(CustomerId);
+            }
+            catch (Exception ex)
+            {
+                await _dialogService.ShowMessageAsync($"Silme hatası: {ex.Message}", "Hata");
             }
         }
     }
