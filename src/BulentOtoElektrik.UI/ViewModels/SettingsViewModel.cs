@@ -17,6 +17,7 @@ public partial class SettingsViewModel : ObservableObject
 
     [ObservableProperty] private string _backupFolder = string.Empty;
     [ObservableProperty] private string _excelExportFolder = string.Empty;
+    [ObservableProperty] private bool _isAutoExportEnabled;
     [ObservableProperty] private ObservableCollection<string> _backups = new();
     [ObservableProperty] private ObservableCollection<ExpenseCategory> _categories = new();
     [ObservableProperty] private string _newCategoryName = string.Empty;
@@ -50,6 +51,7 @@ public partial class SettingsViewModel : ObservableObject
         {
             BackupFolder = _backupService.GetBackupFolder();
             ExcelExportFolder = _excelExportService.GetExportFolder();
+            IsAutoExportEnabled = _excelExportService.IsAutoExportEnabled;
 
             var backupList = await _backupService.GetBackupsAsync();
             Backups = new ObservableCollection<string>(backupList);
@@ -61,6 +63,47 @@ public partial class SettingsViewModel : ObservableObject
         {
             IsBusy = false;
         }
+    }
+
+    [RelayCommand]
+    private async Task ToggleAutoExport()
+    {
+        if (!IsAutoExportEnabled)
+        {
+            // Turning OFF
+            _excelExportService.SetAutoExportEnabled(false);
+            return;
+        }
+
+        // Turning ON — check if export folder has been configured
+        var settingsFile = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "export_settings.txt");
+        if (!File.Exists(settingsFile))
+        {
+            // First time: ask for folder
+            await _dialogService.ShowMessageAsync(
+                "Excel dosyalarını kaydetmek istediğiniz klasörü seçin.",
+                "Klasör Seçimi");
+
+            var dialog = new Microsoft.Win32.OpenFolderDialog
+            {
+                Title = "Excel dosyaları için kayıt klasörünü seçin"
+            };
+
+            if (dialog.ShowDialog() == true)
+            {
+                _excelExportService.SetExportFolder(dialog.FolderName);
+                File.WriteAllText(settingsFile, dialog.FolderName);
+                ExcelExportFolder = dialog.FolderName;
+            }
+            else
+            {
+                // User cancelled — keep disabled
+                IsAutoExportEnabled = false;
+                return;
+            }
+        }
+
+        _excelExportService.SetAutoExportEnabled(true);
     }
 
     [RelayCommand]
@@ -76,6 +119,8 @@ public partial class SettingsViewModel : ObservableObject
         {
             _excelExportService.SetExportFolder(dialog.FolderName);
             ExcelExportFolder = dialog.FolderName;
+            var settingsFile = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "export_settings.txt");
+            File.WriteAllText(settingsFile, dialog.FolderName);
         }
     }
 

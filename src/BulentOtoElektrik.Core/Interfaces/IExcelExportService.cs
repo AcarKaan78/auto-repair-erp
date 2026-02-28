@@ -9,4 +9,6 @@ public interface IExcelExportService
     Task AutoExportAllAsync(CancellationToken ct = default);
     string GetExportFolder();
     void SetExportFolder(string path);
+    bool IsAutoExportEnabled { get; }
+    void SetAutoExportEnabled(bool enabled);
 }

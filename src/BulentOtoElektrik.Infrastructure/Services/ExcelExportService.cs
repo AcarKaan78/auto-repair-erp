@@ -10,6 +10,7 @@ public class ExcelExportService : IExcelExportService
 {
     private readonly IServiceProvider _serviceProvider;
     private string _exportFolder;
+    private bool _isAutoExportEnabled;
 
     public ExcelExportService(IServiceProvider serviceProvider)
     {
@@ -17,6 +18,23 @@ public class ExcelExportService : IExcelExportService
         _exportFolder = Path.Combine(
             Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments),
             "BulentOtoElektrik");
+
+        // Load persisted auto-export setting (default: false)
+        var settingsFile = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "auto_export_enabled.txt");
+        if (File.Exists(settingsFile))
+        {
+            var content = File.ReadAllText(settingsFile).Trim();
+            _isAutoExportEnabled = string.Equals(content, "true", StringComparison.OrdinalIgnoreCase);
+        }
+    }
+
+    public bool IsAutoExportEnabled => _isAutoExportEnabled;
+
+    public void SetAutoExportEnabled(bool enabled)
+    {
+        _isAutoExportEnabled = enabled;
+        var settingsFile = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "auto_export_enabled.txt");
+        File.WriteAllText(settingsFile, enabled ? "true" : "false");
     }
 
     public string GetExportFolder() => _exportFolder;
@@ -400,6 +418,7 @@ public class ExcelExportService : IExcelExportService
 
     public async Task AutoExportCustomerCardsAsync(int customerId, CancellationToken ct = default)
     {
+        if (!_isAutoExportEnabled) return;
         try
         {
             using var scope = _serviceProvider.CreateScope();
@@ -440,6 +459,7 @@ public class ExcelExportService : IExcelExportService
 
     public async Task AutoExportReportsAsync(DateTime date, CancellationToken ct = default)
     {
+        if (!_isAutoExportEnabled) return;
         try
         {
             Directory.CreateDirectory(_exportFolder);
@@ -494,6 +514,7 @@ public class ExcelExportService : IExcelExportService
 
     public async Task AutoExportAllAsync(CancellationToken ct = default)
     {
+        if (!_isAutoExportEnabled) return;
         try
         {
             using var scope = _serviceProvider.CreateScope();
