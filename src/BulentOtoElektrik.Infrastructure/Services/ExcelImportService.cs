@@ -651,13 +651,7 @@ public class ExcelImportService : IExcelImportService
         if (string.IsNullOrWhiteSpace(value))
             return CurrencyType.TL;
 
-        var upper = value.Trim().ToUpper(TrCulture);
-        return upper switch
-        {
-            "USD" or "$" => CurrencyType.USD,
-            "EURO" or "EUR" or "€" => CurrencyType.EURO,
-            _ => CurrencyType.TL
-        };
+        return CurrencyType.TL;
     }
 
     private static void SplitBrandModel(string combined, ExcelFileParseResultDto result)

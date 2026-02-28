@@ -55,7 +55,6 @@
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition Width="*"/>
                     <ColumnDefinition Width="*"/>
-                    <ColumnDefinition Width="*"/>
                 </Grid.ColumnDefinitions>
 
                 <TextBox Grid.Column="0" materialDesign:HintAssist.Hint="Miktar"
@@ -65,33 +64,6 @@
 
                 <TextBox Grid.Column="1" materialDesign:HintAssist.Hint="Birim Fiyat"
                          Text="{Binding UnitPrice, UpdateSourceTrigger=PropertyChanged}"
-                         Style="{StaticResource MaterialDesignOutlinedTextBox}"
-                         Margin="4,0,4,0"/>
-
-                <ComboBox Grid.Column="2" materialDesign:HintAssist.Hint="Para Birimi"
-                          ItemsSource="{Binding Source={StaticResource CurrencyTypeValues}}"
-                          SelectedItem="{Binding Currency}"
-                          Style="{StaticResource MaterialDesignOutlinedComboBox}"
-                          Margin="4,0,0,0"/>
-            </Grid>
-
-            <Grid Margin="0,0,0,8">
-                <Grid.ColumnDefinitions>
-                    <ColumnDefinition Width="*"/>
-                    <ColumnDefinition Width="100"/>
-                </Grid.ColumnDefinitions>
-
-                <ComboBox Grid.Column="0"
-                          materialDesign:HintAssist.Hint="Malzeme (Opsiyonel)"
-                          ItemsSource="{Binding StockItems}"
-                          SelectedItem="{Binding SelectedStockItem}"
-                          DisplayMemberPath="DisplayText"
-                          Style="{StaticResource MaterialDesignOutlinedComboBox}"
-                          Margin="0,0,4,0"/>
-
-                <TextBox Grid.Column="1"
-                         materialDesign:HintAssist.Hint="Malz. Adet"
-                         Text="{Binding MaterialQuantityUsed, UpdateSourceTrigger=PropertyChanged}"
                          Style="{StaticResource MaterialDesignOutlinedTextBox}"
                          Margin="4,0,0,0"/>
             </Grid>

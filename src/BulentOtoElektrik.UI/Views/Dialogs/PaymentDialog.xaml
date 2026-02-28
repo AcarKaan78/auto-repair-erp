@@ -43,7 +43,7 @@
         <ScrollViewer Grid.Row="1" VerticalScrollBarVisibility="Auto">
         <StackPanel>
             <TextBox materialDesign:HintAssist.Hint="Tutar *"
-                     Text="{Binding Amount, UpdateSourceTrigger=PropertyChanged, StringFormat=N2}"
+                     Text="{Binding Amount, UpdateSourceTrigger=PropertyChanged}"
                      Style="{StaticResource MaterialDesignOutlinedTextBox}"
                      FontSize="18" FontWeight="Bold"
                      Margin="0,0,0,12"/>
@@ -59,12 +59,6 @@
                     </DataTemplate>
                 </ComboBox.ItemTemplate>
             </ComboBox>
-
-            <ComboBox materialDesign:HintAssist.Hint="Para Birimi"
-                      ItemsSource="{Binding Source={StaticResource CurrencyTypeValues}}"
-                      SelectedItem="{Binding Currency}"
-                      Style="{StaticResource MaterialDesignOutlinedComboBox}"
-                      Margin="0,0,0,12"/>
 
             <DatePicker materialDesign:HintAssist.Hint="Tarih"
                         SelectedDate="{Binding PaymentDate}"

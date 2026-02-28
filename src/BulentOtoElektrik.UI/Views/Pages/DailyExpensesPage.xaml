@@ -73,9 +73,6 @@
                         </Style>
                     </DataGridTextColumn.ElementStyle>
                 </DataGridTextColumn>
-                <DataGridTextColumn Header="Para Birimi"
-                                    Binding="{Binding Currency}"
-                                    Width="Auto"/>
                 <DataGridTemplateColumn Header="Sil" Width="Auto">
                     <DataGridTemplateColumn.CellTemplate>
                         <DataTemplate>

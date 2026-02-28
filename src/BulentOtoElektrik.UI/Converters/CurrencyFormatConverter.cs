@@ -10,9 +10,9 @@ public class CurrencyFormatConverter : IValueConverter
     public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
     {
         if (value is decimal amount)
-            return amount.ToString("C2", TurkishCulture);
+            return amount.ToString("C0", TurkishCulture);
         if (value is double dAmount)
-            return dAmount.ToString("C2", TurkishCulture);
+            return dAmount.ToString("C0", TurkishCulture);
         return value?.ToString() ?? "";
     }
 

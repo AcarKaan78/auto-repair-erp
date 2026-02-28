@@ -39,17 +39,11 @@
                  Margin="0,0,0,16"/>
 
         <!-- Tutar -->
-        <TextBox Text="{Binding Amount, UpdateSourceTrigger=PropertyChanged, StringFormat=N2}"
+        <TextBox Text="{Binding Amount, UpdateSourceTrigger=PropertyChanged}"
                  materialDesign:HintAssist.Hint="Tutar"
                  Style="{StaticResource MaterialDesignOutlinedTextBox}"
                  Margin="0,0,0,16"/>
 
-        <!-- Para Birimi -->
-        <ComboBox ItemsSource="{Binding CurrencyTypes}"
-                  SelectedItem="{Binding SelectedCurrency}"
-                  materialDesign:HintAssist.Hint="Para Birimi"
-                  Style="{StaticResource MaterialDesignOutlinedComboBox}"
-                  Margin="0,0,0,16"/>
         </StackPanel>
         </ScrollViewer>
 
