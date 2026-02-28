@@ -174,7 +174,7 @@ public class ExcelImportServiceTests : IDisposable
         var result = await _service.ParseFileAsync(path);
 
         Assert.True(result.Success);
-        Assert.Equal(CurrencyType.USD, result.Currency);
+        Assert.Equal(CurrencyType.TL, result.Currency);
     }
 
     #endregion

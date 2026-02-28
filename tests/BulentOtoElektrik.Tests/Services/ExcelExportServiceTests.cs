@@ -25,6 +25,7 @@ public class ExcelExportServiceTests : IDisposable
         var sp = services.BuildServiceProvider();
 
         _service = new ExcelExportService(sp);
+        _service.SetAutoExportEnabled(true);
         _tempDir = Path.Combine(Path.GetTempPath(), $"BulentOtoTest_{Guid.NewGuid():N}");
         Directory.CreateDirectory(_tempDir);
     }
@@ -33,6 +34,7 @@ public class ExcelExportServiceTests : IDisposable
     {
         _context.Dispose();
         try { Directory.Delete(_tempDir, true); } catch { }
+        try { File.Delete(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "auto_export_enabled.txt")); } catch { }
     }
 
     private string TempFile(string name = "test.xlsx") => Path.Combine(_tempDir, name);
