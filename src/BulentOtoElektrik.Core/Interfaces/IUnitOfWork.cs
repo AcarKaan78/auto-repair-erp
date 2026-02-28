@@ -10,5 +10,6 @@ public interface IUnitOfWork : IDisposable
     IExpenseCategoryRepository ExpenseCategories { get; }
     ITechnicianRepository Technicians { get; }
     IStockItemRepository StockItems { get; }
+    IPersonnelRepository Personnel { get; }
     Task<int> SaveChangesAsync(CancellationToken ct = default);
 }

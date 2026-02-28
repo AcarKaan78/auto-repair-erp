@@ -25,7 +25,7 @@ public partial class MainWindowViewModel : ObservableObject
     private string _searchText = "";
 
     [ObservableProperty]
-    private string _todayRevenueText = "\u20ba0,00";
+    private string _todayRevenueText = "\u20ba0";
 
     [ObservableProperty]
     private int _todayVehicleCount;
@@ -47,7 +47,11 @@ public partial class MainWindowViewModel : ObservableObject
         _vehicleRepository = vehicleRepository;
         _reportingService = reportingService;
 
-        _navigationService.CurrentPageChanged += vm => CurrentPage = vm;
+        _navigationService.CurrentPageChanged += vm =>
+        {
+            CurrentPage = vm;
+            _ = RefreshStatusBar();
+        };
 
         _searchDebounceTimer = new DispatcherTimer { Interval = TimeSpan.FromMilliseconds(300) };
         _searchDebounceTimer.Tick += async (s, e) =>
@@ -130,7 +134,7 @@ public partial class MainWindowViewModel : ObservableObject
         try
         {
             var summary = await _reportingService.GetDailySummaryAsync(DateTime.Today);
-            TodayRevenueText = summary.TotalRevenue.ToString("C2", new System.Globalization.CultureInfo("tr-TR"));
+            TodayRevenueText = summary.TotalRevenue.ToString("C0", new System.Globalization.CultureInfo("tr-TR"));
             TodayVehicleCount = summary.VehicleCount;
         }
         catch

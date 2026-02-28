@@ -42,6 +42,9 @@
         <DataTemplate DataType="{x:Type vm:StokTakipViewModel}">
             <pages:StokTakipPage/>
         </DataTemplate>
+        <DataTemplate DataType="{x:Type vm:PersonnelViewModel}">
+            <pages:PersonnelPage/>
+        </DataTemplate>
         <DataTemplate DataType="{x:Type vm:SettingsViewModel}">
             <pages:SettingsPage/>
         </DataTemplate>
@@ -154,6 +157,13 @@
                         </StackPanel>
                     </ListBoxItem>
 
+                    <ListBoxItem Tag="Personnel">
+                        <StackPanel Orientation="Horizontal">
+                            <materialDesign:PackIcon Kind="BadgeAccount" Width="22" Height="22" VerticalAlignment="Center" Foreground="White"/>
+                            <TextBlock Text="Personel" Margin="12,0,0,0" VerticalAlignment="Center" Foreground="White"/>
+                        </StackPanel>
+                    </ListBoxItem>
+
                     <ListBoxItem Tag="Settings">
                         <StackPanel Orientation="Horizontal">
                             <materialDesign:PackIcon Kind="Cog" Width="22" Height="22" VerticalAlignment="Center" Foreground="White"/>
@@ -211,23 +221,6 @@
                     </Grid>
                 </Grid>
             </Border>
-
-            <!-- Status Bar at Bottom -->
-            <StatusBar DockPanel.Dock="Bottom" Background="#303F9F" Foreground="White" Padding="12,6">
-                <StatusBarItem>
-                    <StackPanel Orientation="Horizontal">
-                        <materialDesign:PackIcon Kind="CurrencyTry" Width="16" Height="16"
-                                                  VerticalAlignment="Center" Margin="0,0,4,0"/>
-                        <TextBlock Text="Bugun:" FontWeight="Medium" Margin="0,0,8,0"/>
-                        <TextBlock Text="{Binding TodayRevenueText}" FontWeight="Bold"/>
-                        <TextBlock Text="  |  " Foreground="#7986CB"/>
-                        <materialDesign:PackIcon Kind="Car" Width="16" Height="16"
-                                                  VerticalAlignment="Center" Margin="0,0,4,0"/>
-                        <TextBlock Text="Arac:" FontWeight="Medium" Margin="0,0,8,0"/>
-                        <TextBlock Text="{Binding TodayVehicleCount}" FontWeight="Bold"/>
-                    </StackPanel>
-                </StatusBarItem>
-            </StatusBar>
 
             <!-- Page Content -->
             <ContentControl Content="{Binding CurrentPage}" Margin="0"/>

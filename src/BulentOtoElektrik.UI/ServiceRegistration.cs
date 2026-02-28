@@ -22,6 +22,7 @@ public static class ServiceRegistration
         services.AddTransient<ViewModels.ReportsViewModel>();
         services.AddTransient<ViewModels.TechniciansViewModel>();
         services.AddTransient<ViewModels.StokTakipViewModel>();
+        services.AddTransient<ViewModels.PersonnelViewModel>();
         services.AddTransient<ViewModels.SettingsViewModel>();
 
         // Dialog ViewModels

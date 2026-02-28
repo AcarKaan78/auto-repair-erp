@@ -16,6 +16,7 @@ public class AppDbContext : DbContext
     public DbSet<ExpenseCategory> ExpenseCategories => Set<ExpenseCategory>();
     public DbSet<Technician> Technicians => Set<Technician>();
     public DbSet<StockItem> StockItems => Set<StockItem>();
+    public DbSet<Personnel> Personnel => Set<Personnel>();
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
