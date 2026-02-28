@@ -61,19 +61,16 @@ public partial class CustomerSearchViewModel : ObservableObject
         IsLoading = true;
         try
         {
-            // Load all customers (including those without vehicles)
-            var customers = await _unitOfWork.Customers.GetAllAsync();
+            // Load all customers with vehicles, service records and payments in ONE query
+            var customers = await _unitOfWork.Customers.GetAllWithDetailsAsync();
             var results = new List<VehicleSearchResult>();
 
             foreach (var c in customers)
             {
-                var vehicles = await _unitOfWork.Vehicles.GetByCustomerIdAsync(c.Id);
-                if (vehicles.Count > 0)
+                if (c.Vehicles.Count > 0)
                 {
-                    foreach (var v in vehicles)
+                    foreach (var v in c.Vehicles)
                     {
-                        var serviceRecords = await _unitOfWork.ServiceRecords.GetByVehicleIdAsync(v.Id);
-                        var payments = await _unitOfWork.Payments.GetByCustomerIdAsync(c.Id);
                         results.Add(new VehicleSearchResult
                         {
                             VehicleId = v.Id,
@@ -81,7 +78,7 @@ public partial class CustomerSearchViewModel : ObservableObject
                             PlateNumber = v.PlateNumber,
                             CustomerName = c.FullName,
                             VehicleModel = $"{v.VehicleBrand} {v.VehicleModel}".Trim(),
-                            Balance = serviceRecords.Sum(sr => sr.TotalAmount) - payments.Sum(p => p.Amount)
+                            Balance = v.ServiceRecords.Sum(sr => sr.TotalAmount) - c.Payments.Sum(p => p.Amount)
                         });
                     }
                 }

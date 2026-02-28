@@ -5,6 +5,7 @@ namespace BulentOtoElektrik.Core.Interfaces;
 public interface ICustomerRepository
 {
     Task<List<Customer>> GetAllAsync(CancellationToken ct = default);
+    Task<List<Customer>> GetAllWithDetailsAsync(CancellationToken ct = default);
     Task<Customer?> GetByIdAsync(int id, CancellationToken ct = default);
     Task<Customer?> GetByIdWithDetailsAsync(int id, CancellationToken ct = default);
     Task<List<Customer>> SearchAsync(string searchTerm, CancellationToken ct = default);

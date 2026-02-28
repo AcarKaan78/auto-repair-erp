@@ -24,6 +24,17 @@ public class CustomerRepository : ICustomerRepository
             .ToListAsync(ct);
     }
 
+    public async Task<List<Customer>> GetAllWithDetailsAsync(CancellationToken ct = default)
+    {
+        return await _context.Customers
+            .AsNoTracking()
+            .Include(c => c.Vehicles)
+                .ThenInclude(v => v.ServiceRecords)
+            .Include(c => c.Payments)
+            .OrderBy(c => c.FullName)
+            .ToListAsync(ct);
+    }
+
     public async Task<Customer?> GetByIdAsync(int id, CancellationToken ct = default)
     {
         return await _context.Customers
