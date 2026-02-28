@@ -27,6 +27,7 @@
                 <RowDefinition Height="Auto"/>
                 <RowDefinition Height="Auto"/>
                 <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
             </Grid.RowDefinitions>
 
             <!-- Title -->
@@ -141,8 +142,82 @@
                 </Grid>
             </materialDesign:Card>
 
-            <!-- Middle Section: Service Lines -->
+            <!-- Past Service Records -->
             <materialDesign:Card Grid.Row="2" Padding="20" Margin="0,0,0,16"
+                                 materialDesign:ElevationAssist.Elevation="Dp2"
+                                 Visibility="{Binding SelectedVehicle, Converter={StaticResource NullToVisibilityConverter}}">
+                <StackPanel>
+                    <TextBlock Text="Geçmiş İşlemler"
+                               Style="{StaticResource SectionTitleStyle}"/>
+
+                    <TextBlock Text="Bu araca ait geçmiş işlem bulunamadı."
+                               Foreground="#757575" FontSize="13" Margin="0,8,0,0"
+                               Visibility="{Binding PastServiceRecords.Count, Converter={StaticResource BoolToVisibilityConverter}, ConverterParameter=Invert}"/>
+
+                    <DataGrid ItemsSource="{Binding PastServiceRecords}"
+                              AutoGenerateColumns="False"
+                              CanUserAddRows="False" CanUserDeleteRows="False"
+                              IsReadOnly="True" SelectionMode="Single"
+                              MaxHeight="200"
+                              GridLinesVisibility="Horizontal"
+                              HorizontalGridLinesBrush="#E0E0E0"
+                              RowHeight="36" FontSize="12"
+                              AlternatingRowBackground="#FAFAFA"
+                              HeadersVisibility="Column"
+                              Margin="0,8,0,0">
+                        <DataGrid.Columns>
+                            <DataGridTextColumn Header="Tarih"
+                                                Binding="{Binding ServiceDate, StringFormat={}{0:dd.MM.yyyy}}"
+                                                Width="90">
+                                <DataGridTextColumn.ElementStyle>
+                                    <Style TargetType="TextBlock">
+                                        <Setter Property="VerticalAlignment" Value="Center"/>
+                                        <Setter Property="Margin" Value="8,0"/>
+                                    </Style>
+                                </DataGridTextColumn.ElementStyle>
+                            </DataGridTextColumn>
+                            <DataGridTextColumn Header="Şikayet"
+                                                Binding="{Binding Complaint}"
+                                                Width="150">
+                                <DataGridTextColumn.ElementStyle>
+                                    <Style TargetType="TextBlock">
+                                        <Setter Property="VerticalAlignment" Value="Center"/>
+                                        <Setter Property="Margin" Value="8,0"/>
+                                        <Setter Property="Foreground" Value="#757575"/>
+                                    </Style>
+                                </DataGridTextColumn.ElementStyle>
+                            </DataGridTextColumn>
+                            <DataGridTextColumn Header="Yapılan İşlem"
+                                                Binding="{Binding WorkPerformed}"
+                                                Width="*">
+                                <DataGridTextColumn.ElementStyle>
+                                    <Style TargetType="TextBlock">
+                                        <Setter Property="VerticalAlignment" Value="Center"/>
+                                        <Setter Property="Margin" Value="8,0"/>
+                                        <Setter Property="FontWeight" Value="Medium"/>
+                                    </Style>
+                                </DataGridTextColumn.ElementStyle>
+                            </DataGridTextColumn>
+                            <DataGridTextColumn Header="Tutar"
+                                                Binding="{Binding TotalAmount, Converter={StaticResource CurrencyFormatConverter}}"
+                                                Width="100">
+                                <DataGridTextColumn.ElementStyle>
+                                    <Style TargetType="TextBlock">
+                                        <Setter Property="VerticalAlignment" Value="Center"/>
+                                        <Setter Property="HorizontalAlignment" Value="Right"/>
+                                        <Setter Property="Margin" Value="8,0"/>
+                                        <Setter Property="FontWeight" Value="SemiBold"/>
+                                        <Setter Property="Foreground" Value="#303F9F"/>
+                                    </Style>
+                                </DataGridTextColumn.ElementStyle>
+                            </DataGridTextColumn>
+                        </DataGrid.Columns>
+                    </DataGrid>
+                </StackPanel>
+            </materialDesign:Card>
+
+            <!-- Middle Section: Service Lines -->
+            <materialDesign:Card Grid.Row="3" Padding="20" Margin="0,0,0,16"
                                  materialDesign:ElevationAssist.Elevation="Dp2">
                 <StackPanel>
                     <TextBlock Text="İşlem Satırları"
@@ -151,25 +226,21 @@
                     <!-- Header Row -->
                     <Grid Margin="0,8,0,4">
                         <Grid.ColumnDefinitions>
-                            <ColumnDefinition Width="170"/>
                             <ColumnDefinition Width="200"/>
-                            <ColumnDefinition Width="130"/>
-                            <ColumnDefinition Width="130"/>
-                            <ColumnDefinition Width="75"/>
-                            <ColumnDefinition Width="55"/>
-                            <ColumnDefinition Width="90"/>
-                            <ColumnDefinition Width="90"/>
+                            <ColumnDefinition Width="250"/>
+                            <ColumnDefinition Width="150"/>
+                            <ColumnDefinition Width="70"/>
+                            <ColumnDefinition Width="100"/>
+                            <ColumnDefinition Width="100"/>
                             <ColumnDefinition Width="40"/>
                         </Grid.ColumnDefinitions>
                         <TextBlock Grid.Column="0" Text="Şikayet" FontWeight="Medium" Foreground="Gray"/>
                         <TextBlock Grid.Column="1" Text="Yapılan İşlem" FontWeight="Medium" Foreground="Gray" Margin="4,0,0,0"/>
                         <TextBlock Grid.Column="2" Text="Teknisyen" FontWeight="Medium" Foreground="Gray" Margin="4,0,0,0"/>
-                        <TextBlock Grid.Column="3" Text="Malzeme" FontWeight="Medium" Foreground="Gray" Margin="4,0,0,0"/>
-                        <TextBlock Grid.Column="4" Text="Malz. Adet" FontWeight="Medium" Foreground="Gray" Margin="4,0,0,0" ToolTip="Kullanılan Malzeme Adeti"/>
-                        <TextBlock Grid.Column="5" Text="Miktar" FontWeight="Medium" Foreground="Gray" Margin="4,0,0,0"/>
-                        <TextBlock Grid.Column="6" Text="Birim Fiyat" FontWeight="Medium" Foreground="Gray" Margin="4,0,0,0"/>
-                        <TextBlock Grid.Column="7" Text="Tutar" FontWeight="Medium" Foreground="Gray" Margin="4,0,0,0"/>
-                        <TextBlock Grid.Column="8" Text="Sil" FontWeight="Medium" Foreground="Gray" HorizontalAlignment="Center"/>
+                        <TextBlock Grid.Column="3" Text="Miktar" FontWeight="Medium" Foreground="Gray" Margin="4,0,0,0"/>
+                        <TextBlock Grid.Column="4" Text="Birim Fiyat" FontWeight="Medium" Foreground="Gray" Margin="4,0,0,0"/>
+                        <TextBlock Grid.Column="5" Text="Tutar" FontWeight="Medium" Foreground="Gray" Margin="4,0,0,0"/>
+                        <TextBlock Grid.Column="6" Text="Sil" FontWeight="Medium" Foreground="Gray" HorizontalAlignment="Center"/>
                     </Grid>
 
                     <Separator Margin="0,0,0,4"/>
@@ -180,14 +251,12 @@
                             <DataTemplate>
                                 <Grid Margin="0,2,0,2">
                                     <Grid.ColumnDefinitions>
-                                        <ColumnDefinition Width="170"/>
                                         <ColumnDefinition Width="200"/>
-                                        <ColumnDefinition Width="130"/>
-                                        <ColumnDefinition Width="130"/>
-                                        <ColumnDefinition Width="75"/>
-                                        <ColumnDefinition Width="55"/>
-                                        <ColumnDefinition Width="90"/>
-                                        <ColumnDefinition Width="90"/>
+                                        <ColumnDefinition Width="250"/>
+                                        <ColumnDefinition Width="150"/>
+                                        <ColumnDefinition Width="70"/>
+                                        <ColumnDefinition Width="100"/>
+                                        <ColumnDefinition Width="100"/>
                                         <ColumnDefinition Width="40"/>
                                     </Grid.ColumnDefinitions>
 
@@ -217,27 +286,7 @@
                                               Padding="4" FontSize="13"
                                               materialDesign:HintAssist.FloatingScale="0.75"/>
 
-                                    <ComboBox Grid.Column="3"
-                                              ItemsSource="{Binding DataContext.StockItems, RelativeSource={RelativeSource AncestorType=UserControl}}"
-                                              SelectedItem="{Binding SelectedStockItem}"
-                                              DisplayMemberPath="DisplayText"
-                                              materialDesign:HintAssist.Hint="Malzeme"
-                                              Style="{StaticResource MaterialDesignOutlinedComboBox}"
-                                              Margin="4,0,4,0"
-                                              Padding="4" FontSize="13"
-                                              materialDesign:HintAssist.FloatingScale="0.75"/>
-
-                                    <TextBox Grid.Column="4"
-                                             Text="{Binding MaterialQuantityUsed, UpdateSourceTrigger=PropertyChanged}"
-                                             materialDesign:HintAssist.Hint="Malz."
-                                             Style="{StaticResource MaterialDesignOutlinedTextBox}"
-                                             Margin="4,0,4,0"
-                                             Padding="4" FontSize="13"
-                                             HorizontalContentAlignment="Center"
-                                             materialDesign:HintAssist.FloatingScale="0.75"
-                                             ToolTip="Kullanılan Malzeme Adeti"/>
-
-                                    <TextBox Grid.Column="5"
+                                    <TextBox Grid.Column="3"
                                              Text="{Binding Quantity, UpdateSourceTrigger=PropertyChanged}"
                                              materialDesign:HintAssist.Hint="Adet"
                                              Style="{StaticResource MaterialDesignOutlinedTextBox}"
@@ -246,8 +295,8 @@
                                              HorizontalContentAlignment="Center"
                                              materialDesign:HintAssist.FloatingScale="0.75"/>
 
-                                    <TextBox Grid.Column="6"
-                                             Text="{Binding UnitPrice, UpdateSourceTrigger=PropertyChanged, StringFormat=N2}"
+                                    <TextBox Grid.Column="4"
+                                             Text="{Binding UnitPrice, UpdateSourceTrigger=PropertyChanged}"
                                              materialDesign:HintAssist.Hint="Fiyat"
                                              Style="{StaticResource MaterialDesignOutlinedTextBox}"
                                              Margin="4,0,4,0"
@@ -255,7 +304,7 @@
                                              HorizontalContentAlignment="Right"
                                              materialDesign:HintAssist.FloatingScale="0.75"/>
 
-                                    <TextBlock Grid.Column="7"
+                                    <TextBlock Grid.Column="5"
                                                Text="{Binding LineTotal, Converter={StaticResource CurrencyFormatConverter}}"
                                                VerticalAlignment="Center"
                                                HorizontalAlignment="Right"
@@ -263,7 +312,7 @@
                                                FontSize="13"
                                                Margin="4,0,4,0"/>
 
-                                    <Button Grid.Column="8"
+                                    <Button Grid.Column="6"
                                             Command="{Binding DataContext.RemoveLineCommand, RelativeSource={RelativeSource AncestorType=UserControl}}"
                                             CommandParameter="{Binding}"
                                             Style="{StaticResource MaterialDesignIconForegroundButton}"
@@ -295,7 +344,7 @@
             </materialDesign:Card>
 
             <!-- Bottom Section: Date, Currency, Grand Total, Buttons -->
-            <materialDesign:Card Grid.Row="3" Padding="20" Margin="0,0,0,16"
+            <materialDesign:Card Grid.Row="4" Padding="20" Margin="0,0,0,16"
                                  materialDesign:ElevationAssist.Elevation="Dp2">
                 <Grid>
                     <Grid.ColumnDefinitions>
@@ -303,22 +352,14 @@
                         <ColumnDefinition Width="Auto"/>
                     </Grid.ColumnDefinitions>
 
-                    <!-- Left: Date and Currency -->
+                    <!-- Left: Date -->
                     <StackPanel Grid.Column="0" Orientation="Horizontal">
-                        <StackPanel Margin="0,0,24,0">
+                        <StackPanel>
                             <TextBlock Text="İşlem Tarihi" FontWeight="Medium" Margin="0,0,0,4"/>
                             <DatePicker SelectedDate="{Binding ServiceDate}"
                                         Style="{StaticResource MaterialDesignOutlinedDatePicker}"
                                         Width="180"
                                         materialDesign:HintAssist.Hint="Tarih"/>
-                        </StackPanel>
-
-                        <StackPanel>
-                            <TextBlock Text="Varsayılan Para Birimi" FontWeight="Medium" Margin="0,0,0,4"/>
-                            <ComboBox ItemsSource="{Binding Source={StaticResource CurrencyTypeValues}}"
-                                      SelectedItem="{Binding DefaultCurrency}"
-                                      Style="{StaticResource MaterialDesignOutlinedComboBox}"
-                                      Width="120"/>
                         </StackPanel>
                     </StackPanel>
 
@@ -337,7 +378,7 @@
             </materialDesign:Card>
 
             <!-- Action Buttons -->
-            <StackPanel Grid.Row="4"
+            <StackPanel Grid.Row="5"
                         Orientation="Horizontal"
                         HorizontalAlignment="Right"
                         Margin="0,0,0,24">

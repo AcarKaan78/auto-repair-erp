@@ -11,23 +11,14 @@ public partial class AddServiceDialogViewModel : ObservableObject
     public AddServiceDialogViewModel()
     {
         Technicians = new ObservableCollection<Technician>();
-        StockItems = new ObservableCollection<StockItem>();
     }
 
     public AddServiceDialogViewModel(List<Technician> technicians)
     {
         Technicians = new ObservableCollection<Technician>(technicians);
-        StockItems = new ObservableCollection<StockItem>();
-    }
-
-    public AddServiceDialogViewModel(List<Technician> technicians, List<StockItem> stockItems)
-    {
-        Technicians = new ObservableCollection<Technician>(technicians);
-        StockItems = new ObservableCollection<StockItem>(stockItems);
     }
 
     public ObservableCollection<Technician> Technicians { get; }
-    public ObservableCollection<StockItem> StockItems { get; }
 
     [ObservableProperty] private string? _complaint;
     [ObservableProperty] private string _workPerformed = "";
@@ -37,8 +28,6 @@ public partial class AddServiceDialogViewModel : ObservableObject
     [ObservableProperty] private CurrencyType _currency = CurrencyType.TL;
     [ObservableProperty] private DateTime _serviceDate = DateTime.Today;
     [ObservableProperty] private string? _notes;
-    [ObservableProperty] private StockItem? _selectedStockItem;
-    [ObservableProperty] private int _materialQuantityUsed;
 
     public ServiceRecord? CreatedRecord { get; private set; }
 
@@ -72,9 +61,7 @@ public partial class AddServiceDialogViewModel : ObservableObject
             TotalAmount = Quantity * UnitPrice,
             Currency = Currency,
             ServiceDate = ServiceDate,
-            Notes = Notes,
-            StockItemId = SelectedStockItem?.Id,
-            MaterialQuantityUsed = MaterialQuantityUsed
+            Notes = Notes
         };
 
         CloseRequested?.Invoke(true);

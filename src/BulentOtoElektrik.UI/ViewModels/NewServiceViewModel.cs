@@ -18,8 +18,6 @@ public partial class ServiceLineItem : ObservableObject
     [ObservableProperty] private int _quantity = 1;
     [ObservableProperty] private decimal _unitPrice;
     [ObservableProperty] private CurrencyType _currency = CurrencyType.TL;
-    [ObservableProperty] private StockItem? _selectedStockItem;
-    [ObservableProperty] private int _materialQuantityUsed;
 
     public decimal LineTotal => Quantity * UnitPrice;
 
@@ -49,7 +47,6 @@ public partial class NewServiceViewModel : ObservableObject
         ServiceLines.CollectionChanged += OnServiceLinesChanged;
         SearchResults = new ObservableCollection<VehicleSearchResult>();
         Technicians = new ObservableCollection<Technician>();
-        StockItems = new ObservableCollection<StockItem>();
 
         AddEmptyLine();
     }
@@ -62,14 +59,17 @@ public partial class NewServiceViewModel : ObservableObject
     [ObservableProperty]
     private bool _isSearchPopupOpen;
 
+    private bool _suppressSearch;
+
     public ObservableCollection<VehicleSearchResult> SearchResults { get; }
 
     partial void OnPlateTextChanged(string value)
     {
+        if (_suppressSearch) return;
+
         var formatted = PlateNumberFormatter.FormatPlate(value);
         if (formatted != value && !string.IsNullOrEmpty(formatted))
         {
-            // Avoid re-entry: only set if genuinely different after formatting
             _plateText = formatted;
             OnPropertyChanged(nameof(PlateText));
         }
@@ -113,12 +113,17 @@ public partial class NewServiceViewModel : ObservableObject
     [ObservableProperty]
     private string _vehicleDisplayInfo = "";
 
+    [ObservableProperty]
+    private ObservableCollection<ServiceRecord> _pastServiceRecords = new();
+
     [RelayCommand]
     private async Task SelectSearchResult(VehicleSearchResult? result)
     {
         if (result == null) return;
 
+        _suppressSearch = true;
         IsSearchPopupOpen = false;
+        SearchResults.Clear();
 
         var vehicle = await _unitOfWork.Vehicles.GetByIdAsync(result.VehicleId);
         if (vehicle != null)
@@ -133,6 +138,23 @@ public partial class NewServiceViewModel : ObservableObject
                 CustomerDisplayName = customer.FullName;
                 VehicleDisplayInfo = $"{vehicle.VehicleBrand} {vehicle.VehicleModel} ({vehicle.VehicleYear})";
             }
+
+            // Load past service records
+            await LoadPastServiceRecordsAsync(vehicle.Id);
+        }
+        _suppressSearch = false;
+    }
+
+    private async Task LoadPastServiceRecordsAsync(int vehicleId)
+    {
+        try
+        {
+            var records = await _unitOfWork.ServiceRecords.GetByVehicleIdAsync(vehicleId);
+            PastServiceRecords = new ObservableCollection<ServiceRecord>(records);
+        }
+        catch
+        {
+            PastServiceRecords.Clear();
         }
     }
 
@@ -197,10 +219,9 @@ public partial class NewServiceViewModel : ObservableObject
     [ObservableProperty]
     private CurrencyType _defaultCurrency = CurrencyType.TL;
 
-    // --- Technicians & Stock ---
+    // --- Technicians ---
 
     public ObservableCollection<Technician> Technicians { get; }
-    public ObservableCollection<StockItem> StockItems { get; }
 
     // --- Initialization ---
 
@@ -212,11 +233,6 @@ public partial class NewServiceViewModel : ObservableObject
             Technicians.Clear();
             foreach (var t in technicians)
                 Technicians.Add(t);
-
-            var stockItems = await _unitOfWork.StockItems.GetActiveAsync();
-            StockItems.Clear();
-            foreach (var s in stockItems)
-                StockItems.Add(s);
         }
         catch
         {
@@ -240,12 +256,14 @@ public partial class NewServiceViewModel : ObservableObject
 
         if (vehicle != null)
         {
+            _suppressSearch = true;
             SelectedVehicle = vehicle;
             PlateText = vehicle.PlateNumber;
             CustomerDisplayName = customer.FullName;
             VehicleDisplayInfo = $"{vehicle.VehicleBrand} {vehicle.VehicleModel} ({vehicle.VehicleYear})";
             _ = _excelExportService.AutoExportCustomerCardsAsync(customer.Id);
             _ = _excelExportService.AutoExportReportsAsync(DateTime.Today);
+            _suppressSearch = false;
         }
     }
 
@@ -284,20 +302,8 @@ public partial class NewServiceViewModel : ObservableObject
                 Quantity = line.Quantity,
                 UnitPrice = line.UnitPrice,
                 TotalAmount = line.LineTotal,
-                Currency = line.Currency,
-                StockItemId = line.SelectedStockItem?.Id,
-                MaterialQuantityUsed = line.MaterialQuantityUsed
+                Currency = line.Currency
             }).ToList();
-
-            // Deduct stock quantities
-            foreach (var line in validLines)
-            {
-                if (line.SelectedStockItem != null && line.MaterialQuantityUsed > 0)
-                {
-                    line.SelectedStockItem.RemainingQuantity -= line.MaterialQuantityUsed;
-                    await _unitOfWork.StockItems.UpdateAsync(line.SelectedStockItem);
-                }
-            }
 
             await _unitOfWork.ServiceRecords.AddRangeAsync(records);
             await _unitOfWork.SaveChangesAsync();
@@ -341,5 +347,6 @@ public partial class NewServiceViewModel : ObservableObject
         ServiceLines.Clear();
         AddEmptyLine();
         GrandTotal = 0;
+        PastServiceRecords.Clear();
     }
 }

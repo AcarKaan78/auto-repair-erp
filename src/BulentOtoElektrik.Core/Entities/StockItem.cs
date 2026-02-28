@@ -15,5 +15,5 @@ public class StockItem : BaseEntity
     public decimal TotalValue => RemainingQuantity * UnitPrice;
 
     [NotMapped]
-    public string DisplayText => $"{MaterialName} - {UnitPrice:N2} ₺";
+    public string DisplayText => $"{MaterialName} - {UnitPrice:N0} ₺";
 }

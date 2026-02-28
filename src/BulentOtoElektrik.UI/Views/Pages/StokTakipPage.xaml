@@ -113,17 +113,6 @@
                             </DataGridTextColumn.ElementStyle>
                         </DataGridTextColumn>
 
-                        <DataGridTextColumn Header="Stok Adet"
-                                            Binding="{Binding StockQuantity}"
-                                            Width="100">
-                            <DataGridTextColumn.ElementStyle>
-                                <Style TargetType="TextBlock">
-                                    <Setter Property="VerticalAlignment" Value="Center"/>
-                                    <Setter Property="HorizontalAlignment" Value="Center"/>
-                                </Style>
-                            </DataGridTextColumn.ElementStyle>
-                        </DataGridTextColumn>
-
                         <DataGridTextColumn Header="Kalan Adet"
                                             Binding="{Binding RemainingQuantity}"
                                             Width="100">
@@ -209,7 +198,7 @@
                              VerticalAlignment="Center"/>
                     <TextBox Grid.Column="1"
                              Text="{Binding NewStockQuantity, UpdateSourceTrigger=PropertyChanged}"
-                             materialDesign:HintAssist.Hint="Adet"
+                             materialDesign:HintAssist.Hint="Kalan Adet"
                              Style="{StaticResource MaterialDesignOutlinedTextBox}"
                              Margin="0,0,8,0"
                              VerticalAlignment="Center"/>
@@ -249,13 +238,13 @@
                              Style="{StaticResource MaterialDesignOutlinedTextBox}"
                              Margin="0,0,0,12"/>
 
-                    <TextBox Text="{Binding EditUnitPrice, UpdateSourceTrigger=PropertyChanged}"
-                             materialDesign:HintAssist.Hint="Birim Fiyat"
+                    <TextBox Text="{Binding EditRemainingQuantity, UpdateSourceTrigger=PropertyChanged}"
+                             materialDesign:HintAssist.Hint="Kalan Adet"
                              Style="{StaticResource MaterialDesignOutlinedTextBox}"
                              Margin="0,0,0,12"/>
 
-                    <TextBox Text="{Binding RestockQuantity, UpdateSourceTrigger=PropertyChanged}"
-                             materialDesign:HintAssist.Hint="Stok Ekle (Adet)"
+                    <TextBox Text="{Binding EditUnitPrice, UpdateSourceTrigger=PropertyChanged}"
+                             materialDesign:HintAssist.Hint="Birim Fiyat"
                              Style="{StaticResource MaterialDesignOutlinedTextBox}"
                              Margin="0,0,0,16"/>
 

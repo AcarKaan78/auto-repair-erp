@@ -26,6 +26,7 @@ public partial class NewServicePage : UserControl
     {
         if (sender is ListBoxItem item && item.DataContext is VehicleSearchResult result)
         {
+            e.Handled = true;
             if (DataContext is NewServiceViewModel vm)
             {
                 vm.SelectSearchResultCommand.Execute(result);

@@ -25,8 +25,9 @@ public partial class StokTakipViewModel : ObservableObject
     [ObservableProperty] private StockItem? _editingItem;
     [ObservableProperty] private bool _isEditing;
     [ObservableProperty] private string _editMaterialName = "";
+    [ObservableProperty] private string _editStockQuantity = "";
+    [ObservableProperty] private string _editRemainingQuantity = "";
     [ObservableProperty] private string _editUnitPrice = "";
-    [ObservableProperty] private string _restockQuantity = "";
 
     // Search
     [ObservableProperty] private string _searchText = "";
@@ -186,8 +187,9 @@ public partial class StokTakipViewModel : ObservableObject
         if (item == null) return;
         EditingItem = item;
         EditMaterialName = item.MaterialName;
+        EditStockQuantity = item.StockQuantity.ToString();
+        EditRemainingQuantity = item.RemainingQuantity.ToString();
         EditUnitPrice = item.UnitPrice.ToString();
-        RestockQuantity = "";
         IsEditing = true;
     }
 
@@ -213,15 +215,12 @@ public partial class StokTakipViewModel : ObservableObject
         try
         {
             EditingItem.MaterialName = EditMaterialName.Trim();
+            if (int.TryParse(EditStockQuantity, out var stockQty) && stockQty >= 0)
+                EditingItem.StockQuantity = stockQty;
+            if (int.TryParse(EditRemainingQuantity, out var remQty) && remQty >= 0)
+                EditingItem.RemainingQuantity = remQty;
             if (decimal.TryParse(EditUnitPrice, out var price))
                 EditingItem.UnitPrice = price;
-
-            if (!string.IsNullOrWhiteSpace(RestockQuantity)
-                && int.TryParse(RestockQuantity, out var restock) && restock > 0)
-            {
-                EditingItem.StockQuantity += restock;
-                EditingItem.RemainingQuantity += restock;
-            }
 
             await _unitOfWork.StockItems.UpdateAsync(EditingItem);
             await _unitOfWork.SaveChangesAsync();

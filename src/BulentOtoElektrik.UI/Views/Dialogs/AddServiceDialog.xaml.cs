@@ -31,6 +31,6 @@ public partial class AddServiceDialog : Window
     private void UpdateTotal(AddServiceDialogViewModel vm)
     {
         var total = vm.Quantity * vm.UnitPrice;
-        TotalText.Text = total.ToString("C2", new System.Globalization.CultureInfo("tr-TR"));
+        TotalText.Text = total.ToString("C0", new System.Globalization.CultureInfo("tr-TR"));
     }
 }
