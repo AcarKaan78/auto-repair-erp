@@ -93,6 +93,64 @@ public partial class App : Application
                 }
             }
 
+            // Migrate: add Personnel table if missing
+            using (var cmd2 = conn.CreateCommand())
+            {
+                cmd2.CommandText = "SELECT name FROM sqlite_master WHERE type='table' AND name='Personnel'";
+                if (await cmd2.ExecuteScalarAsync() == null)
+                {
+                    using var migrate2 = conn.CreateCommand();
+                    migrate2.CommandText = @"
+                        CREATE TABLE Personnel (
+                            Id INTEGER PRIMARY KEY AUTOINCREMENT,
+                            FullName TEXT NOT NULL,
+                            TcKimlikNo TEXT,
+                            Phone TEXT,
+                            Role TEXT,
+                            IsActive INTEGER NOT NULL DEFAULT 1,
+                            CreatedAt TEXT NOT NULL DEFAULT '0001-01-01',
+                            UpdatedAt TEXT NOT NULL DEFAULT '0001-01-01'
+                        );";
+                    await migrate2.ExecuteNonQueryAsync();
+                    Log.Information("Personnel table created");
+                }
+            }
+
+            // Migrate: add TcKimlikNo column to Personnel if missing
+            using (var cmd3 = conn.CreateCommand())
+            {
+                cmd3.CommandText = "PRAGMA table_info(Personnel)";
+                bool hasTcColumn = false;
+                using var reader = await cmd3.ExecuteReaderAsync();
+                while (await reader.ReadAsync())
+                {
+                    if (reader.GetString(1) == "TcKimlikNo")
+                    {
+                        hasTcColumn = true;
+                        break;
+                    }
+                }
+                if (!hasTcColumn)
+                {
+                    using var migrate3 = conn.CreateCommand();
+                    migrate3.CommandText = "ALTER TABLE Personnel ADD COLUMN TcKimlikNo TEXT";
+                    await migrate3.ExecuteNonQueryAsync();
+                    Log.Information("TcKimlikNo column added to Personnel table");
+                }
+            }
+
+            // Migrate: convert all USD/EURO currency values to TL
+            using (var cmd4 = conn.CreateCommand())
+            {
+                cmd4.CommandText = @"
+                    UPDATE ServiceRecords SET Currency = 'TL' WHERE Currency IN ('USD', 'EURO');
+                    UPDATE Payments SET Currency = 'TL' WHERE Currency IN ('USD', 'EURO');
+                    UPDATE DailyExpenses SET Currency = 'TL' WHERE Currency IN ('USD', 'EURO');";
+                var affected = await cmd4.ExecuteNonQueryAsync();
+                if (affected > 0)
+                    Log.Information("Migrated {Count} records from USD/EURO to TL", affected);
+            }
+
             var seeder = scope.ServiceProvider.GetRequiredService<DatabaseSeeder>();
             await seeder.SeedAsync();
 
@@ -120,7 +178,7 @@ public partial class App : Application
             Log.Warning(ex, "Failed to create startup backup");
         }
 
-        // First-launch: ask user for Excel export folder if not set
+        // Load saved Excel export folder if configured
         try
         {
             var excelService = _serviceProvider.GetRequiredService<IExcelExportService>();
@@ -131,46 +189,10 @@ public partial class App : Application
                 if (!string.IsNullOrEmpty(savedFolder))
                     excelService.SetExportFolder(savedFolder);
             }
-            else
-            {
-                MessageBox.Show(
-                    "Excel dosyalarını çıkartmak istediğiniz yeri seçin.",
-                    "Klasör Seçimi",
-                    MessageBoxButton.OK,
-                    MessageBoxImage.Information);
-
-                var dialog = new Microsoft.Win32.OpenFolderDialog
-                {
-                    Title = "Excel dosyaları için kayıt klasörünü seçin",
-                    Multiselect = false
-                };
-                if (dialog.ShowDialog() == true)
-                {
-                    excelService.SetExportFolder(dialog.FolderName);
-                    File.WriteAllText(settingsFile, dialog.FolderName);
-                }
-                else
-                {
-                    // Use default folder
-                    File.WriteAllText(settingsFile, excelService.GetExportFolder());
-                }
-            }
         }
         catch (Exception ex)
         {
-            Log.Warning(ex, "Failed to set export folder");
-        }
-
-        // Auto-export all Excel files on startup (fire-and-forget)
-        try
-        {
-            var excelExportService = _serviceProvider.GetRequiredService<IExcelExportService>();
-            _ = excelExportService.AutoExportAllAsync();
-            Log.Information("Startup Excel auto-export initiated");
-        }
-        catch (Exception ex)
-        {
-            Log.Warning(ex, "Failed to initiate startup Excel export");
+            Log.Warning(ex, "Failed to load export folder setting");
         }
 
         // Show main window (from UI project)
@@ -200,6 +222,7 @@ public partial class App : Application
         services.AddScoped<IExpenseCategoryRepository, ExpenseCategoryRepository>();
         services.AddScoped<ITechnicianRepository, TechnicianRepository>();
         services.AddScoped<IStockItemRepository, StockItemRepository>();
+        services.AddScoped<IPersonnelRepository, PersonnelRepository>();
         services.AddScoped<IUnitOfWork, UnitOfWork>();
 
         // Services
