@@ -34,13 +34,11 @@ public class ExpenseCategoryRepository : IExpenseCategoryRepository
     public async Task<ExpenseCategory> AddAsync(ExpenseCategory category, CancellationToken ct = default)
     {
         _context.ExpenseCategories.Add(category);
-        await _context.SaveChangesAsync(ct);
         return category;
     }
 
     public async Task UpdateAsync(ExpenseCategory category, CancellationToken ct = default)
     {
         _context.ExpenseCategories.Update(category);
-        await _context.SaveChangesAsync(ct);
     }
 }

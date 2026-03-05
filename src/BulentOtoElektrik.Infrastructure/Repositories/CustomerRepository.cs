@@ -69,14 +69,12 @@ public class CustomerRepository : ICustomerRepository
     public async Task<Customer> AddAsync(Customer customer, CancellationToken ct = default)
     {
         _context.Customers.Add(customer);
-        await _context.SaveChangesAsync(ct);
         return customer;
     }
 
     public async Task UpdateAsync(Customer customer, CancellationToken ct = default)
     {
         _context.Customers.Update(customer);
-        await _context.SaveChangesAsync(ct);
     }
 
     public async Task DeleteAsync(int id, CancellationToken ct = default)
@@ -85,7 +83,6 @@ public class CustomerRepository : ICustomerRepository
         if (customer != null)
         {
             _context.Customers.Remove(customer);
-            await _context.SaveChangesAsync(ct);
         }
     }
 

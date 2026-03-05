@@ -34,7 +34,6 @@ public class StockItemRepository : IStockItemRepository
     public async Task<StockItem> AddAsync(StockItem stockItem, CancellationToken ct = default)
     {
         _context.StockItems.Add(stockItem);
-        await _context.SaveChangesAsync(ct);
         return stockItem;
     }
 
@@ -51,7 +50,5 @@ public class StockItemRepository : IStockItemRepository
         {
             _context.StockItems.Update(stockItem);
         }
-
-        await _context.SaveChangesAsync(ct);
     }
 }

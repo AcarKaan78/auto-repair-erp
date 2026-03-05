@@ -84,14 +84,12 @@ public class VehicleRepository : IVehicleRepository
     public async Task<Vehicle> AddAsync(Vehicle vehicle, CancellationToken ct = default)
     {
         _context.Vehicles.Add(vehicle);
-        await _context.SaveChangesAsync(ct);
         return vehicle;
     }
 
     public async Task UpdateAsync(Vehicle vehicle, CancellationToken ct = default)
     {
         _context.Vehicles.Update(vehicle);
-        await _context.SaveChangesAsync(ct);
     }
 
     public async Task DeleteAsync(int id, CancellationToken ct = default)
@@ -100,7 +98,6 @@ public class VehicleRepository : IVehicleRepository
         if (vehicle != null)
         {
             _context.Vehicles.Remove(vehicle);
-            await _context.SaveChangesAsync(ct);
         }
     }
 }

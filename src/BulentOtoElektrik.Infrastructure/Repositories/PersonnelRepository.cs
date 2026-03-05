@@ -24,14 +24,12 @@ public class PersonnelRepository : IPersonnelRepository
     public async Task<Personnel> AddAsync(Personnel personnel, CancellationToken ct = default)
     {
         _context.Personnel.Add(personnel);
-        await _context.SaveChangesAsync(ct);
         return personnel;
     }
 
     public async Task UpdateAsync(Personnel personnel, CancellationToken ct = default)
     {
         _context.Personnel.Update(personnel);
-        await _context.SaveChangesAsync(ct);
     }
 
     public async Task DeleteAsync(int id, CancellationToken ct = default)
@@ -40,7 +38,6 @@ public class PersonnelRepository : IPersonnelRepository
         if (personnel != null)
         {
             _context.Personnel.Remove(personnel);
-            await _context.SaveChangesAsync(ct);
         }
     }
 }

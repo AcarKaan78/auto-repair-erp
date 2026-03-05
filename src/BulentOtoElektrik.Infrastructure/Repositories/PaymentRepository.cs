@@ -28,14 +28,12 @@ public class PaymentRepository : IPaymentRepository
     public async Task<Payment> AddAsync(Payment payment, CancellationToken ct = default)
     {
         _context.Payments.Add(payment);
-        await _context.SaveChangesAsync(ct);
         return payment;
     }
 
     public async Task UpdateAsync(Payment payment, CancellationToken ct = default)
     {
         _context.Payments.Update(payment);
-        await _context.SaveChangesAsync(ct);
     }
 
     public async Task DeleteAsync(int id, CancellationToken ct = default)
@@ -44,7 +42,6 @@ public class PaymentRepository : IPaymentRepository
         if (payment != null)
         {
             _context.Payments.Remove(payment);
-            await _context.SaveChangesAsync(ct);
         }
     }
 }

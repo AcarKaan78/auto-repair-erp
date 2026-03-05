@@ -38,14 +38,12 @@ public class DailyExpenseRepository : IDailyExpenseRepository
     public async Task<DailyExpense> AddAsync(DailyExpense expense, CancellationToken ct = default)
     {
         _context.DailyExpenses.Add(expense);
-        await _context.SaveChangesAsync(ct);
         return expense;
     }
 
     public async Task UpdateAsync(DailyExpense expense, CancellationToken ct = default)
     {
         _context.DailyExpenses.Update(expense);
-        await _context.SaveChangesAsync(ct);
     }
 
     public async Task DeleteAsync(int id, CancellationToken ct = default)
@@ -54,7 +52,6 @@ public class DailyExpenseRepository : IDailyExpenseRepository
         if (expense != null)
         {
             _context.DailyExpenses.Remove(expense);
-            await _context.SaveChangesAsync(ct);
         }
     }
 }

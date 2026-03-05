@@ -64,20 +64,17 @@ public class ServiceRecordRepository : IServiceRecordRepository
     public async Task<ServiceRecord> AddAsync(ServiceRecord record, CancellationToken ct = default)
     {
         _context.ServiceRecords.Add(record);
-        await _context.SaveChangesAsync(ct);
         return record;
     }
 
     public async Task AddRangeAsync(IEnumerable<ServiceRecord> records, CancellationToken ct = default)
     {
         _context.ServiceRecords.AddRange(records);
-        await _context.SaveChangesAsync(ct);
     }
 
     public async Task UpdateAsync(ServiceRecord record, CancellationToken ct = default)
     {
         _context.ServiceRecords.Update(record);
-        await _context.SaveChangesAsync(ct);
     }
 
     public async Task DeleteAsync(int id, CancellationToken ct = default)
@@ -86,7 +83,6 @@ public class ServiceRecordRepository : IServiceRecordRepository
         if (record != null)
         {
             _context.ServiceRecords.Remove(record);
-            await _context.SaveChangesAsync(ct);
         }
     }
 }

@@ -34,7 +34,6 @@ public class TechnicianRepository : ITechnicianRepository
     public async Task<Technician> AddAsync(Technician technician, CancellationToken ct = default)
     {
         _context.Technicians.Add(technician);
-        await _context.SaveChangesAsync(ct);
         return technician;
     }
 
@@ -51,7 +50,5 @@ public class TechnicianRepository : ITechnicianRepository
         {
             _context.Technicians.Update(technician);
         }
-
-        await _context.SaveChangesAsync(ct);
     }
 }
