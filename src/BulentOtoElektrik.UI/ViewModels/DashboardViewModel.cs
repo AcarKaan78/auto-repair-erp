@@ -87,7 +87,7 @@ public partial class DashboardViewModel : ObservableObject
             RecentServices = new ObservableCollection<ServiceRecord>(recentServices);
 
             // 3. Load top debtors
-            var topDebtors = await _unitOfWork.Customers.GetTopDebtorsAsync(10);
+            var topDebtors = await _unitOfWork.Customers.GetTopDebtorsAsync(int.MaxValue);
             TopDebtors = new ObservableCollection<Customer>(topDebtors);
 
             // 4. Build chart data for current month
@@ -119,7 +119,7 @@ public partial class DashboardViewModel : ObservableObject
             {
                 new ColumnSeries<decimal>
                 {
-                    Name = "Gelir",
+                    Name = "Tahsilat",
                     Values = dailyRevenues,
                     Fill = new SolidColorPaint(SKColors.Green.WithAlpha(180)),
                 },

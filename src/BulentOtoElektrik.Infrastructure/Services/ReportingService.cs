@@ -26,15 +26,21 @@ public class ReportingService : IReportingService
         var previousDateEnd = targetDate; // == previousDate.AddDays(1)
 
         // SQLite cannot Sum() on decimal, so materialize first then sum in memory
-        // Use range comparison to handle any time component in stored dates
-        var todayServices = await _context.ServiceRecords
+        // Revenue = actual payments received (not service record amounts)
+        var todayPaymentAmounts = await _context.Payments
+            .AsNoTracking()
+            .Where(p => p.PaymentDate >= targetDate && p.PaymentDate < targetDateEnd)
+            .Select(p => p.Amount)
+            .ToListAsync(ct);
+        var todayRevenue = todayPaymentAmounts.Sum();
+
+        // Vehicle count still from service records (vehicles serviced today)
+        var vehicleCount = await _context.ServiceRecords
             .AsNoTracking()
             .Where(sr => sr.ServiceDate >= targetDate && sr.ServiceDate < targetDateEnd)
-            .Select(sr => new { sr.TotalAmount, sr.VehicleId })
-            .ToListAsync(ct);
-
-        var todayRevenue = todayServices.Sum(sr => sr.TotalAmount);
-        var vehicleCount = todayServices.Select(sr => sr.VehicleId).Distinct().Count();
+            .Select(sr => sr.VehicleId)
+            .Distinct()
+            .CountAsync(ct);
 
         var todayExpenseAmounts = await _context.DailyExpenses
             .AsNoTracking()
@@ -43,12 +49,12 @@ public class ReportingService : IReportingService
             .ToListAsync(ct);
         var todayExpenses = todayExpenseAmounts.Sum();
 
-        var yesterdayServiceAmounts = await _context.ServiceRecords
+        var yesterdayPaymentAmounts = await _context.Payments
             .AsNoTracking()
-            .Where(sr => sr.ServiceDate >= previousDate && sr.ServiceDate < previousDateEnd)
-            .Select(sr => sr.TotalAmount)
+            .Where(p => p.PaymentDate >= previousDate && p.PaymentDate < previousDateEnd)
+            .Select(p => p.Amount)
             .ToListAsync(ct);
-        var yesterdayRevenue = yesterdayServiceAmounts.Sum();
+        var yesterdayRevenue = yesterdayPaymentAmounts.Sum();
 
         var yesterdayExpenseAmounts = await _context.DailyExpenses
             .AsNoTracking()
@@ -83,9 +89,10 @@ public class ReportingService : IReportingService
         var start = startDate.Date;
         var end = endDate.Date;
 
-        var serviceRecords = await _context.ServiceRecords
+        // Revenue = actual payments received (not service record amounts)
+        var payments = await _context.Payments
             .AsNoTracking()
-            .Where(sr => sr.ServiceDate >= start && sr.ServiceDate <= end)
+            .Where(p => p.PaymentDate >= start && p.PaymentDate <= end)
             .ToListAsync(ct);
 
         var expenses = await _context.DailyExpenses
@@ -96,7 +103,7 @@ public class ReportingService : IReportingService
         var dailyBreakdown = new List<DailyBreakdownDto>();
         for (var date = start; date <= end; date = date.AddDays(1))
         {
-            var dayRevenue = serviceRecords.Where(sr => sr.ServiceDate == date).Sum(sr => sr.TotalAmount);
+            var dayRevenue = payments.Where(p => p.PaymentDate.Date == date).Sum(p => p.Amount);
             var dayExpenses = expenses.Where(e => e.ExpenseDate == date).Sum(e => e.Amount);
 
             if (dayRevenue > 0 || dayExpenses > 0)
@@ -114,7 +121,7 @@ public class ReportingService : IReportingService
         {
             StartDate = start,
             EndDate = end,
-            TotalRevenue = serviceRecords.Sum(sr => sr.TotalAmount),
+            TotalRevenue = payments.Sum(p => p.Amount),
             TotalExpenses = expenses.Sum(e => e.Amount),
             DailyBreakdown = dailyBreakdown
         };
