@@ -352,6 +352,27 @@ public partial class CustomerDetailViewModel : ObservableObject
     }
 
     [RelayCommand]
+    private async Task AddVehicleAsync()
+    {
+        var dialogVm = new AddVehicleDialogViewModel(_unitOfWork, _dialogService);
+        dialogVm.CustomerId = CustomerId;
+        var vehicle = await _dialogService.ShowDialogAsync<Vehicle>(dialogVm);
+        if (vehicle != null)
+        {
+            try
+            {
+                PreferredVehicleId = vehicle.Id;
+                await LoadAsync(CustomerId);
+                _ = _excelExportService.AutoExportCustomerCardsAsync(CustomerId);
+            }
+            catch (Exception ex)
+            {
+                await _dialogService.ShowMessageAsync($"Araç eklenirken hata: {ex.Message}", "Hata");
+            }
+        }
+    }
+
+    [RelayCommand]
     private async Task DeleteVehicleAsync()
     {
         if (Vehicle == null) return;
@@ -393,23 +414,25 @@ public partial class CustomerDetailViewModel : ObservableObject
     {
         if (Vehicle == null)
         {
-            await _dialogService.ShowMessageAsync("Bu musteriye ait arac bulunamadi.", "Uyarı");
+            await _dialogService.ShowMessageAsync("Bu müşteriye ait araç bulunamadı.", "Uyarı");
             return;
         }
 
         try
         {
-            var exportFolder = _excelExportService.GetExportFolder();
-            Directory.CreateDirectory(exportFolder);
-
-            // Sanitize file name (remove invalid chars from plate/name)
             var safeName = string.Join("_", $"{CustomerName}_{Vehicle.PlateNumber}".Split(Path.GetInvalidFileNameChars()));
             var fileName = $"{safeName}.xlsx";
-            var filePath = Path.Combine(exportFolder, fileName);
+            var filePath = Path.Combine(Path.GetTempPath(), fileName);
 
             await _excelExportService.ExportCustomerCardAsync(
                 CustomerId, Vehicle.Id, filePath);
-            await _dialogService.ShowMessageAsync($"Excel dosyası başarıyla oluşturuldu.\n{filePath}", "Başarılı");
+
+            // Open the file directly so user can view it
+            System.Diagnostics.Process.Start(new System.Diagnostics.ProcessStartInfo
+            {
+                FileName = filePath,
+                UseShellExecute = true
+            });
         }
         catch (Exception ex)
         {
