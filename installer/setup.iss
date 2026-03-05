@@ -2,7 +2,7 @@
 ; Requires Inno Setup 6.x (https://jrsoftware.org/isinfo.php)
 
 #define MyAppName "Bulent Oto Elektrik Yonetim Sistemi"
-#define MyAppVersion "1.0.3"
+#define MyAppVersion "1.0.6"
 #define MyAppPublisher "Bulent Oto Elektrik"
 #define MyAppExeName "BulentOtoElektrik.App.exe"
 #define PublishDir "..\publish"
