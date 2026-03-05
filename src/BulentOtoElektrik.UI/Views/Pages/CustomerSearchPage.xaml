@@ -10,7 +10,7 @@
         <converters:BalanceToColorConverter x:Key="BalanceToColor"/>
     </UserControl.Resources>
 
-    <Grid Margin="24">
+    <Grid Margin="16">
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto"/>
             <RowDefinition Height="*"/>
@@ -18,7 +18,7 @@
         </Grid.RowDefinitions>
 
         <!-- Search Bar and Add Button -->
-        <Grid Grid.Row="0" Margin="0,0,0,16">
+        <Grid Grid.Row="0" Margin="0,0,0,10">
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="*"/>
                 <ColumnDefinition Width="Auto"/>
@@ -31,7 +31,7 @@
                      materialDesign:TextFieldAssist.LeadingIcon="Magnify"
                      materialDesign:TextFieldAssist.HasClearButton="True"
                      Style="{StaticResource MaterialDesignOutlinedTextBox}"
-                     FontSize="14" Margin="0,0,16,0"
+                     FontSize="12" Margin="0,0,16,0"
                      VerticalAlignment="Center"/>
 
             <Button Grid.Column="1"
@@ -39,11 +39,11 @@
                     Style="{StaticResource MaterialDesignRaisedButton}"
                     materialDesign:ButtonAssist.CornerRadius="4"
                     Background="#303F9F" Foreground="White"
-                    Padding="16,8" FontSize="14"
+                    Padding="12,6" FontSize="12"
                     VerticalAlignment="Center">
                 <StackPanel Orientation="Horizontal">
-                    <materialDesign:PackIcon Kind="AccountPlus" Width="20" Height="20"
-                                              VerticalAlignment="Center" Margin="0,0,8,0"/>
+                    <materialDesign:PackIcon Kind="AccountPlus" Width="16" Height="16"
+                                              VerticalAlignment="Center" Margin="0,0,6,0"/>
                     <TextBlock Text="Yeni Musteri Ekle" VerticalAlignment="Center"/>
                 </StackPanel>
             </Button>
@@ -57,13 +57,13 @@
                       IsReadOnly="True" SelectionMode="Single"
                       GridLinesVisibility="Horizontal"
                       HorizontalGridLinesBrush="#E0E0E0"
-                      RowHeight="44" FontSize="13"
+                      FontSize="11"
                       AlternatingRowBackground="#FAFAFA"
                       MouseDoubleClick="DataGrid_MouseDoubleClick"
                       HeadersVisibility="Column">
                 <DataGrid.Columns>
                     <DataGridTextColumn Header="Plaka" Binding="{Binding PlateNumber}"
-                                        Width="130" FontSize="14">
+                                        Width="110" FontSize="12">
                         <DataGridTextColumn.ElementStyle>
                             <Style TargetType="TextBlock">
                                 <Setter Property="FontWeight" Value="Bold"/>
@@ -97,8 +97,8 @@
                         </DataGridTextColumn.ElementStyle>
                     </DataGridTextColumn>
 
-                    <DataGridTextColumn Header="Bakiye" Binding="{Binding Balance, Converter={StaticResource CurrencyFormat}}"
-                                        Width="140">
+                    <DataGridTextColumn Header="Kalan Borç" Binding="{Binding Balance, Converter={StaticResource CurrencyFormat}}"
+                                        Width="110">
                         <DataGridTextColumn.ElementStyle>
                             <Style TargetType="TextBlock">
                                 <Setter Property="FontWeight" Value="SemiBold"/>
@@ -110,14 +110,15 @@
                         </DataGridTextColumn.ElementStyle>
                     </DataGridTextColumn>
 
-                    <DataGridTemplateColumn Header="" Width="60">
+                    <DataGridTemplateColumn Header="" Width="50">
                         <DataGridTemplateColumn.CellTemplate>
                             <DataTemplate>
                                 <Button Style="{StaticResource MaterialDesignIconForegroundButton}"
                                         Command="{Binding DataContext.ViewCustomerCommand, RelativeSource={RelativeSource AncestorType=UserControl}}"
                                         CommandParameter="{Binding}"
-                                        ToolTip="Detay" Width="32" Height="32">
-                                    <materialDesign:PackIcon Kind="ChevronRight" Width="20" Height="20"/>
+                                        ToolTip="Detay"
+                                        Width="28" Height="28" Padding="0">
+                                    <materialDesign:PackIcon Kind="ChevronRight" Width="16" Height="16"/>
                                 </Button>
                             </DataTemplate>
                         </DataGridTemplateColumn.CellTemplate>
@@ -128,6 +129,6 @@
 
         <!-- Status -->
         <TextBlock Grid.Row="2" Text="{Binding StatusMessage}" Foreground="#757575"
-                   FontSize="12" Margin="0,8,0,0"/>
+                   FontSize="11" Margin="0,6,0,0"/>
     </Grid>
 </UserControl>

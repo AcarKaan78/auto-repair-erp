@@ -9,7 +9,7 @@
         <converters:BoolToVisibilityConverter x:Key="BoolToVisibility"/>
     </UserControl.Resources>
 
-    <Grid Margin="24">
+    <Grid Margin="16">
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto"/>
             <RowDefinition Height="Auto"/>
@@ -22,7 +22,7 @@
                    Style="{StaticResource PageTitleStyle}"/>
 
         <!-- Add Personnel Section -->
-        <materialDesign:Card Grid.Row="1" Padding="16" UniformCornerRadius="8" Margin="0,0,0,16">
+        <materialDesign:Card Grid.Row="1" Padding="10" UniformCornerRadius="8" Margin="0,0,0,10">
             <Grid>
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition Width="*"/>
@@ -65,10 +65,10 @@
                         Style="{StaticResource MaterialDesignRaisedButton}"
                         Background="#303F9F" Foreground="White"
                         materialDesign:ButtonAssist.CornerRadius="4"
-                        Padding="16,8"
+                        Padding="12,6"
                         VerticalAlignment="Center">
                     <StackPanel Orientation="Horizontal">
-                        <materialDesign:PackIcon Kind="AccountPlus" Width="20" Height="20"
+                        <materialDesign:PackIcon Kind="AccountPlus" Width="16" Height="16"
                                                   VerticalAlignment="Center" Margin="0,0,8,0"/>
                         <TextBlock Text="Ekle" VerticalAlignment="Center"/>
                     </StackPanel>
@@ -152,7 +152,7 @@
                                             CommandParameter="{Binding}"
                                             ToolTip="Düzenle"
                                             Width="32" Height="32">
-                                        <materialDesign:PackIcon Kind="Pencil" Width="18" Height="18"/>
+                                        <materialDesign:PackIcon Kind="Pencil" Width="14" Height="14"/>
                                     </Button>
                                     <Button Style="{StaticResource MaterialDesignIconForegroundButton}"
                                             Command="{Binding DataContext.DeletePersonnelCommand, RelativeSource={RelativeSource AncestorType=UserControl}}"
@@ -160,7 +160,7 @@
                                             ToolTip="Sil"
                                             Width="32" Height="32"
                                             Foreground="#E53935">
-                                        <materialDesign:PackIcon Kind="DeleteOutline" Width="18" Height="18"/>
+                                        <materialDesign:PackIcon Kind="DeleteOutline" Width="14" Height="14"/>
                                     </Button>
                                 </StackPanel>
                             </DataTemplate>
@@ -174,35 +174,35 @@
         <Grid Grid.Row="0" Grid.RowSpan="3"
               Visibility="{Binding IsEditing, Converter={StaticResource BoolToVisibility}}"
               Background="#80000000">
-            <materialDesign:Card Padding="24" UniformCornerRadius="12"
-                                  Width="400"
+            <materialDesign:Card Padding="16" UniformCornerRadius="12"
+                                  Width="340"
                                   VerticalAlignment="Center"
                                   HorizontalAlignment="Center">
                 <StackPanel>
                     <TextBlock Text="Personel Düzenle"
-                               FontSize="20" FontWeight="Bold"
+                               FontSize="16" FontWeight="Bold"
                                Foreground="#303F9F"
-                               Margin="0,0,0,16"/>
+                               Margin="0,0,0,10"/>
 
                     <TextBox Text="{Binding EditFullName, UpdateSourceTrigger=PropertyChanged}"
                              materialDesign:HintAssist.Hint="Ad Soyad"
                              Style="{StaticResource MaterialDesignOutlinedTextBox}"
-                             Margin="0,0,0,12"/>
+                             Margin="0,0,0,8"/>
 
                     <TextBox Text="{Binding EditTcKimlikNo, UpdateSourceTrigger=PropertyChanged}"
                              materialDesign:HintAssist.Hint="T.C. Kimlik No"
                              Style="{StaticResource MaterialDesignOutlinedTextBox}"
-                             Margin="0,0,0,12"/>
+                             Margin="0,0,0,8"/>
 
                     <TextBox Text="{Binding EditPhone, UpdateSourceTrigger=PropertyChanged}"
                              materialDesign:HintAssist.Hint="Telefon"
                              Style="{StaticResource MaterialDesignOutlinedTextBox}"
-                             Margin="0,0,0,12"/>
+                             Margin="0,0,0,8"/>
 
                     <TextBox Text="{Binding EditRole, UpdateSourceTrigger=PropertyChanged}"
                              materialDesign:HintAssist.Hint="Görev"
                              Style="{StaticResource MaterialDesignOutlinedTextBox}"
-                             Margin="0,0,0,20"/>
+                             Margin="0,0,0,14"/>
 
                     <StackPanel Orientation="Horizontal" HorizontalAlignment="Right">
                         <Button Command="{Binding CancelEditCommand}"
@@ -225,11 +225,11 @@
             <StackPanel VerticalAlignment="Center" HorizontalAlignment="Center">
                 <ProgressBar Style="{StaticResource MaterialDesignCircularProgressBar}"
                              IsIndeterminate="True"
-                             Width="40" Height="40"/>
+                             Width="32" Height="32"/>
                 <TextBlock Text="Yükleniyor..."
                            HorizontalAlignment="Center"
-                           Margin="0,12,0,0"
-                           FontSize="14"
+                           Margin="0,8,0,0"
+                           FontSize="12"
                            Foreground="#757575"/>
             </StackPanel>
         </Grid>

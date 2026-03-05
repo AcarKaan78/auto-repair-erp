@@ -14,14 +14,14 @@
 
     <Grid>
         <!-- Main Content -->
-        <ScrollViewer VerticalScrollBarVisibility="Auto" Padding="24,24,24,0">
+        <ScrollViewer VerticalScrollBarVisibility="Auto" Padding="16,16,16,0">
             <Grid MaxWidth="1400">
-                <Grid.RowDefinitions>
-                    <RowDefinition Height="Auto"/>
-                    <RowDefinition Height="Auto"/>
-                    <RowDefinition Height="Auto"/>
-                    <RowDefinition Height="Auto"/>
-                </Grid.RowDefinitions>
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+            </Grid.RowDefinitions>
 
                 <!-- Title -->
                 <TextBlock Grid.Row="0"
@@ -29,7 +29,7 @@
                            Style="{StaticResource PageTitleStyle}"/>
 
                 <!-- Row 1: Summary Cards -->
-                <UniformGrid Grid.Row="1" Columns="4" Margin="0,0,0,16">
+                <UniformGrid Grid.Row="1" Columns="4" Margin="0,0,0,10">
 
                     <!-- Bugun Gelir Card -->
                     <materialDesign:Card Style="{StaticResource SummaryCardStyle}">
@@ -40,14 +40,14 @@
                                 <RowDefinition Height="Auto"/>
                             </Grid.RowDefinitions>
                             <TextBlock Grid.Row="0"
-                                       Text="Bugun Gelir"
+                                       Text="Bugün Tahsilat"
                                        Style="{StaticResource SummaryCardLabelStyle}"/>
                             <TextBlock Grid.Row="1"
                                        Text="{Binding TodayRevenue, Converter={StaticResource CurrencyFormat}}"
                                        Style="{StaticResource SummaryCardValueStyle}"
                                        Foreground="#4CAF50"/>
-                            <StackPanel Grid.Row="2" Orientation="Horizontal" Margin="0,4,0,0">
-                                <materialDesign:PackIcon Width="16" Height="16" VerticalAlignment="Center">
+                            <StackPanel Grid.Row="2" Orientation="Horizontal" Margin="0,2,0,0">
+                                <materialDesign:PackIcon Width="14" Height="14" VerticalAlignment="Center">
                                     <materialDesign:PackIcon.Style>
                                         <Style TargetType="materialDesign:PackIcon">
                                             <Setter Property="Kind" Value="ArrowUp"/>
@@ -61,7 +61,7 @@
                                         </Style>
                                     </materialDesign:PackIcon.Style>
                                 </materialDesign:PackIcon>
-                                <TextBlock VerticalAlignment="Center" FontSize="12" Margin="2,0,0,0">
+                                <TextBlock VerticalAlignment="Center" FontSize="11" Margin="2,0,0,0">
                                     <TextBlock.Style>
                                         <Style TargetType="TextBlock">
                                             <Setter Property="Foreground" Value="#4CAF50"/>
@@ -95,8 +95,8 @@
                                        Text="{Binding TodayExpenses, Converter={StaticResource CurrencyFormat}}"
                                        Style="{StaticResource SummaryCardValueStyle}"
                                        Foreground="#F44336"/>
-                            <StackPanel Grid.Row="2" Orientation="Horizontal" Margin="0,4,0,0">
-                                <materialDesign:PackIcon Width="16" Height="16" VerticalAlignment="Center">
+                            <StackPanel Grid.Row="2" Orientation="Horizontal" Margin="0,2,0,0">
+                                <materialDesign:PackIcon Width="14" Height="14" VerticalAlignment="Center">
                                     <materialDesign:PackIcon.Style>
                                         <Style TargetType="materialDesign:PackIcon">
                                             <Setter Property="Kind" Value="ArrowUp"/>
@@ -110,7 +110,7 @@
                                         </Style>
                                     </materialDesign:PackIcon.Style>
                                 </materialDesign:PackIcon>
-                                <TextBlock VerticalAlignment="Center" FontSize="12" Margin="2,0,0,0">
+                                <TextBlock VerticalAlignment="Center" FontSize="11" Margin="2,0,0,0">
                                     <TextBlock.Style>
                                         <Style TargetType="TextBlock">
                                             <Setter Property="Foreground" Value="#4CAF50"/>
@@ -144,8 +144,8 @@
                                        Text="{Binding NetEarnings, Converter={StaticResource CurrencyFormat}}"
                                        Style="{StaticResource SummaryCardValueStyle}"
                                        Foreground="#1976D2"/>
-                            <StackPanel Grid.Row="2" Orientation="Horizontal" Margin="0,4,0,0">
-                                <materialDesign:PackIcon Width="16" Height="16" VerticalAlignment="Center">
+                            <StackPanel Grid.Row="2" Orientation="Horizontal" Margin="0,2,0,0">
+                                <materialDesign:PackIcon Width="14" Height="14" VerticalAlignment="Center">
                                     <materialDesign:PackIcon.Style>
                                         <Style TargetType="materialDesign:PackIcon">
                                             <Setter Property="Kind" Value="ArrowUp"/>
@@ -159,7 +159,7 @@
                                         </Style>
                                     </materialDesign:PackIcon.Style>
                                 </materialDesign:PackIcon>
-                                <TextBlock VerticalAlignment="Center" FontSize="12" Margin="2,0,0,0">
+                                <TextBlock VerticalAlignment="Center" FontSize="11" Margin="2,0,0,0">
                                     <TextBlock.Style>
                                         <Style TargetType="TextBlock">
                                             <Setter Property="Foreground" Value="#4CAF50"/>
@@ -198,15 +198,15 @@
                 </UniformGrid>
 
                 <!-- Row 2: Recent Services + Top Debtors -->
-                <Grid Grid.Row="2" Margin="0,0,0,16">
+                <Grid Grid.Row="2" Margin="0,0,0,10">
                     <Grid.ColumnDefinitions>
                         <ColumnDefinition Width="*"/>
-                        <ColumnDefinition Width="16"/>
-                        <ColumnDefinition Width="350"/>
+                        <ColumnDefinition Width="10"/>
+                        <ColumnDefinition Width="300"/>
                     </Grid.ColumnDefinitions>
 
                     <!-- Left: Son Islemler -->
-                    <materialDesign:Card Grid.Column="0" Padding="16" UniformCornerRadius="8">
+                    <materialDesign:Card Grid.Column="0" Padding="10" UniformCornerRadius="8">
                         <DockPanel>
                             <TextBlock DockPanel.Dock="Top"
                                        Text="Son Islemler"
@@ -218,12 +218,11 @@
                                       IsReadOnly="True" SelectionMode="Single"
                                       GridLinesVisibility="Horizontal"
                                       HorizontalGridLinesBrush="#E0E0E0"
-                                      RowHeight="40" FontSize="13"
+                                      RowHeight="32" FontSize="11"
                                       AlternatingRowBackground="#FAFAFA"
                                       HeadersVisibility="Column"
-                                      MaxHeight="400"
-                                      MouseDoubleClick="RecentServices_MouseDoubleClick"
-                                      PreviewMouseWheel="InnerControl_PreviewMouseWheel">
+                                      Height="200"
+                                      MouseDoubleClick="RecentServices_MouseDoubleClick">
                                 <DataGrid.Columns>
                                     <DataGridTextColumn Header="Tarih"
                                                         Binding="{Binding ServiceDate, Converter={StaticResource DateFormat}}"
@@ -238,7 +237,7 @@
 
                                     <DataGridTextColumn Header="Plaka"
                                                         Binding="{Binding Vehicle.PlateNumber}"
-                                                        Width="Auto" MinWidth="120">
+                                                        Width="Auto" MinWidth="100">
                                         <DataGridTextColumn.ElementStyle>
                                             <Style TargetType="TextBlock">
                                                 <Setter Property="FontWeight" Value="Bold"/>
@@ -263,7 +262,7 @@
 
                                     <DataGridTextColumn Header="Tutar"
                                                         Binding="{Binding TotalAmount, Converter={StaticResource CurrencyFormat}}"
-                                                        Width="120">
+                                                        Width="100">
                                         <DataGridTextColumn.ElementStyle>
                                             <Style TargetType="TextBlock">
                                                 <Setter Property="FontWeight" Value="SemiBold"/>
@@ -279,17 +278,17 @@
                     </materialDesign:Card>
 
                     <!-- Right: En Borclu Musteriler -->
-                    <materialDesign:Card Grid.Column="2" Padding="16" UniformCornerRadius="8">
+                    <materialDesign:Card Grid.Column="2" Padding="10" UniformCornerRadius="8">
                         <DockPanel>
                             <TextBlock DockPanel.Dock="Top"
-                                       Text="En Borclu Musteriler"
+                                       Text="Borçlu Müşteriler"
                                        Style="{StaticResource SectionTitleStyle}"/>
 
                             <ListView ItemsSource="{Binding TopDebtors}"
-                                      MaxHeight="400"
                                       BorderThickness="0"
+                                      Height="200"
                                       ScrollViewer.HorizontalScrollBarVisibility="Disabled"
-                                      PreviewMouseWheel="InnerControl_PreviewMouseWheel">
+                                      ScrollViewer.VerticalScrollBarVisibility="Auto">
                                 <ListView.ItemTemplate>
                                     <DataTemplate>
                                         <Grid Margin="0,4">
@@ -300,19 +299,19 @@
 
                                             <StackPanel Grid.Column="0" Orientation="Horizontal" VerticalAlignment="Center">
                                                 <materialDesign:PackIcon Kind="AccountCircle"
-                                                                         Width="24" Height="24"
+                                                                         Width="20" Height="20"
                                                                          Foreground="#9E9E9E"
                                                                          VerticalAlignment="Center"
                                                                          Margin="0,0,8,0"/>
                                                 <TextBlock Text="{Binding FullName}"
-                                                           FontSize="14"
+                                                           FontSize="12"
                                                            VerticalAlignment="Center"/>
                                             </StackPanel>
 
                                             <TextBlock Grid.Column="1"
                                                        Text="{Binding Balance, Converter={StaticResource CurrencyFormat}}"
                                                        FontWeight="Bold"
-                                                       FontSize="14"
+                                                       FontSize="12"
                                                        Foreground="#F44336"
                                                        VerticalAlignment="Center"/>
                                         </Grid>
@@ -332,17 +331,17 @@
                 </Grid>
 
                 <!-- Row 3: Monthly Chart -->
-                <materialDesign:Card Grid.Row="3" Padding="16" UniformCornerRadius="8" Margin="0,0,0,16">
+                <materialDesign:Card Grid.Row="3" Padding="10" UniformCornerRadius="8" Margin="0,0,0,10">
                     <DockPanel>
                         <TextBlock DockPanel.Dock="Top"
-                                   Text="Aylik Gelir/Gider Grafigi"
+                                   Text="Aylık Tahsilat/Gider Grafiği"
                                    Style="{StaticResource SectionTitleStyle}"/>
 
                         <lvc:CartesianChart Series="{Binding ChartSeries}"
                                             XAxes="{Binding XAxes}"
                                             YAxes="{Binding YAxes}"
-                                            Height="300"
-                                            Margin="0,8,0,0"/>
+                                            Height="240"
+                                            Margin="0,4,0,0"/>
                     </DockPanel>
                 </materialDesign:Card>
 
@@ -355,11 +354,11 @@
             <StackPanel VerticalAlignment="Center" HorizontalAlignment="Center">
                 <ProgressBar Style="{StaticResource MaterialDesignCircularProgressBar}"
                              IsIndeterminate="True"
-                             Width="48" Height="48"/>
+                             Width="36" Height="36"/>
                 <TextBlock Text="Yukleniyor..."
                            HorizontalAlignment="Center"
-                           Margin="0,12,0,0"
-                           FontSize="14" Foreground="#757575"/>
+                           Margin="0,8,0,0"
+                           FontSize="12" Foreground="#757575"/>
             </StackPanel>
         </Grid>
     </Grid>

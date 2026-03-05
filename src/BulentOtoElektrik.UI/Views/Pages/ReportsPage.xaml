@@ -12,7 +12,7 @@
         <converters:BoolToVisibilityConverter x:Key="BoolToVisibility"/>
     </UserControl.Resources>
 
-    <Grid Margin="24">
+    <Grid Margin="16">
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto"/>
             <RowDefinition Height="Auto"/>
@@ -27,16 +27,16 @@
                    Style="{StaticResource PageTitleStyle}"/>
 
         <!-- Date Range and Filters Row -->
-        <WrapPanel Grid.Row="1" Orientation="Horizontal" Margin="0,0,0,16">
+        <WrapPanel Grid.Row="1" Orientation="Horizontal" Margin="0,0,0,10">
             <DatePicker SelectedDate="{Binding StartDate, Mode=TwoWay}"
-                        Width="160"
+                        Width="140"
                         VerticalAlignment="Center"
                         Margin="0,0,8,0"
                         materialDesign:HintAssist.Hint="Başlangıç"
                         Style="{StaticResource MaterialDesignOutlinedDatePicker}"/>
 
             <DatePicker SelectedDate="{Binding EndDate, Mode=TwoWay}"
-                        Width="160"
+                        Width="140"
                         VerticalAlignment="Center"
                         Margin="0,0,16,0"
                         materialDesign:HintAssist.Hint="Bitiş"
@@ -81,26 +81,26 @@
                     Command="{Binding LoadReportCommand}"
                     Background="#303F9F" Foreground="White"
                     materialDesign:ButtonAssist.CornerRadius="4"
-                    Padding="16,8"
+                    Padding="12,6"
                     VerticalAlignment="Center">
                 <StackPanel Orientation="Horizontal">
-                    <materialDesign:PackIcon Kind="ChartBar" Width="20" Height="20"
-                                              VerticalAlignment="Center" Margin="0,0,8,0"/>
+                    <materialDesign:PackIcon Kind="ChartBar" Width="16" Height="16"
+                                              VerticalAlignment="Center" Margin="0,0,6,0"/>
                     <TextBlock Text="Rapor Oluştur" VerticalAlignment="Center"/>
                 </StackPanel>
             </Button>
         </WrapPanel>
 
         <!-- Summary Cards -->
-        <UniformGrid Grid.Row="2" Columns="3" Margin="0,0,0,16">
-            <!-- Toplam Gelir -->
+        <UniformGrid Grid.Row="2" Columns="3" Margin="0,0,0,10">
+            <!-- Toplam Tahsilat -->
             <materialDesign:Card Style="{StaticResource SummaryCardStyle}">
                 <StackPanel>
-                    <StackPanel Orientation="Horizontal" Margin="0,0,0,8">
-                        <materialDesign:PackIcon Kind="CashPlus" Width="20" Height="20"
+                    <StackPanel Orientation="Horizontal" Margin="0,0,0,6">
+                        <materialDesign:PackIcon Kind="CashPlus" Width="16" Height="16"
                                                   Foreground="{StaticResource SuccessGreenBrush}"
-                                                  VerticalAlignment="Center" Margin="0,0,8,0"/>
-                        <TextBlock Text="Toplam Gelir"
+                                                  VerticalAlignment="Center" Margin="0,0,6,0"/>
+                        <TextBlock Text="Toplam Tahsilat"
                                    Style="{StaticResource SummaryCardLabelStyle}"/>
                     </StackPanel>
                     <TextBlock Text="{Binding TotalRevenue, Converter={StaticResource CurrencyFormat}}"
@@ -112,10 +112,10 @@
             <!-- Toplam Gider -->
             <materialDesign:Card Style="{StaticResource SummaryCardStyle}">
                 <StackPanel>
-                    <StackPanel Orientation="Horizontal" Margin="0,0,0,8">
-                        <materialDesign:PackIcon Kind="CashMinus" Width="20" Height="20"
+                    <StackPanel Orientation="Horizontal" Margin="0,0,0,6">
+                        <materialDesign:PackIcon Kind="CashMinus" Width="16" Height="16"
                                                   Foreground="{StaticResource DangerRedBrush}"
-                                                  VerticalAlignment="Center" Margin="0,0,8,0"/>
+                                                  VerticalAlignment="Center" Margin="0,0,6,0"/>
                         <TextBlock Text="Toplam Gider"
                                    Style="{StaticResource SummaryCardLabelStyle}"/>
                     </StackPanel>
@@ -128,10 +128,10 @@
             <!-- Net Kazanç -->
             <materialDesign:Card Style="{StaticResource SummaryCardStyle}">
                 <StackPanel>
-                    <StackPanel Orientation="Horizontal" Margin="0,0,0,8">
-                        <materialDesign:PackIcon Kind="Calculator" Width="20" Height="20"
+                    <StackPanel Orientation="Horizontal" Margin="0,0,0,6">
+                        <materialDesign:PackIcon Kind="Calculator" Width="16" Height="16"
                                                   Foreground="#1976D2"
-                                                  VerticalAlignment="Center" Margin="0,0,8,0"/>
+                                                  VerticalAlignment="Center" Margin="0,0,6,0"/>
                         <TextBlock Text="Net Kazanç"
                                    Style="{StaticResource SummaryCardLabelStyle}"/>
                     </StackPanel>
@@ -147,14 +147,14 @@
 
             <!-- Tab 1: Günlük Detay -->
             <TabItem Header="Günlük Detay">
-                <materialDesign:Card Padding="0" UniformCornerRadius="8" Margin="0,8,0,0">
+                <materialDesign:Card Padding="0" UniformCornerRadius="8" Margin="0,6,0,0">
                     <DataGrid ItemsSource="{Binding DailyBreakdown}"
                               Style="{StaticResource AppDataGridStyle}">
                         <DataGrid.Columns>
                             <DataGridTextColumn Header="Tarih"
                                                 Binding="{Binding Date, Converter={StaticResource DateFormat}}"
                                                 Width="150"/>
-                            <DataGridTextColumn Header="Gelir"
+                            <DataGridTextColumn Header="Tahsilat"
                                                 Binding="{Binding Revenue, Converter={StaticResource CurrencyFormat}}"
                                                 Width="*">
                                 <DataGridTextColumn.ElementStyle>
@@ -194,7 +194,7 @@
 
             <!-- Tab 2: Teknisyen Bazlı -->
             <TabItem Header="Teknisyen Bazlı">
-                <materialDesign:Card Padding="0" UniformCornerRadius="8" Margin="0,8,0,0">
+                <materialDesign:Card Padding="0" UniformCornerRadius="8" Margin="0,6,0,0">
                     <DataGrid ItemsSource="{Binding TechnicianReport}"
                               Style="{StaticResource AppDataGridStyle}">
                         <DataGrid.Columns>
@@ -236,10 +236,10 @@
 
             <!-- Tab 3: Gider Dağılımı -->
             <TabItem Header="Gider Dağılımı">
-                <materialDesign:Card Padding="16" UniformCornerRadius="8" Margin="0,8,0,0">
+                <materialDesign:Card Padding="10" UniformCornerRadius="8" Margin="0,6,0,0">
                     <lvc:PieChart Series="{Binding PieChartSeries}"
-                                  MinHeight="350"
-                                  Margin="0,0,0,24"/>
+                                  MinHeight="280"
+                                  Margin="0,0,0,16"/>
                 </materialDesign:Card>
             </TabItem>
         </TabControl>
@@ -251,8 +251,8 @@
                 HorizontalAlignment="Left"
                 Padding="24,8">
             <StackPanel Orientation="Horizontal">
-                <materialDesign:PackIcon Kind="FileExcel" Width="20" Height="20"
-                                          VerticalAlignment="Center" Margin="0,0,8,0"/>
+                <materialDesign:PackIcon Kind="FileExcel" Width="16" Height="16"
+                                          VerticalAlignment="Center" Margin="0,0,6,0"/>
                 <TextBlock Text="Excel'e Aktar" VerticalAlignment="Center"/>
             </StackPanel>
         </Button>
@@ -264,11 +264,11 @@
             <StackPanel VerticalAlignment="Center" HorizontalAlignment="Center">
                 <ProgressBar Style="{StaticResource MaterialDesignCircularProgressBar}"
                              IsIndeterminate="True"
-                             Width="40" Height="40"/>
+                             Width="32" Height="32"/>
                 <TextBlock Text="Yükleniyor..."
                            HorizontalAlignment="Center"
-                           Margin="0,12,0,0"
-                           FontSize="14"
+                           Margin="0,8,0,0"
+                           FontSize="12"
                            Foreground="#757575"/>
             </StackPanel>
         </Grid>

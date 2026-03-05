@@ -6,10 +6,10 @@
         xmlns:sys="clr-namespace:System;assembly=mscorlib"
         xmlns:converters="clr-namespace:BulentOtoElektrik.UI.Converters"
         Title="Odeme Al"
-        Width="420" Height="520"
+        Width="360" Height="440"
         WindowStartupLocation="CenterOwner"
         ResizeMode="CanResizeWithGrip"
-        MinHeight="480" MinWidth="380"
+        MinHeight="400" MinWidth="320"
         TextElement.Foreground="{DynamicResource MaterialDesignBody}"
         Background="{DynamicResource MaterialDesignPaper}">
 
@@ -29,7 +29,7 @@
         <converters:PaymentMethodConverter x:Key="PaymentMethodConverter"/>
     </Window.Resources>
 
-    <Grid Margin="24">
+    <Grid Margin="16">
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto"/>
             <RowDefinition Height="*"/>
@@ -37,7 +37,7 @@
         </Grid.RowDefinitions>
 
         <!-- Title -->
-        <TextBlock Grid.Row="0" Text="Odeme Al" FontSize="20" FontWeight="Medium" Margin="0,0,0,16"/>
+        <TextBlock Grid.Row="0" Text="Odeme Al" FontSize="16" FontWeight="Medium" Margin="0,0,0,10"/>
 
         <!-- Form -->
         <ScrollViewer Grid.Row="1" VerticalScrollBarVisibility="Auto">
@@ -45,14 +45,14 @@
             <TextBox materialDesign:HintAssist.Hint="Tutar *"
                      Text="{Binding Amount, UpdateSourceTrigger=PropertyChanged}"
                      Style="{StaticResource MaterialDesignOutlinedTextBox}"
-                     FontSize="18" FontWeight="Bold"
-                     Margin="0,0,0,12"/>
+                     FontSize="14" FontWeight="Bold"
+                     Margin="0,0,0,8"/>
 
             <ComboBox materialDesign:HintAssist.Hint="Odeme Yontemi"
                       ItemsSource="{Binding Source={StaticResource PaymentMethodValues}}"
                       SelectedItem="{Binding PaymentMethod}"
                       Style="{StaticResource MaterialDesignOutlinedComboBox}"
-                      Margin="0,0,0,12">
+                      Margin="0,0,0,8">
                 <ComboBox.ItemTemplate>
                     <DataTemplate>
                         <TextBlock Text="{Binding Converter={StaticResource PaymentMethodConverter}}"/>
@@ -63,17 +63,17 @@
             <DatePicker materialDesign:HintAssist.Hint="Tarih"
                         SelectedDate="{Binding PaymentDate}"
                         Style="{StaticResource MaterialDesignOutlinedDatePicker}"
-                        Margin="0,0,0,12"/>
+                        Margin="0,0,0,8"/>
 
             <TextBox materialDesign:HintAssist.Hint="Notlar"
                      Text="{Binding Notes, UpdateSourceTrigger=PropertyChanged}"
                      Style="{StaticResource MaterialDesignOutlinedTextBox}"
-                     TextWrapping="Wrap" AcceptsReturn="True" MaxHeight="60"/>
+                     TextWrapping="Wrap" AcceptsReturn="True" MaxHeight="50"/>
         </StackPanel>
         </ScrollViewer>
 
         <!-- Buttons -->
-        <StackPanel Grid.Row="2" Orientation="Horizontal" HorizontalAlignment="Right" Margin="0,16,0,0">
+        <StackPanel Grid.Row="2" Orientation="Horizontal" HorizontalAlignment="Right" Margin="0,10,0,0">
             <Button Content="Iptal" Command="{Binding CancelCommand}"
                     Style="{StaticResource MaterialDesignFlatButton}" Margin="0,0,8,0"/>
             <Button Content="Kaydet" Command="{Binding SaveCommand}"

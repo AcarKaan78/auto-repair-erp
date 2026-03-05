@@ -9,7 +9,7 @@
         <converters:BoolToVisibilityConverter x:Key="BoolToVisibility"/>
     </UserControl.Resources>
 
-    <Grid Margin="24">
+    <Grid Margin="16">
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto"/>
             <RowDefinition Height="Auto"/>
@@ -24,15 +24,15 @@
                    Style="{StaticResource PageTitleStyle}"/>
 
         <!-- Date Navigation Row -->
-        <StackPanel Grid.Row="1" Orientation="Horizontal" Margin="0,0,0,16">
+        <StackPanel Grid.Row="1" Orientation="Horizontal" Margin="0,0,0,10">
             <Button Style="{StaticResource MaterialDesignIconButton}"
                     Command="{Binding PreviousDayCommand}"
                     ToolTip="Önceki Gün">
-                <materialDesign:PackIcon Kind="ChevronLeft" Width="24" Height="24"/>
+                <materialDesign:PackIcon Kind="ChevronLeft" Width="20" Height="20"/>
             </Button>
 
             <DatePicker SelectedDate="{Binding SelectedDate, Mode=TwoWay}"
-                        Width="180"
+                        Width="150"
                         VerticalAlignment="Center"
                         Margin="8,0"
                         materialDesign:HintAssist.Hint="Tarih Seçin"
@@ -41,7 +41,7 @@
             <Button Style="{StaticResource MaterialDesignIconButton}"
                     Command="{Binding NextDayCommand}"
                     ToolTip="Sonraki Gün">
-                <materialDesign:PackIcon Kind="ChevronRight" Width="24" Height="24"/>
+                <materialDesign:PackIcon Kind="ChevronRight" Width="20" Height="20"/>
             </Button>
 
             <Button Style="{StaticResource MaterialDesignOutlinedButton}"
@@ -55,7 +55,7 @@
         <DataGrid Grid.Row="2"
                   ItemsSource="{Binding Expenses}"
                   Style="{StaticResource AppDataGridStyle}"
-                  Margin="0,0,0,16">
+                  Margin="0,0,0,10">
             <DataGrid.Columns>
                 <DataGridTextColumn Header="Kategori"
                                     Binding="{Binding Category.Name}"
@@ -73,15 +73,16 @@
                         </Style>
                     </DataGridTextColumn.ElementStyle>
                 </DataGridTextColumn>
-                <DataGridTemplateColumn Header="Sil" Width="Auto">
+                <DataGridTemplateColumn Header="Sil" Width="50">
                     <DataGridTemplateColumn.CellTemplate>
                         <DataTemplate>
                             <Button Style="{StaticResource MaterialDesignIconForegroundButton}"
                                     Command="{Binding DataContext.DeleteExpenseCommand, RelativeSource={RelativeSource AncestorType=UserControl}}"
                                     CommandParameter="{Binding}"
                                     ToolTip="Gideri Sil"
-                                    Foreground="{StaticResource DangerRedBrush}">
-                                <materialDesign:PackIcon Kind="Delete" Width="18" Height="18"/>
+                                    Foreground="#E53935"
+                                    Width="28" Height="28" Padding="0">
+                                <materialDesign:PackIcon Kind="Delete" Width="16" Height="16"/>
                             </Button>
                         </DataTemplate>
                     </DataGridTemplateColumn.CellTemplate>
@@ -95,8 +96,8 @@
                 Content="Gider Ekle"
                 Command="{Binding AddExpenseCommand}"
                 HorizontalAlignment="Left"
-                Margin="0,0,0,16"
-                Padding="24,8">
+                Margin="0,0,0,10"
+                Padding="16,6">
             <Button.ContentTemplate>
                 <DataTemplate>
                     <StackPanel Orientation="Horizontal">
@@ -150,11 +151,11 @@
             <StackPanel VerticalAlignment="Center" HorizontalAlignment="Center">
                 <ProgressBar Style="{StaticResource MaterialDesignCircularProgressBar}"
                              IsIndeterminate="True"
-                             Width="40" Height="40"/>
+                             Width="32" Height="32"/>
                 <TextBlock Text="Yükleniyor..."
                            HorizontalAlignment="Center"
-                           Margin="0,12,0,0"
-                           FontSize="14"
+                           Margin="0,8,0,0"
+                           FontSize="12"
                            Foreground="#757575"/>
             </StackPanel>
         </Grid>

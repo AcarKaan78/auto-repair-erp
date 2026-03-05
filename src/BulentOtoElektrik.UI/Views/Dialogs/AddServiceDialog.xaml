@@ -6,7 +6,7 @@
         xmlns:sys="clr-namespace:System;assembly=mscorlib"
         xmlns:converters="clr-namespace:BulentOtoElektrik.UI.Converters"
         Title="Islem Ekle"
-        Width="520" Height="580"
+        Width="440" Height="480"
         WindowStartupLocation="CenterOwner"
         ResizeMode="NoResize"
         TextElement.Foreground="{DynamicResource MaterialDesignBody}"
@@ -22,7 +22,7 @@
         <converters:NullToVisibilityConverter x:Key="NullToVisibilityConverter"/>
     </Window.Resources>
 
-    <Grid Margin="24">
+    <Grid Margin="16">
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto"/>
             <RowDefinition Height="*"/>
@@ -30,28 +30,28 @@
         </Grid.RowDefinitions>
 
         <!-- Title -->
-        <TextBlock Grid.Row="0" Text="Islem Ekle" FontSize="20" FontWeight="Medium" Margin="0,0,0,16"/>
+        <TextBlock Grid.Row="0" Text="Islem Ekle" FontSize="16" FontWeight="Medium" Margin="0,0,0,10"/>
 
         <!-- Form -->
         <StackPanel Grid.Row="1">
             <TextBox materialDesign:HintAssist.Hint="Sikayet"
                      Text="{Binding Complaint, UpdateSourceTrigger=PropertyChanged}"
                      Style="{StaticResource MaterialDesignOutlinedTextBox}"
-                     Margin="0,0,0,8" TextWrapping="Wrap" AcceptsReturn="True" MaxHeight="60"/>
+                     Margin="0,0,0,6" TextWrapping="Wrap" AcceptsReturn="True" MaxHeight="50"/>
 
             <TextBox materialDesign:HintAssist.Hint="Yapilan Islem *"
                      Text="{Binding WorkPerformed, UpdateSourceTrigger=PropertyChanged}"
                      Style="{StaticResource MaterialDesignOutlinedTextBox}"
-                     Margin="0,0,0,8" TextWrapping="Wrap" AcceptsReturn="True" MaxHeight="60"/>
+                     Margin="0,0,0,6" TextWrapping="Wrap" AcceptsReturn="True" MaxHeight="50"/>
 
             <ComboBox materialDesign:HintAssist.Hint="Teknisyen"
                       ItemsSource="{Binding Technicians}"
                       SelectedItem="{Binding SelectedTechnician}"
                       DisplayMemberPath="FullName"
                       Style="{StaticResource MaterialDesignOutlinedComboBox}"
-                      Margin="0,0,0,8"/>
+                      Margin="0,0,0,6"/>
 
-            <Grid Margin="0,0,0,8">
+            <Grid Margin="0,0,0,6">
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition Width="*"/>
                     <ColumnDefinition Width="*"/>
@@ -71,28 +71,28 @@
             <DatePicker materialDesign:HintAssist.Hint="Tarih"
                         SelectedDate="{Binding ServiceDate}"
                         Style="{StaticResource MaterialDesignOutlinedDatePicker}"
-                        Margin="0,0,0,8"/>
+                        Margin="0,0,0,6"/>
 
             <TextBox materialDesign:HintAssist.Hint="Notlar"
                      Text="{Binding Notes, UpdateSourceTrigger=PropertyChanged}"
                      Style="{StaticResource MaterialDesignOutlinedTextBox}"
-                     TextWrapping="Wrap" AcceptsReturn="True" MaxHeight="50"/>
+                     TextWrapping="Wrap" AcceptsReturn="True" MaxHeight="40"/>
 
             <!-- Computed Total -->
-            <Border Margin="0,12,0,0" Background="#F5F5F5" CornerRadius="4" Padding="12,8">
+            <Border Margin="0,8,0,0" Background="#F5F5F5" CornerRadius="4" Padding="8,6">
                 <StackPanel Orientation="Horizontal" HorizontalAlignment="Right">
-                    <TextBlock Text="Tutar: " FontSize="16" FontWeight="Medium"
+                    <TextBlock Text="Tutar: " FontSize="13" FontWeight="Medium"
                                VerticalAlignment="Center" Foreground="#757575"/>
-                    <TextBlock x:Name="TotalText" FontSize="20" FontWeight="Bold"
+                    <TextBlock x:Name="TotalText" FontSize="16" FontWeight="Bold"
                                VerticalAlignment="Center" Foreground="#303F9F"/>
                 </StackPanel>
             </Border>
         </StackPanel>
 
         <!-- Buttons -->
-        <StackPanel Grid.Row="2" Margin="0,16,0,0">
+        <StackPanel Grid.Row="2" Margin="0,10,0,0">
             <TextBlock Text="{Binding ValidationError}" Foreground="Red" FontSize="12"
-                       Margin="0,0,0,8"
+                       Margin="0,0,0,6"
                        Visibility="{Binding ValidationError, Converter={StaticResource NullToVisibilityConverter}, FallbackValue=Collapsed}"/>
             <StackPanel Orientation="Horizontal" HorizontalAlignment="Right">
                 <Button Content="Iptal" Command="{Binding CancelCommand}"

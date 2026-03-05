@@ -3,13 +3,13 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
         Title="Yeni Araç Ekle"
-        Width="420" Height="480"
+        Width="360" Height="400"
         WindowStartupLocation="CenterOwner"
         ResizeMode="CanResizeWithGrip"
-        MinHeight="400" MinWidth="380"
+        MinHeight="340" MinWidth="320"
         TextElement.Foreground="{DynamicResource MaterialDesignBody}"
         Background="{DynamicResource MaterialDesignPaper}">
-    <Grid Margin="24">
+    <Grid Margin="16">
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto"/>
             <RowDefinition Height="*"/>
@@ -19,8 +19,8 @@
         <!-- Title -->
         <TextBlock Grid.Row="0"
                    Text="Yeni Araç Ekle"
-                   FontSize="20" FontWeight="Medium"
-                   Margin="0,0,0,16"/>
+                   FontSize="16" FontWeight="Medium"
+                   Margin="0,0,0,10"/>
 
         <!-- Form -->
         <ScrollViewer Grid.Row="1" VerticalScrollBarVisibility="Auto">
@@ -29,17 +29,17 @@
                      Text="{Binding PlateNumber, UpdateSourceTrigger=PropertyChanged}"
                      Style="{StaticResource MaterialDesignOutlinedTextBox}"
                      CharacterCasing="Upper"
-                     Margin="0,0,0,8"/>
+                     Margin="0,0,0,6"/>
 
             <TextBox materialDesign:HintAssist.Hint="Marka"
                      Text="{Binding VehicleBrand, UpdateSourceTrigger=PropertyChanged}"
                      Style="{StaticResource MaterialDesignOutlinedTextBox}"
-                     Margin="0,0,0,8"/>
+                     Margin="0,0,0,6"/>
 
             <TextBox materialDesign:HintAssist.Hint="Model"
                      Text="{Binding VehicleModel, UpdateSourceTrigger=PropertyChanged}"
                      Style="{StaticResource MaterialDesignOutlinedTextBox}"
-                     Margin="0,0,0,8"/>
+                     Margin="0,0,0,6"/>
 
             <TextBox materialDesign:HintAssist.Hint="Yıl"
                      Text="{Binding VehicleYear, UpdateSourceTrigger=PropertyChanged}"
@@ -51,7 +51,7 @@
         <StackPanel Grid.Row="2"
                     Orientation="Horizontal"
                     HorizontalAlignment="Right"
-                    Margin="0,16,0,0">
+                    Margin="0,10,0,0">
             <Button Content="İptal"
                     Command="{Binding CancelCommand}"
                     Style="{StaticResource MaterialDesignFlatButton}"

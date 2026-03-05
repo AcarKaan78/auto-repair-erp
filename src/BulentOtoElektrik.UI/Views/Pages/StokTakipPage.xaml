@@ -12,7 +12,7 @@
 
     <Grid>
         <!-- Main Content -->
-        <Grid Margin="24">
+        <Grid Margin="16">
             <Grid.RowDefinitions>
                 <RowDefinition Height="Auto"/>
                 <RowDefinition Height="Auto"/>
@@ -25,7 +25,7 @@
                 <TextBlock Text="Stok Takip"
                            Style="{StaticResource PageTitleStyle}"/>
 
-                <UniformGrid Columns="3" Margin="0,0,0,16">
+                <UniformGrid Columns="3" Margin="0,0,0,10">
                     <materialDesign:Card Style="{StaticResource SummaryCardStyle}">
                         <StackPanel>
                             <TextBlock Text="Toplam Malzeme"
@@ -59,7 +59,7 @@
             </StackPanel>
 
             <!-- Row 1: Search Bar + Add Button -->
-            <Grid Grid.Row="1" Margin="0,0,0,16">
+            <Grid Grid.Row="1" Margin="0,0,0,10">
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition Width="*"/>
                     <ColumnDefinition Width="Auto"/>
@@ -79,10 +79,10 @@
                         Command="{Binding ToggleAddFormCommand}"
                         Style="{StaticResource MaterialDesignRaisedButton}"
                         Background="#303F9F" Foreground="White"
-                        Padding="16,8"
+                        Padding="12,6"
                         VerticalAlignment="Center">
                     <StackPanel Orientation="Horizontal">
-                        <materialDesign:PackIcon Kind="Plus" Width="20" Height="20"
+                        <materialDesign:PackIcon Kind="Plus" Width="16" Height="16"
                                                   VerticalAlignment="Center" Margin="0,0,8,0"/>
                         <TextBlock Text="Yeni Malzeme Ekle" VerticalAlignment="Center"/>
                     </StackPanel>
@@ -90,14 +90,14 @@
             </Grid>
 
             <!-- Row 2: DataGrid -->
-            <materialDesign:Card Grid.Row="2" Padding="0" UniformCornerRadius="8" Margin="0,0,0,16">
+            <materialDesign:Card Grid.Row="2" Padding="0" UniformCornerRadius="8" Margin="0,0,0,10">
                 <DataGrid ItemsSource="{Binding FilteredStockItems}"
                           AutoGenerateColumns="False"
                           CanUserAddRows="False" CanUserDeleteRows="False"
                           IsReadOnly="True" SelectionMode="Single"
                           GridLinesVisibility="Horizontal"
                           HorizontalGridLinesBrush="#E0E0E0"
-                          RowHeight="44" FontSize="13"
+                          RowHeight="34" FontSize="11"
                           AlternatingRowBackground="#FAFAFA"
                           HeadersVisibility="Column">
                     <DataGrid.Columns>
@@ -161,7 +161,7 @@
                                                 CommandParameter="{Binding}"
                                                 ToolTip="Duzenle"
                                                 Width="32" Height="32">
-                                            <materialDesign:PackIcon Kind="Pencil" Width="18" Height="18"/>
+                                            <materialDesign:PackIcon Kind="Pencil" Width="14" Height="14"/>
                                         </Button>
                                         <Button Style="{StaticResource MaterialDesignIconForegroundButton}"
                                                 Command="{Binding DataContext.DeleteStockItemCommand, RelativeSource={RelativeSource AncestorType=UserControl}}"
@@ -169,7 +169,7 @@
                                                 ToolTip="Sil"
                                                 Width="32" Height="32"
                                                 Foreground="#F44336">
-                                            <materialDesign:PackIcon Kind="Delete" Width="18" Height="18"/>
+                                            <materialDesign:PackIcon Kind="Delete" Width="14" Height="14"/>
                                         </Button>
                                     </StackPanel>
                                 </DataTemplate>
@@ -180,7 +180,7 @@
             </materialDesign:Card>
 
             <!-- Row 3: Add Form (collapsible) -->
-            <materialDesign:Card Grid.Row="3" Padding="16" UniformCornerRadius="8" Margin="0,0,0,16"
+            <materialDesign:Card Grid.Row="3" Padding="10" UniformCornerRadius="8" Margin="0,0,0,10"
                                  Visibility="{Binding IsAddFormVisible, Converter={StaticResource BoolToVisibility}}">
                 <Grid>
                     <Grid.ColumnDefinitions>
@@ -212,10 +212,10 @@
                             Command="{Binding AddStockItemCommand}"
                             Style="{StaticResource MaterialDesignRaisedButton}"
                             Background="#303F9F" Foreground="White"
-                            Padding="24,8"
+                            Padding="16,6"
                             VerticalAlignment="Center">
                         <StackPanel Orientation="Horizontal">
-                            <materialDesign:PackIcon Kind="ContentSave" Width="20" Height="20"
+                            <materialDesign:PackIcon Kind="ContentSave" Width="16" Height="16"
                                                       VerticalAlignment="Center" Margin="0,0,8,0"/>
                             <TextBlock Text="Ekle" VerticalAlignment="Center"/>
                         </StackPanel>
@@ -227,26 +227,26 @@
         <!-- Edit Overlay -->
         <Grid Visibility="{Binding IsEditing, Converter={StaticResource BoolToVisibility}}"
               Background="#80000000">
-            <materialDesign:Card Padding="24" UniformCornerRadius="12"
+            <materialDesign:Card Padding="16" UniformCornerRadius="12"
                                  VerticalAlignment="Center" HorizontalAlignment="Center"
-                                 MinWidth="400" MaxWidth="500">
+                                 MinWidth="340" MaxWidth="420">
                 <StackPanel>
-                    <TextBlock Text="Malzeme Duzenle" FontSize="18" FontWeight="Medium" Margin="0,0,0,16"/>
+                    <TextBlock Text="Malzeme Duzenle" FontSize="14" FontWeight="Medium" Margin="0,0,0,10"/>
 
                     <TextBox Text="{Binding EditMaterialName, UpdateSourceTrigger=PropertyChanged}"
                              materialDesign:HintAssist.Hint="Malzeme Adi"
                              Style="{StaticResource MaterialDesignOutlinedTextBox}"
-                             Margin="0,0,0,12"/>
+                             Margin="0,0,0,8"/>
 
                     <TextBox Text="{Binding EditRemainingQuantity, UpdateSourceTrigger=PropertyChanged}"
                              materialDesign:HintAssist.Hint="Kalan Adet"
                              Style="{StaticResource MaterialDesignOutlinedTextBox}"
-                             Margin="0,0,0,12"/>
+                             Margin="0,0,0,8"/>
 
                     <TextBox Text="{Binding EditUnitPrice, UpdateSourceTrigger=PropertyChanged}"
                              materialDesign:HintAssist.Hint="Birim Fiyat"
                              Style="{StaticResource MaterialDesignOutlinedTextBox}"
-                             Margin="0,0,0,16"/>
+                             Margin="0,0,0,10"/>
 
                     <StackPanel Orientation="Horizontal" HorizontalAlignment="Right">
                         <Button Content="Iptal"
@@ -267,11 +267,11 @@
             <StackPanel VerticalAlignment="Center" HorizontalAlignment="Center">
                 <ProgressBar Style="{StaticResource MaterialDesignCircularProgressBar}"
                              IsIndeterminate="True"
-                             Width="40" Height="40"/>
+                             Width="32" Height="32"/>
                 <TextBlock Text="Yukleniyor..."
                            HorizontalAlignment="Center"
-                           Margin="0,12,0,0"
-                           FontSize="14"
+                           Margin="0,8,0,0"
+                           FontSize="12"
                            Foreground="#757575"/>
             </StackPanel>
         </Grid>

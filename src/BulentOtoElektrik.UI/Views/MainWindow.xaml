@@ -6,8 +6,8 @@
         xmlns:vm="clr-namespace:BulentOtoElektrik.UI.ViewModels"
         xmlns:pages="clr-namespace:BulentOtoElektrik.UI.Views.Pages"
         Title="BULENT OTO ELEKTRIK - Musteri Yonetim Sistemi"
-        Width="1280" Height="800"
-        MinWidth="1024" MinHeight="768"
+        Width="1100" Height="700"
+        MinWidth="900" MinHeight="650"
         WindowStartupLocation="CenterScreen"
         TextElement.Foreground="{DynamicResource MaterialDesignBody}"
         Background="{DynamicResource MaterialDesignPaper}"
@@ -52,7 +52,7 @@
 
     <Grid>
         <Grid.ColumnDefinitions>
-            <ColumnDefinition Width="220"/>
+            <ColumnDefinition Width="180"/>
             <ColumnDefinition Width="*"/>
         </Grid.ColumnDefinitions>
 
@@ -60,21 +60,21 @@
         <Border Grid.Column="0" Background="#303F9F">
             <DockPanel>
                 <!-- Logo/Title at top -->
-                <StackPanel DockPanel.Dock="Top" Margin="16,20,16,24">
-                    <materialDesign:PackIcon Kind="CarElectric" Width="40" Height="40"
+                <StackPanel DockPanel.Dock="Top" Margin="12,14,12,16">
+                    <materialDesign:PackIcon Kind="CarElectric" Width="30" Height="30"
                                               Foreground="White" HorizontalAlignment="Center"/>
                     <TextBlock Text="BULENT OTO"
-                               Foreground="White" FontWeight="Bold" FontSize="16"
-                               HorizontalAlignment="Center" Margin="0,8,0,0"/>
+                               Foreground="White" FontWeight="Bold" FontSize="13"
+                               HorizontalAlignment="Center" Margin="0,6,0,0"/>
                     <TextBlock Text="ELEKTRIK"
-                               Foreground="White" FontWeight="Bold" FontSize="16"
+                               Foreground="White" FontWeight="Bold" FontSize="13"
                                HorizontalAlignment="Center"/>
                 </StackPanel>
 
                 <!-- Version info at bottom -->
                 <TextBlock DockPanel.Dock="Bottom"
-                           Text="v1.0.0" Foreground="#7986CB" FontSize="11"
-                           HorizontalAlignment="Center" Margin="0,0,0,12"/>
+                           Text="v1.0.0" Foreground="#7986CB" FontSize="10"
+                           HorizontalAlignment="Center" Margin="0,0,0,8"/>
 
                 <!-- Navigation ListBox -->
                 <ListBox x:Name="NavListBox"
@@ -84,8 +84,8 @@
                     <ListBox.ItemContainerStyle>
                         <Style TargetType="ListBoxItem">
                             <Setter Property="Foreground" Value="White"/>
-                            <Setter Property="FontSize" Value="14"/>
-                            <Setter Property="Padding" Value="20,12"/>
+                            <Setter Property="FontSize" Value="12"/>
+                            <Setter Property="Padding" Value="14,8"/>
                             <Setter Property="Cursor" Value="Hand"/>
                             <Setter Property="Template">
                                 <Setter.Value>
@@ -110,64 +110,64 @@
 
                     <ListBoxItem Tag="Dashboard">
                         <StackPanel Orientation="Horizontal">
-                            <materialDesign:PackIcon Kind="Home" Width="22" Height="22" VerticalAlignment="Center" Foreground="White"/>
-                            <TextBlock Text="Ana Sayfa" Margin="12,0,0,0" VerticalAlignment="Center" Foreground="White"/>
+                            <materialDesign:PackIcon Kind="Home" Width="18" Height="18" VerticalAlignment="Center" Foreground="White"/>
+                            <TextBlock Text="Ana Sayfa" Margin="10,0,0,0" VerticalAlignment="Center" Foreground="White"/>
                         </StackPanel>
                     </ListBoxItem>
 
                     <ListBoxItem Tag="CustomerSearch">
                         <StackPanel Orientation="Horizontal">
-                            <materialDesign:PackIcon Kind="Magnify" Width="22" Height="22" VerticalAlignment="Center" Foreground="White"/>
-                            <TextBlock Text="Musteri Ara" Margin="12,0,0,0" VerticalAlignment="Center" Foreground="White"/>
+                            <materialDesign:PackIcon Kind="Magnify" Width="18" Height="18" VerticalAlignment="Center" Foreground="White"/>
+                            <TextBlock Text="Musteri Ara" Margin="10,0,0,0" VerticalAlignment="Center" Foreground="White"/>
                         </StackPanel>
                     </ListBoxItem>
 
                     <ListBoxItem Tag="NewService">
                         <StackPanel Orientation="Horizontal">
-                            <materialDesign:PackIcon Kind="Plus" Width="22" Height="22" VerticalAlignment="Center" Foreground="White"/>
-                            <TextBlock Text="Yeni Islem" Margin="12,0,0,0" VerticalAlignment="Center" Foreground="White"/>
+                            <materialDesign:PackIcon Kind="Plus" Width="18" Height="18" VerticalAlignment="Center" Foreground="White"/>
+                            <TextBlock Text="Yeni Islem" Margin="10,0,0,0" VerticalAlignment="Center" Foreground="White"/>
                         </StackPanel>
                     </ListBoxItem>
 
                     <ListBoxItem Tag="DailyExpenses">
                         <StackPanel Orientation="Horizontal">
-                            <materialDesign:PackIcon Kind="Cash" Width="22" Height="22" VerticalAlignment="Center" Foreground="White"/>
-                            <TextBlock Text="Gunluk Giderler" Margin="12,0,0,0" VerticalAlignment="Center" Foreground="White"/>
+                            <materialDesign:PackIcon Kind="Cash" Width="18" Height="18" VerticalAlignment="Center" Foreground="White"/>
+                            <TextBlock Text="Gunluk Giderler" Margin="10,0,0,0" VerticalAlignment="Center" Foreground="White"/>
                         </StackPanel>
                     </ListBoxItem>
 
                     <ListBoxItem Tag="Reports">
                         <StackPanel Orientation="Horizontal">
-                            <materialDesign:PackIcon Kind="ChartBar" Width="22" Height="22" VerticalAlignment="Center" Foreground="White"/>
-                            <TextBlock Text="Raporlar" Margin="12,0,0,0" VerticalAlignment="Center" Foreground="White"/>
+                            <materialDesign:PackIcon Kind="ChartBar" Width="18" Height="18" VerticalAlignment="Center" Foreground="White"/>
+                            <TextBlock Text="Raporlar" Margin="10,0,0,0" VerticalAlignment="Center" Foreground="White"/>
                         </StackPanel>
                     </ListBoxItem>
 
                     <ListBoxItem Tag="Technicians">
                         <StackPanel Orientation="Horizontal">
-                            <materialDesign:PackIcon Kind="AccountGroup" Width="22" Height="22" VerticalAlignment="Center" Foreground="White"/>
-                            <TextBlock Text="Teknisyenler" Margin="12,0,0,0" VerticalAlignment="Center" Foreground="White"/>
+                            <materialDesign:PackIcon Kind="AccountGroup" Width="18" Height="18" VerticalAlignment="Center" Foreground="White"/>
+                            <TextBlock Text="Teknisyenler" Margin="10,0,0,0" VerticalAlignment="Center" Foreground="White"/>
                         </StackPanel>
                     </ListBoxItem>
 
                     <ListBoxItem Tag="StokTakip">
                         <StackPanel Orientation="Horizontal">
-                            <materialDesign:PackIcon Kind="PackageVariant" Width="22" Height="22" VerticalAlignment="Center" Foreground="White"/>
-                            <TextBlock Text="Stok Takip" Margin="12,0,0,0" VerticalAlignment="Center" Foreground="White"/>
+                            <materialDesign:PackIcon Kind="PackageVariant" Width="18" Height="18" VerticalAlignment="Center" Foreground="White"/>
+                            <TextBlock Text="Stok Takip" Margin="10,0,0,0" VerticalAlignment="Center" Foreground="White"/>
                         </StackPanel>
                     </ListBoxItem>
 
                     <ListBoxItem Tag="Personnel">
                         <StackPanel Orientation="Horizontal">
-                            <materialDesign:PackIcon Kind="BadgeAccount" Width="22" Height="22" VerticalAlignment="Center" Foreground="White"/>
-                            <TextBlock Text="Personel" Margin="12,0,0,0" VerticalAlignment="Center" Foreground="White"/>
+                            <materialDesign:PackIcon Kind="BadgeAccount" Width="18" Height="18" VerticalAlignment="Center" Foreground="White"/>
+                            <TextBlock Text="Personel" Margin="10,0,0,0" VerticalAlignment="Center" Foreground="White"/>
                         </StackPanel>
                     </ListBoxItem>
 
                     <ListBoxItem Tag="Settings">
                         <StackPanel Orientation="Horizontal">
-                            <materialDesign:PackIcon Kind="Cog" Width="22" Height="22" VerticalAlignment="Center" Foreground="White"/>
-                            <TextBlock Text="Ayarlar" Margin="12,0,0,0" VerticalAlignment="Center" Foreground="White"/>
+                            <materialDesign:PackIcon Kind="Cog" Width="18" Height="18" VerticalAlignment="Center" Foreground="White"/>
+                            <TextBlock Text="Ayarlar" Margin="10,0,0,0" VerticalAlignment="Center" Foreground="White"/>
                         </StackPanel>
                     </ListBoxItem>
                 </ListBox>
@@ -178,14 +178,14 @@
         <DockPanel Grid.Column="1" Background="#F5F5F5">
             <!-- Top Search Bar -->
             <Border DockPanel.Dock="Top" Background="White"
-                    Padding="16,10" BorderBrush="#E0E0E0" BorderThickness="0,0,0,1">
+                    Padding="12,6" BorderBrush="#E0E0E0" BorderThickness="0,0,0,1">
                 <Grid>
                     <Grid.ColumnDefinitions>
                         <ColumnDefinition Width="*"/>
                     </Grid.ColumnDefinitions>
 
                     <!-- Search Box -->
-                    <Grid Grid.Column="0" MaxWidth="500" HorizontalAlignment="Left">
+                    <Grid Grid.Column="0" MaxWidth="400" HorizontalAlignment="Left">
                         <TextBox x:Name="SearchBox"
                                  Text="{Binding SearchText, UpdateSourceTrigger=PropertyChanged}"
                                  materialDesign:HintAssist.Hint="Plaka veya musteri ara... (Ctrl+F)"
@@ -193,8 +193,8 @@
                                  materialDesign:TextFieldAssist.LeadingIcon="Magnify"
                                  materialDesign:TextFieldAssist.HasClearButton="True"
                                  Style="{StaticResource MaterialDesignOutlinedTextBox}"
-                                 MinWidth="350" VerticalAlignment="Center"
-                                 FontSize="14"/>
+                                 MinWidth="280" VerticalAlignment="Center"
+                                 FontSize="12"/>
 
                         <!-- Search Results Popup -->
                         <Popup IsOpen="{Binding IsSearchPopupOpen}"
@@ -202,16 +202,16 @@
                                Placement="Bottom" StaysOpen="False"
                                Width="{Binding ElementName=SearchBox, Path=ActualWidth}">
                             <materialDesign:Card Padding="0" UniformCornerRadius="4">
-                                <ListBox ItemsSource="{Binding SearchResults}" MaxHeight="300"
+                                <ListBox ItemsSource="{Binding SearchResults}" MaxHeight="250"
                                          BorderThickness="0">
                                     <ListBox.ItemTemplate>
                                         <DataTemplate>
                                             <StackPanel Orientation="Horizontal" Margin="4,2">
                                                 <TextBlock Text="{Binding PlateNumber}" FontWeight="Bold"
-                                                           Foreground="#303F9F" MinWidth="100"/>
-                                                <TextBlock Text="{Binding CustomerName}" Margin="12,0,0,0"/>
-                                                <TextBlock Text="{Binding VehicleModel}" Margin="12,0,0,0"
-                                                           Foreground="#757575"/>
+                                                           Foreground="#303F9F" MinWidth="80" FontSize="11"/>
+                                                <TextBlock Text="{Binding CustomerName}" Margin="8,0,0,0" FontSize="11"/>
+                                                <TextBlock Text="{Binding VehicleModel}" Margin="8,0,0,0"
+                                                           Foreground="#757575" FontSize="11"/>
                                             </StackPanel>
                                         </DataTemplate>
                                     </ListBox.ItemTemplate>

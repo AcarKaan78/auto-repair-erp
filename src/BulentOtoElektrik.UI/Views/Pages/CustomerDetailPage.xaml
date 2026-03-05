@@ -27,7 +27,7 @@
     </UserControl.Resources>
 
     <ScrollViewer VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Disabled">
-        <Grid Margin="24">
+        <Grid Margin="16">
             <Grid.RowDefinitions>
                 <RowDefinition Height="Auto"/>
                 <RowDefinition Height="Auto"/>
@@ -36,7 +36,7 @@
             </Grid.RowDefinitions>
 
             <!-- Top Bar -->
-            <Grid Grid.Row="0" Margin="0,0,0,16">
+            <Grid Grid.Row="0" Margin="0,0,0,10">
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition Width="Auto"/>
                     <ColumnDefinition Width="*"/>
@@ -44,33 +44,30 @@
                 </Grid.ColumnDefinitions>
 
                 <Button Grid.Column="0" Command="{Binding GoBackCommand}"
-                        Style="{StaticResource MaterialDesignOutlinedButton}"
-                        Padding="12,6">
-                    <StackPanel Orientation="Horizontal">
-                        <materialDesign:PackIcon Kind="ArrowLeft" Width="20" Height="20" VerticalAlignment="Center"/>
-                        <TextBlock Text="Geri" Margin="4,0,0,0" VerticalAlignment="Center"/>
-                    </StackPanel>
+                        Style="{StaticResource MaterialDesignIconForegroundButton}"
+                        ToolTip="Geri" Width="32" Height="32">
+                    <materialDesign:PackIcon Kind="ArrowLeft" Width="18" Height="18"/>
                 </Button>
 
                 <TextBlock Grid.Column="1" Text="{Binding CustomerName}"
-                           FontSize="24" FontWeight="Medium" Foreground="#212121"
+                           FontSize="18" FontWeight="Medium" Foreground="#212121"
                            HorizontalAlignment="Center" VerticalAlignment="Center"/>
 
                 <StackPanel Grid.Column="2" Orientation="Horizontal">
                     <Button Command="{Binding ExportExcelCommand}"
                             Style="{StaticResource MaterialDesignOutlinedButton}"
-                            Padding="12,6" Margin="0,0,8,0">
+                            Padding="10,4" Margin="0,0,6,0">
                         <StackPanel Orientation="Horizontal">
-                            <materialDesign:PackIcon Kind="FileExcel" Width="20" Height="20" VerticalAlignment="Center"/>
-                            <TextBlock Text="Excel" Margin="4,0,0,0" VerticalAlignment="Center"/>
+                            <materialDesign:PackIcon Kind="Printer" Width="16" Height="16" VerticalAlignment="Center"/>
+                            <TextBlock Text="Yazdır" Margin="4,0,0,0" VerticalAlignment="Center"/>
                         </StackPanel>
                     </Button>
                     <Button Command="{Binding DeleteCustomerCommand}"
                             Style="{StaticResource MaterialDesignOutlinedButton}"
-                            Padding="12,6" BorderBrush="#E53935" Foreground="#E53935"
+                            Padding="10,4" BorderBrush="#E53935" Foreground="#E53935"
                             ToolTip="Müşteriyi Sil">
                         <StackPanel Orientation="Horizontal">
-                            <materialDesign:PackIcon Kind="DeleteOutline" Width="20" Height="20" VerticalAlignment="Center"/>
+                            <materialDesign:PackIcon Kind="DeleteOutline" Width="16" Height="16" VerticalAlignment="Center"/>
                             <TextBlock Text="Müşteri Sil" Margin="4,0,0,0" VerticalAlignment="Center"/>
                         </StackPanel>
                     </Button>
@@ -78,14 +75,14 @@
             </Grid>
 
             <!-- Row 1: Customer Info + Balance -->
-            <Grid Grid.Row="1" Margin="0,0,0,16">
+            <Grid Grid.Row="1" Margin="0,0,0,10">
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition Width="*"/>
                     <ColumnDefinition Width="*"/>
                 </Grid.ColumnDefinitions>
 
                 <!-- Customer Info Card -->
-                <materialDesign:Card Grid.Column="0" Padding="20" Margin="0,0,8,0" UniformCornerRadius="8">
+                <materialDesign:Card Grid.Column="0" Padding="14" Margin="0,0,6,0" UniformCornerRadius="8">
                     <Grid>
                         <Grid.RowDefinitions>
                             <RowDefinition Height="Auto"/>
@@ -93,20 +90,20 @@
                             <RowDefinition Height="Auto"/>
                         </Grid.RowDefinitions>
 
-                        <Grid Grid.Row="0" Margin="0,0,0,12">
-                            <TextBlock Text="Musteri Bilgileri" FontSize="16" FontWeight="Medium"/>
+                        <Grid Grid.Row="0" Margin="0,0,0,6">
+                            <TextBlock Text="Musteri Bilgileri" FontSize="13" FontWeight="Medium"/>
                             <Button HorizontalAlignment="Right"
                                     Command="{Binding ToggleEditCommand}"
                                     Style="{StaticResource MaterialDesignIconForegroundButton}"
-                                    ToolTip="Duzenle" Width="32" Height="32">
-                                <materialDesign:PackIcon Kind="PencilOutline" Width="20" Height="20"/>
+                                    ToolTip="Duzenle" Width="28" Height="28">
+                                <materialDesign:PackIcon Kind="PencilOutline" Width="16" Height="16"/>
                             </Button>
                         </Grid>
 
-                        <StackPanel Grid.Row="1" Margin="0,0,0,8">
+                        <StackPanel Grid.Row="1" Margin="0,0,0,6">
                             <Grid Margin="0,4">
                                 <Grid.ColumnDefinitions>
-                                    <ColumnDefinition Width="100"/>
+                                    <ColumnDefinition Width="80"/>
                                     <ColumnDefinition Width="*"/>
                                 </Grid.ColumnDefinitions>
                                 <TextBlock Text="Ad Soyad:" FontWeight="Medium" Foreground="#757575"/>
@@ -117,7 +114,7 @@
 
                             <Grid Margin="0,4">
                                 <Grid.ColumnDefinitions>
-                                    <ColumnDefinition Width="100"/>
+                                    <ColumnDefinition Width="80"/>
                                     <ColumnDefinition Width="*"/>
                                 </Grid.ColumnDefinitions>
                                 <TextBlock Text="Telefon 1:" FontWeight="Medium" Foreground="#757575"/>
@@ -128,7 +125,7 @@
 
                             <Grid Margin="0,4">
                                 <Grid.ColumnDefinitions>
-                                    <ColumnDefinition Width="100"/>
+                                    <ColumnDefinition Width="80"/>
                                     <ColumnDefinition Width="*"/>
                                 </Grid.ColumnDefinitions>
                                 <TextBlock Text="Telefon 2:" FontWeight="Medium" Foreground="#757575"/>
@@ -139,7 +136,7 @@
 
                             <Grid Margin="0,4">
                                 <Grid.ColumnDefinitions>
-                                    <ColumnDefinition Width="100"/>
+                                    <ColumnDefinition Width="80"/>
                                     <ColumnDefinition Width="*"/>
                                 </Grid.ColumnDefinitions>
                                 <TextBlock Text="TC No:" FontWeight="Medium" Foreground="#757575"/>
@@ -150,7 +147,7 @@
 
                             <Grid Margin="0,4">
                                 <Grid.ColumnDefinitions>
-                                    <ColumnDefinition Width="100"/>
+                                    <ColumnDefinition Width="80"/>
                                     <ColumnDefinition Width="*"/>
                                 </Grid.ColumnDefinitions>
                                 <TextBlock Text="E-posta:" FontWeight="Medium" Foreground="#757575"/>
@@ -161,56 +158,63 @@
 
                             <Grid Margin="0,4">
                                 <Grid.ColumnDefinitions>
-                                    <ColumnDefinition Width="100"/>
+                                    <ColumnDefinition Width="80"/>
                                     <ColumnDefinition Width="*"/>
                                 </Grid.ColumnDefinitions>
                                 <TextBlock Text="Adres:" FontWeight="Medium" Foreground="#757575"/>
                                 <TextBox Grid.Column="1" Text="{Binding Address, UpdateSourceTrigger=PropertyChanged}"
                                          IsEnabled="{Binding IsEditing}"
                                          Style="{StaticResource EditableFieldStyle}"
-                                         TextWrapping="Wrap" AcceptsReturn="True" MaxHeight="60"/>
+                                         TextWrapping="Wrap" AcceptsReturn="True" MaxHeight="50"/>
                             </Grid>
 
                             <Grid Margin="0,4">
                                 <Grid.ColumnDefinitions>
-                                    <ColumnDefinition Width="100"/>
+                                    <ColumnDefinition Width="80"/>
                                     <ColumnDefinition Width="*"/>
                                 </Grid.ColumnDefinitions>
                                 <TextBlock Text="Notlar:" FontWeight="Medium" Foreground="#757575"/>
                                 <TextBox Grid.Column="1" Text="{Binding Notes, UpdateSourceTrigger=PropertyChanged}"
                                          IsEnabled="{Binding IsEditing}"
                                          Style="{StaticResource EditableFieldStyle}"
-                                         TextWrapping="Wrap" AcceptsReturn="True" MaxHeight="60"/>
+                                         TextWrapping="Wrap" AcceptsReturn="True" MaxHeight="50"/>
                             </Grid>
 
                             <!-- Vehicle Info (inline) -->
-                            <Separator Margin="0,8"/>
-                            <Grid Margin="0,8,0,4">
+                            <Separator Margin="0,6"/>
+                            <Grid Margin="0,6,0,4">
                                 <TextBlock Text="Araç Bilgileri" FontWeight="Medium" Foreground="#303F9F" VerticalAlignment="Center"/>
-                                <Button HorizontalAlignment="Right"
-                                        Command="{Binding DeleteVehicleCommand}"
-                                        Style="{StaticResource MaterialDesignIconForegroundButton}"
-                                        ToolTip="Aracı Sil" Width="32" Height="32"
-                                        Foreground="#E53935">
-                                    <materialDesign:PackIcon Kind="DeleteOutline" Width="18" Height="18"/>
-                                </Button>
+                                <StackPanel HorizontalAlignment="Right" Orientation="Horizontal">
+                                    <Button Command="{Binding AddVehicleCommand}"
+                                            Style="{StaticResource MaterialDesignIconForegroundButton}"
+                                            ToolTip="Araç Ekle" Width="28" Height="28"
+                                            Foreground="#4CAF50">
+                                        <materialDesign:PackIcon Kind="PlusCircleOutline" Width="14" Height="14"/>
+                                    </Button>
+                                    <Button Command="{Binding DeleteVehicleCommand}"
+                                            Style="{StaticResource MaterialDesignIconForegroundButton}"
+                                            ToolTip="Aracı Sil" Width="28" Height="28"
+                                            Foreground="#E53935">
+                                        <materialDesign:PackIcon Kind="DeleteOutline" Width="14" Height="14"/>
+                                    </Button>
+                                </StackPanel>
                             </Grid>
 
                             <Grid Margin="0,4">
                                 <Grid.ColumnDefinitions>
-                                    <ColumnDefinition Width="100"/>
+                                    <ColumnDefinition Width="80"/>
                                     <ColumnDefinition Width="*"/>
                                 </Grid.ColumnDefinitions>
                                 <TextBlock Text="Plaka:" FontWeight="Medium" Foreground="#757575"/>
                                 <TextBox Grid.Column="1" Text="{Binding VehiclePlate, UpdateSourceTrigger=PropertyChanged}"
                                          IsEnabled="{Binding IsEditing}"
                                          Style="{StaticResource EditableFieldStyle}"
-                                         FontWeight="Bold" FontSize="14"/>
+                                         FontWeight="Bold" FontSize="12"/>
                             </Grid>
 
                             <Grid Margin="0,4">
                                 <Grid.ColumnDefinitions>
-                                    <ColumnDefinition Width="100"/>
+                                    <ColumnDefinition Width="80"/>
                                     <ColumnDefinition Width="*"/>
                                 </Grid.ColumnDefinitions>
                                 <TextBlock Text="Marka:" FontWeight="Medium" Foreground="#757575"/>
@@ -221,7 +225,7 @@
 
                             <Grid Margin="0,4">
                                 <Grid.ColumnDefinitions>
-                                    <ColumnDefinition Width="100"/>
+                                    <ColumnDefinition Width="80"/>
                                     <ColumnDefinition Width="*"/>
                                 </Grid.ColumnDefinitions>
                                 <TextBlock Text="Model:" FontWeight="Medium" Foreground="#757575"/>
@@ -232,7 +236,7 @@
 
                             <Grid Margin="0,4">
                                 <Grid.ColumnDefinitions>
-                                    <ColumnDefinition Width="100"/>
+                                    <ColumnDefinition Width="80"/>
                                     <ColumnDefinition Width="*"/>
                                 </Grid.ColumnDefinitions>
                                 <TextBlock Text="Yıl:" FontWeight="Medium" Foreground="#757575"/>
@@ -247,44 +251,44 @@
                                 Style="{StaticResource MaterialDesignRaisedButton}"
                                 Background="#303F9F" Foreground="White"
                                 Content="Kaydet" HorizontalAlignment="Right"
-                                Padding="24,6" Margin="0,8,0,0"/>
+                                Padding="16,4" Margin="0,8,0,0"/>
                     </Grid>
                 </materialDesign:Card>
 
                 <!-- Balance Card -->
-                <materialDesign:Card Grid.Column="1" Padding="20" Margin="8,0,0,0" UniformCornerRadius="8">
+                <materialDesign:Card Grid.Column="1" Padding="14" Margin="6,0,0,0" UniformCornerRadius="8">
                     <Grid>
                         <Grid.RowDefinitions>
                             <RowDefinition Height="Auto"/>
                             <RowDefinition Height="*"/>
                         </Grid.RowDefinitions>
 
-                        <TextBlock Grid.Row="0" Text="Hesap Ozeti" FontSize="16" FontWeight="Medium" Margin="0,0,0,16"/>
+                        <TextBlock Grid.Row="0" Text="Hesap Ozeti" FontSize="13" FontWeight="Medium" Margin="0,0,0,10"/>
 
                         <UniformGrid Grid.Row="1" Columns="3" Margin="0,8">
                             <!-- Debt -->
                             <StackPanel HorizontalAlignment="Center" Margin="4">
-                                <TextBlock Text="BORC" FontSize="13" Foreground="#757575" HorizontalAlignment="Center"/>
+                                <TextBlock Text="BORÇ" FontSize="11" Foreground="#757575" HorizontalAlignment="Center"/>
                                 <TextBlock Text="{Binding TotalDebt, Converter={StaticResource CurrencyFormat}}"
-                                           FontSize="20" FontWeight="Bold" Foreground="#F44336"
+                                           FontSize="16" FontWeight="Bold" Foreground="#F44336"
                                            HorizontalAlignment="Center" Margin="0,4,0,0"
                                            TextTrimming="CharacterEllipsis"/>
                             </StackPanel>
 
                             <!-- Payments -->
                             <StackPanel HorizontalAlignment="Center" Margin="4">
-                                <TextBlock Text="ODEME" FontSize="13" Foreground="#757575" HorizontalAlignment="Center"/>
+                                <TextBlock Text="ÖDEME" FontSize="11" Foreground="#757575" HorizontalAlignment="Center"/>
                                 <TextBlock Text="{Binding TotalPayments, Converter={StaticResource CurrencyFormat}}"
-                                           FontSize="20" FontWeight="Bold" Foreground="#4CAF50"
+                                           FontSize="16" FontWeight="Bold" Foreground="#4CAF50"
                                            HorizontalAlignment="Center" Margin="0,4,0,0"
                                            TextTrimming="CharacterEllipsis"/>
                             </StackPanel>
 
                             <!-- Balance -->
                             <StackPanel HorizontalAlignment="Center" Margin="4">
-                                <TextBlock Text="BAKIYE" FontSize="13" Foreground="#757575" HorizontalAlignment="Center"/>
+                                <TextBlock Text="KALAN BORÇ" FontSize="11" Foreground="#757575" HorizontalAlignment="Center"/>
                                 <TextBlock Text="{Binding Balance, Converter={StaticResource CurrencyFormat}}"
-                                           FontSize="20" FontWeight="Bold"
+                                           FontSize="16" FontWeight="Bold"
                                            Foreground="{Binding Balance, Converter={StaticResource BalanceToColor}}"
                                            HorizontalAlignment="Center" Margin="0,4,0,0"
                                            TextTrimming="CharacterEllipsis"/>
@@ -295,22 +299,22 @@
             </Grid>
 
             <!-- Row 2: Service Records -->
-            <materialDesign:Card Grid.Row="2" Padding="16" Margin="0,0,0,16" UniformCornerRadius="8">
+            <materialDesign:Card Grid.Row="2" Padding="10" Margin="0,0,0,10" UniformCornerRadius="8">
                 <Grid>
                     <Grid.RowDefinitions>
                         <RowDefinition Height="Auto"/>
                         <RowDefinition Height="*"/>
                     </Grid.RowDefinitions>
 
-                    <Grid Grid.Row="0" Margin="0,0,0,12">
-                        <TextBlock Text="Islem Kayitlari" FontSize="16" FontWeight="Medium" VerticalAlignment="Center"/>
+                    <Grid Grid.Row="0" Margin="0,0,0,6">
+                        <TextBlock Text="Islem Kayitlari" FontSize="13" FontWeight="Medium" VerticalAlignment="Center"/>
                         <Button HorizontalAlignment="Right"
                                 Command="{Binding AddServiceCommand}"
                                 Style="{StaticResource MaterialDesignRaisedButton}"
                                 Background="#303F9F" Foreground="White"
-                                Padding="12,4">
+                                Padding="10,4">
                             <StackPanel Orientation="Horizontal">
-                                <materialDesign:PackIcon Kind="Plus" Width="18" Height="18" VerticalAlignment="Center"/>
+                                <materialDesign:PackIcon Kind="Plus" Width="14" Height="14" VerticalAlignment="Center"/>
                                 <TextBlock Text="Islem Ekle" Margin="4,0,0,0" VerticalAlignment="Center"/>
                             </StackPanel>
                         </Button>
@@ -322,9 +326,9 @@
                               IsReadOnly="True" SelectionMode="Single"
                               GridLinesVisibility="Horizontal"
                               HorizontalGridLinesBrush="#E0E0E0"
-                              RowHeight="40" FontSize="13"
+                              RowHeight="32" FontSize="11"
                               AlternatingRowBackground="#FAFAFA"
-                              MaxHeight="300"
+                              MaxHeight="240"
                               HeadersVisibility="Column">
                         <DataGrid.Columns>
                             <DataGridTextColumn Header="Tarih" Binding="{Binding ServiceDate, Converter={StaticResource DateFormat}}"
@@ -411,9 +415,9 @@
                                         <Button Style="{StaticResource MaterialDesignIconForegroundButton}"
                                                 Command="{Binding DataContext.DeleteServiceCommand, RelativeSource={RelativeSource AncestorType=UserControl}}"
                                                 CommandParameter="{Binding}"
-                                                ToolTip="Sil" Width="28" Height="28"
+                                                ToolTip="Sil" Width="24" Height="24"
                                                 Foreground="#F44336">
-                                            <materialDesign:PackIcon Kind="DeleteOutline" Width="18" Height="18"/>
+                                            <materialDesign:PackIcon Kind="DeleteOutline" Width="14" Height="14"/>
                                         </Button>
                                     </DataTemplate>
                                 </DataGridTemplateColumn.CellTemplate>
@@ -424,22 +428,22 @@
             </materialDesign:Card>
 
             <!-- Row 3: Payments -->
-            <materialDesign:Card Grid.Row="3" Padding="16" Margin="0,0,0,16" UniformCornerRadius="8">
+            <materialDesign:Card Grid.Row="3" Padding="10" Margin="0,0,0,10" UniformCornerRadius="8">
                 <Grid>
                     <Grid.RowDefinitions>
                         <RowDefinition Height="Auto"/>
                         <RowDefinition Height="*"/>
                     </Grid.RowDefinitions>
 
-                    <Grid Grid.Row="0" Margin="0,0,0,16">
-                        <TextBlock Text="Odemeler" FontSize="16" FontWeight="Medium" VerticalAlignment="Center"/>
+                    <Grid Grid.Row="0" Margin="0,0,0,10">
+                        <TextBlock Text="Odemeler" FontSize="13" FontWeight="Medium" VerticalAlignment="Center"/>
                         <Button HorizontalAlignment="Right"
                                 Command="{Binding TakePaymentCommand}"
                                 Style="{StaticResource MaterialDesignRaisedButton}"
                                 Background="#4CAF50" Foreground="White"
-                                Padding="12,4">
+                                Padding="10,4">
                             <StackPanel Orientation="Horizontal">
-                                <materialDesign:PackIcon Kind="CashPlus" Width="18" Height="18" VerticalAlignment="Center"/>
+                                <materialDesign:PackIcon Kind="CashPlus" Width="14" Height="14" VerticalAlignment="Center"/>
                                 <TextBlock Text="Odeme Al" Margin="4,0,0,0" VerticalAlignment="Center"/>
                             </StackPanel>
                         </Button>
@@ -451,9 +455,9 @@
                               IsReadOnly="True" SelectionMode="Single"
                               GridLinesVisibility="Horizontal"
                               HorizontalGridLinesBrush="#E0E0E0"
-                              RowHeight="40" FontSize="13"
+                              RowHeight="32" FontSize="11"
                               AlternatingRowBackground="#FAFAFA"
-                              MaxHeight="250"
+                              MaxHeight="200"
                               HeadersVisibility="Column">
                         <DataGrid.Columns>
                             <DataGridTextColumn Header="Tarih" Binding="{Binding PaymentDate, Converter={StaticResource DateFormat}}"
@@ -513,9 +517,9 @@
                                         <Button Style="{StaticResource MaterialDesignIconForegroundButton}"
                                                 Command="{Binding DataContext.DeletePaymentCommand, RelativeSource={RelativeSource AncestorType=UserControl}}"
                                                 CommandParameter="{Binding}"
-                                                ToolTip="Sil" Width="28" Height="28"
+                                                ToolTip="Sil" Width="24" Height="24"
                                                 Foreground="#F44336">
-                                            <materialDesign:PackIcon Kind="DeleteOutline" Width="18" Height="18"/>
+                                            <materialDesign:PackIcon Kind="DeleteOutline" Width="14" Height="14"/>
                                         </Button>
                                     </DataTemplate>
                                 </DataGridTemplateColumn.CellTemplate>
