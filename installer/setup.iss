@@ -1,21 +1,21 @@
-; Bulent Oto Elektrik - Inno Setup Script
+; Yasar Otomotiv Elektrik - Inno Setup Script
 ; Requires Inno Setup 6.x (https://jrsoftware.org/isinfo.php)
 
-#define MyAppName "Bulent Oto Elektrik Yonetim Sistemi"
+#define MyAppName "Yasar Otomotiv Elektrik Yonetim Sistemi"
 #define MyAppVersion "1.0.6"
-#define MyAppPublisher "Bulent Oto Elektrik"
-#define MyAppExeName "BulentOtoElektrik.App.exe"
+#define MyAppPublisher "Yasar Otomotiv Elektrik"
+#define MyAppExeName "YasarOtomotivElektrik.App.exe"
 #define PublishDir "..\publish"
 
 [Setup]
-AppId={{A1B2C3D4-E5F6-7890-ABCD-EF1234567890}
+AppId={{F67286F3-6B6B-4255-AECB-6945F296D863}
 AppName={#MyAppName}
 AppVersion={#MyAppVersion}
 AppVerName={#MyAppName} {#MyAppVersion}
 AppPublisher={#MyAppPublisher}
 
-; Install to C:\BulentOtoElektrik (NOT Program Files - app writes data to BaseDirectory)
-DefaultDirName=C:\BulentOtoElektrik
+; Install to C:\YasarOtomotivElektrik (NOT Program Files - app writes data to BaseDirectory)
+DefaultDirName=C:\YasarOtomotivElektrik
 DisableDirPage=no
 
 ; Start Menu
@@ -24,7 +24,7 @@ DisableProgramGroupPage=yes
 
 ; Output installer
 OutputDir=.\Output
-OutputBaseFilename=BulentOtoElektrik_Kurulum_v{#MyAppVersion}
+OutputBaseFilename=YasarOtomotivElektrik_Kurulum_v{#MyAppVersion}
 SetupIconFile=app.ico
 
 ; Compression
@@ -68,16 +68,16 @@ Source: "{#PublishDir}\*"; DestDir: "{app}"; Flags: ignoreversion recursesubdirs
 
 [Icons]
 ; Desktop shortcut
-Name: "{userdesktop}\Bulent Oto Elektrik"; Filename: "{app}\{#MyAppExeName}"; \
+Name: "{userdesktop}\Yasar Otomotiv Elektrik"; Filename: "{app}\{#MyAppExeName}"; \
   IconFilename: "{app}\{#MyAppExeName}"; Tasks: desktopicon
 
 ; Start Menu shortcuts
-Name: "{userprograms}\{#MyAppName}\Bulent Oto Elektrik"; Filename: "{app}\{#MyAppExeName}"; Tasks: startmenu
+Name: "{userprograms}\{#MyAppName}\Yasar Otomotiv Elektrik"; Filename: "{app}\{#MyAppExeName}"; Tasks: startmenu
 Name: "{userprograms}\{#MyAppName}\Programi Kaldir"; Filename: "{uninstallexe}"; Tasks: startmenu
 
 [Run]
 ; Option to launch after install
-Filename: "{app}\{#MyAppExeName}"; Description: "Bulent Oto Elektrik'i baslat"; \
+Filename: "{app}\{#MyAppExeName}"; Description: "Yasar Otomotiv Elektrik'i baslat"; \
   Flags: nowait postinstall skipifsilent
 
 [Code]

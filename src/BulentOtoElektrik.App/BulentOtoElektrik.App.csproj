@@ -7,9 +7,10 @@
     <ImplicitUsings>enable</ImplicitUsings>
     <UseWPF>true</UseWPF>
     <ApplicationIcon>..\..\installer\app.ico</ApplicationIcon>
+    <AssemblyName>YasarOtomotivElektrik.App</AssemblyName>
     <Version>1.0.0</Version>
-    <Company>Bülent Oto Elektrik</Company>
-    <Product>Bülent Oto Elektrik Yönetim Sistemi</Product>
+    <Company>Yaşar Otomotiv Elektrik</Company>
+    <Product>Yaşar Otomotiv Elektrik Yönetim Sistemi</Product>
   </PropertyGroup>
 
   <ItemGroup>

@@ -15,65 +15,6 @@
                 <TextBlock Text="Ayarlar"
                            Style="{StaticResource PageTitleStyle}"/>
 
-                <!-- Section 0: Otomatik Excel Oluşturma -->
-                <materialDesign:Card Padding="14" Margin="0,0,0,10" UniformCornerRadius="8">
-                    <StackPanel>
-                        <TextBlock Text="Otomatik Excel Oluşturma"
-                                   Style="{StaticResource SectionTitleStyle}"/>
-
-                        <TextBlock Text="Açıldığında her veri değişikliğinde Excel raporları otomatik olarak oluşturulur."
-                                   Foreground="#757575" FontSize="11" Margin="0,4,0,8"
-                                   TextWrapping="Wrap"/>
-
-                        <StackPanel Orientation="Horizontal" Margin="0,0,0,12">
-                            <ToggleButton Style="{StaticResource MaterialDesignSwitchToggleButton}"
-                                          IsChecked="{Binding IsAutoExportEnabled}"
-                                          Command="{Binding ToggleAutoExportCommand}"
-                                          VerticalAlignment="Center"/>
-                            <TextBlock VerticalAlignment="Center" Margin="12,0,0,0"
-                                       FontWeight="Medium" FontSize="12">
-                                <TextBlock.Style>
-                                    <Style TargetType="TextBlock">
-                                        <Setter Property="Text" Value="Kapalı"/>
-                                        <Setter Property="Foreground" Value="#757575"/>
-                                        <Style.Triggers>
-                                            <DataTrigger Binding="{Binding IsAutoExportEnabled}" Value="True">
-                                                <Setter Property="Text" Value="Açık"/>
-                                                <Setter Property="Foreground" Value="#4CAF50"/>
-                                            </DataTrigger>
-                                        </Style.Triggers>
-                                    </Style>
-                                </TextBlock.Style>
-                            </TextBlock>
-                        </StackPanel>
-
-                        <Grid>
-                            <Grid.ColumnDefinitions>
-                                <ColumnDefinition Width="Auto"/>
-                                <ColumnDefinition Width="*"/>
-                                <ColumnDefinition Width="Auto"/>
-                            </Grid.ColumnDefinitions>
-
-                            <TextBlock Grid.Column="0"
-                                       Text="Kayıt Klasörü:"
-                                       FontWeight="Medium"
-                                       VerticalAlignment="Center"
-                                       Margin="0,0,12,0"/>
-                            <TextBlock Grid.Column="1"
-                                       Text="{Binding ExcelExportFolder}"
-                                       VerticalAlignment="Center"
-                                       TextTrimming="CharacterEllipsis"
-                                       Foreground="#757575"
-                                       ToolTip="{Binding ExcelExportFolder}"/>
-                            <Button Grid.Column="2"
-                                    Style="{StaticResource MaterialDesignOutlinedButton}"
-                                    Content="Klasör Seç"
-                                    Command="{Binding ChangeExcelExportFolderCommand}"
-                                    Margin="12,0,0,0"/>
-                        </Grid>
-                    </StackPanel>
-                </materialDesign:Card>
-
                 <!-- Section 1: Excel İçe Aktarma -->
                 <materialDesign:Card Padding="14" Margin="0,0,0,10" UniformCornerRadius="8">
                     <StackPanel>
@@ -262,7 +203,7 @@
                                    Style="{StaticResource SectionTitleStyle}"/>
 
                         <StackPanel Margin="0,6,0,0">
-                            <TextBlock Text="Bülent Oto Elektrik - Müşteri Yönetim Sistemi"
+                            <TextBlock Text="Yaşar Otomotiv Elektrik - Müşteri Yönetim Sistemi"
                                        FontSize="14"
                                        FontWeight="Bold"
                                        Foreground="#303F9F"/>

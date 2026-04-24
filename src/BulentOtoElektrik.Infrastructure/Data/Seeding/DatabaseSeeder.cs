@@ -18,7 +18,6 @@ public class DatabaseSeeder
     public async Task SeedAsync()
     {
         await SeedExpenseCategoriesAsync();
-        await SeedTechniciansAsync();
     }
 
     private async Task SeedExpenseCategoriesAsync()
@@ -45,20 +44,4 @@ public class DatabaseSeeder
         await _context.SaveChangesAsync();
         _logger?.LogInformation("Seeded {Count} expense categories", categories.Count);
     }
-
-    private async Task SeedTechniciansAsync()
-    {
-        if (await _context.Technicians.AnyAsync()) return;
-
-        var technicians = new List<Technician>
-        {
-            new() { FullName = "İRFAN USTA" },
-            new() { FullName = "ARDA K.AVCI" }
-        };
-
-        _context.Technicians.AddRange(technicians);
-        await _context.SaveChangesAsync();
-        _logger?.LogInformation("Seeded {Count} technicians", technicians.Count);
-    }
-
 }

@@ -17,24 +17,17 @@ public class ExcelExportService : IExcelExportService
         _serviceProvider = serviceProvider;
         _exportFolder = Path.Combine(
             Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments),
-            "BulentOtoElektrik");
+            "YasarOtomotivElektrik");
 
-        // Load persisted auto-export setting (default: false)
-        var settingsFile = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "auto_export_enabled.txt");
-        if (File.Exists(settingsFile))
-        {
-            var content = File.ReadAllText(settingsFile).Trim();
-            _isAutoExportEnabled = string.Equals(content, "true", StringComparison.OrdinalIgnoreCase);
-        }
+        // Auto-export is permanently disabled — the feature code is retained but cannot be enabled.
+        _isAutoExportEnabled = false;
     }
 
     public bool IsAutoExportEnabled => _isAutoExportEnabled;
 
     public void SetAutoExportEnabled(bool enabled)
     {
-        _isAutoExportEnabled = enabled;
-        var settingsFile = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "auto_export_enabled.txt");
-        File.WriteAllText(settingsFile, enabled ? "true" : "false");
+        // No-op: auto-export is permanently disabled.
     }
 
     public string GetExportFolder() => _exportFolder;
@@ -158,7 +151,7 @@ public class ExcelExportService : IExcelExportService
 
             // --- Row 9: Company banner ---
             ws.Range("A9:J9").Merge();
-            ws.Cell("A9").Value = "BÜLENT OTO ELEKTRİK";
+            ws.Cell("A9").Value = "YAŞAR OTOMOTİV ELEKTRİK";
             ws.Cell("A9").Style.Font.FontSize = 28;
             ws.Cell("A9").Style.Font.Bold = true;
             ws.Cell("A9").Style.Font.FontColor = XLColor.FromHtml("#C00000");
@@ -282,7 +275,7 @@ public class ExcelExportService : IExcelExportService
             var summarySheet = workbook.Worksheets.Add("Özet");
             var headerBg = XLColor.FromHtml("#002060");
 
-            summarySheet.Cell("A1").Value = "BÜLENT OTO ELEKTRİK - RAPOR";
+            summarySheet.Cell("A1").Value = "YAŞAR OTOMOTİV ELEKTRİK - RAPOR";
             summarySheet.Range("A1:D1").Merge();
             summarySheet.Cell("A1").Style.Font.FontSize = 18;
             summarySheet.Cell("A1").Style.Font.Bold = true;

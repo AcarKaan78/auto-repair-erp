@@ -1,6 +1,6 @@
 @echo off
 echo ============================================
-echo  Bulent Oto Elektrik - Installer Builder
+echo  Yasar Otomotiv Elektrik - Installer Builder
 echo ============================================
 echo.
 
@@ -43,6 +43,6 @@ if errorlevel 1 (
 echo.
 echo ============================================
 echo  BASARILI! Installer olusturuldu:
-echo  installer\Output\BulentOtoElektrik_Kurulum_v1.0.0.exe
+echo  installer\Output\YasarOtomotivElektrik_Kurulum_v1.0.6.exe
 echo ============================================
 pause

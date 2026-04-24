@@ -287,7 +287,7 @@ public class ExcelExportServiceTests : IDisposable
         using var wb = new XLWorkbook(path);
         var ws = wb.Worksheet("kart1");
 
-        Assert.Equal("BÜLENT OTO ELEKTRİK", ws.Cell("A9").GetString());
+        Assert.Equal("YAŞAR OTOMOTİV ELEKTRİK", ws.Cell("A9").GetString());
         Assert.Equal(28, ws.Cell("A9").Style.Font.FontSize);
         Assert.True(ws.Cell("A9").Style.Font.Bold);
         // A9:J9 should be merged
@@ -566,7 +566,7 @@ public class ExcelExportServiceTests : IDisposable
         var ws = wb.Worksheet("Özet");
 
         // Title
-        Assert.Contains("BÜLENT OTO ELEKTRİK", ws.Cell("A1").GetString());
+        Assert.Contains("YAŞAR OTOMOTİV ELEKTRİK", ws.Cell("A1").GetString());
 
         // Period
         Assert.Contains("01.06.2025", ws.Cell("A2").GetString());

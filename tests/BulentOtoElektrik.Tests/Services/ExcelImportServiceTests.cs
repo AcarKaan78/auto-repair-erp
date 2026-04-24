@@ -410,7 +410,7 @@ public class ExcelImportServiceTests : IDisposable
         ws.Cell("J1").Value = currency;
 
         // Banner
-        ws.Range("A9:J9").Merge().SetValue("BULENT OTO ELEKTRIK");
+        ws.Range("A9:J9").Merge().SetValue("YASAR OTOMOTIV ELEKTRIK");
 
         // Column headers (OLD format)
         ws.Cell("A10").Value = "SIRA";
@@ -467,7 +467,7 @@ public class ExcelImportServiceTests : IDisposable
 
         ws.Cell("I1").Value = "KULLANILAN PARA BIRIMI";
         ws.Cell("J1").Value = "TL";
-        ws.Range("A9:J9").Merge().SetValue("BULENT OTO ELEKTRIK");
+        ws.Range("A9:J9").Merge().SetValue("YASAR OTOMOTIV ELEKTRIK");
         ws.Cell("A10").Value = "SIRA";
 
         // Row 11: real data
@@ -517,7 +517,7 @@ public class ExcelImportServiceTests : IDisposable
 
         ws.Cell("I1").Value = "KULLANILAN PARA BIRIMI";
         ws.Cell("J1").Value = "TL";
-        ws.Range("A9:J9").Merge().SetValue("BULENT OTO ELEKTRIK");
+        ws.Range("A9:J9").Merge().SetValue("YASAR OTOMOTIV ELEKTRIK");
         ws.Cell("A10").Value = "SIRA";
 
         // Service row with payment
@@ -563,7 +563,7 @@ public class ExcelImportServiceTests : IDisposable
 
         ws.Cell("I1").Value = "PARA BİRİMİ";
         ws.Cell("J1").Value = "TL";
-        ws.Range("A9:J9").Merge().SetValue("BÜLENT OTO ELEKTRİK");
+        ws.Range("A9:J9").Merge().SetValue("YAŞAR OTOMOTİV ELEKTRİK");
 
         // APP format column headers
         ws.Cell("A10").Value = "S.NO";
