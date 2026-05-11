@@ -2,7 +2,7 @@
 ; Requires Inno Setup 6.x (https://jrsoftware.org/isinfo.php)
 
 #define MyAppName "Yasar Otomotiv Elektrik Yonetim Sistemi"
-#define MyAppVersion "1.0.6"
+#define MyAppVersion "1.0.7"
 #define MyAppPublisher "Yasar Otomotiv Elektrik"
 #define MyAppExeName "YasarOtomotivElektrik.App.exe"
 #define PublishDir "..\publish"
