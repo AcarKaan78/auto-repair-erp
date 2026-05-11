@@ -149,6 +149,16 @@ public class ExcelExportService : IExcelExportService
             ws.Cell("J6").Style.Font.FontColor = XLColor.White;
             ws.Cell("J6").Style.Font.Bold = true;
 
+            // I7, J7 - Kalan Borç (Toplam Borç - Toplam Ödeme)
+            ws.Cell("I7").Value = "KALAN BORÇ";
+            ws.Cell("I7").Style.Font.FontColor = navyBlue;
+            ws.Cell("I7").Style.Font.Bold = true;
+            ws.Cell("J7").FormulaA1 = "J5-J6";
+            ws.Cell("J7").Style.NumberFormat.Format = @"#,##0.00\ ""TL""";
+            ws.Cell("J7").Style.Fill.BackgroundColor = XLColor.Red;
+            ws.Cell("J7").Style.Font.FontColor = XLColor.White;
+            ws.Cell("J7").Style.Font.Bold = true;
+
             // --- Row 9: Company banner ---
             ws.Range("A9:J9").Merge();
             ws.Cell("A9").Value = "YAŞAR OTOMOTİV ELEKTRİK";
@@ -306,7 +316,13 @@ public class ExcelExportService : IExcelExportService
             summarySheet.Cell("B7").Style.NumberFormat.Format = @"#,##0.00\ ""TL""";
             summarySheet.Cell("B7").Style.Font.Bold = true;
 
-            for (int r = 4; r <= 7; r++)
+            summarySheet.Cell("A8").Value = "Kalan Borç";
+            summarySheet.Cell("B8").Value = totalRevenue - totalPayments;
+            summarySheet.Cell("B8").Style.NumberFormat.Format = @"#,##0.00\ ""TL""";
+            summarySheet.Cell("B8").Style.Font.Bold = true;
+            summarySheet.Cell("B8").Style.Fill.BackgroundColor = XLColor.FromHtml("#FFC7CE");
+
+            for (int r = 4; r <= 8; r++)
             {
                 summarySheet.Cell(r, 1).Style.Font.Bold = true;
             }
